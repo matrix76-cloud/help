@@ -1,0 +1,45 @@
+
+
+@font-face {
+  font-family: "Semibold";
+  font-weight: bold;
+  src: url("../fonts/SF-Pro-Text-Bold.otf") format("truetype");
+}
+
+.Homebody{
+  height: 100%;
+  background-color: #fff;
+}
+.MainLabel{
+  display:flex;
+  flex-direction: column;  
+  height: 100px;
+  background: white;
+
+}
+
+
+.Devide{
+  display: flex;
+  flex-direction: row;  
+}
+.LeftDevide{
+  flex-grow: 7; 
+}
+.ReightDevide{
+  flex-grow: 1; 
+}
+
+.ButtonView{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:wrap;
+  width:100%;
+  margin-bottom :20px;
+  justify-content: center;
+
+}
+
+.swiper-scrollbar{
+  display : none;
+}

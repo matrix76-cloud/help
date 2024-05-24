@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "marone-d7e06",
+    "mapapp-30": "marone-d7e06"
+  },
+  "targets": {
+    "marone-d7e06": {
+      "hosting": {
+        "mapapp-30": [
+          "mapapp-30"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
