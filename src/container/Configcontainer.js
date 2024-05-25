@@ -1,5 +1,5 @@
 
-import React,{useState, useEffect, useContext, useLayoutEffect} from 'react';
+import React,{useState, useEffect, useContext, useLayoutEffect, useRef} from 'react';
 import { HashRouter, Route, Switch, Redirect, BrowserRouter, Routes, Link, useNavigate} from "react-router-dom";
 import styled from 'styled-components';
 import Label from '../common/Label';
@@ -15,9 +15,9 @@ import { get_review, get_reviewForUser } from '../service/ReviewService';
 import { get_heartstores, get_storeinfoForUSERID } from '../service/StoreService';
 import { get_coupone, get_enablestorecoupone, get_storecoupone } from '../service/CouponeService';
 import { STORESTATUS, STORE_STATUS, TYPE } from '../utility/maroneDefine';
-import { get_checkuser } from '../service/CheckService';
+import { get_checkuser, uploadImage } from '../service/CheckService';
 import Button from '../common/Button';
-import { logout, reset_userdevice } from '../service/UserService';
+import { logout, reset_userdevice, Update_userimg } from '../service/UserService';
 import { get_badalluser, get_baduser } from '../service/BadUserService';
 
 
@@ -94,7 +94,14 @@ const Configcontainer = ({containerStyle}) => {
   const [heartcount, setHeartcount] = useState(0);
   const [badusercount, setBadusercount] = useState(0);
   const [storename, setStorename] = useState("");
+
+  const [userimg, setUserimg] = useState(user.img);
+  const [refresh, setRefresh] = useState(1);
   
+  useEffect(()=>{
+    setUserimg(userimg);
+
+  },[refresh]);
   const LoginCallback = () =>{
       navigation("/login");
   }
@@ -179,6 +186,7 @@ const Configcontainer = ({containerStyle}) => {
       user['type']        = '';
       user['nickname']    = '';
       user['updatetoken'] = '';
+ 
       dispatch2(user);
       setLoading(false);
   }
@@ -276,6 +284,92 @@ const Configcontainer = ({containerStyle}) => {
 
   }
 
+  const fileInput = useRef();
+
+  const handleUploadClick = (e) => {
+    fileInput.current.click();
+  };
+
+  const ALLOW_IMAGE_FILE_EXTENSION = "jpg,jpeg,png,bmp";
+
+  const ImagefileExtensionValid = (name) => {
+    const extention = removeFileName(name);
+
+    if (
+      ALLOW_IMAGE_FILE_EXTENSION.indexOf(extention) <= -1 ||
+      extention == ""
+    ) {
+      return false;
+    }
+    return true;
+  };
+  const removeFileName = (originalFileName) => {
+    const lastIndex = originalFileName.lastIndexOf(".");
+
+    if (lastIndex < 0) {
+      return "";
+    }
+    return originalFileName.substring(lastIndex + 1).toLowerCase();
+  };
+
+  const ImageUpload = async (data, data2) => {
+    const uri = data;
+    const email = data2;
+    const URL = await uploadImage({ uri, email });
+    return URL;
+  };
+  
+  
+  const handlefileuploadChange = async (e) => {
+    let filename = "";
+    const file = e.target.files[0];
+    filename = file.name;
+
+
+    if (!ImagefileExtensionValid(filename)) {
+      window.alert(
+        "업로드 대상 파일의 확장자는 bmp, jpg, jpeg, png 만 가능 합니다"
+      );
+      return;
+    }
+
+
+
+    var p1 = new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let img = reader.result;
+        resolve(img);
+      };
+    });
+    const getRandom = () => Math.random();
+    const email = getRandom();
+
+    p1.then(async (result) => {
+      const uri = result;
+
+
+      let msg = await ImageUpload(uri, email);
+      const IMGTYPE = true;
+      console.log("uri", msg);
+
+      user["img"] = msg;
+      dispatch2(user);
+
+      setUserimg(msg);
+      setRefresh((refresh) => refresh +1);
+
+      const USERID = user.uid;
+      const img = msg;
+      await Update_userimg({USERID, img});
+
+      
+
+    });
+  };
+
+
   return (
     <Container style={containerStyle}>
     
@@ -299,7 +393,10 @@ const Configcontainer = ({containerStyle}) => {
           </MainLoginView>
         ) : (
           <MainLoginedView>
-            <div style={{ display: "flex", flexDirection: "row", minHeight:40 }}>
+            <div style={{ display: "flex", flexDirection: "row", minHeight:40,
+              justifyContent: "center",
+              alignItems: "center"
+               }}>
               <Badge
                 count={user.type == TYPE.USER ? "일반회원" : storename + "점주회원"}
                 height={45}
@@ -308,22 +405,43 @@ const Configcontainer = ({containerStyle}) => {
                 containerStyle={{
                   position: "relative",
                   backgroundColor: "#307bf1",
-                  marginRight: "10px",
+                  marginRight: "30px",
                   padding: "10px",
                   bottom: "1px",
                   borderRadius: "5px",
                 }}
               />
-              {/* <Label
-                content={"로그인"}
-                fontweight={700}
-                containerStyle={{
-                  color: "#FF4E19",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              /> */}
+              <div style={{height:55,width: 55,
+                background: '#ff4e19',
+                borderRadius: 50}}>
+              <img src={userimg}
+              style={{padding:10,height:35,width:35}}
+              />  
+              </div>
+      
+              <Button
+              buttonText={"사진변경"}
+              callback={handleUploadClick}
+              containerStyle={{
+                backgroundColor: 'rgb(255 255 255)',
+                fontSize: '10px',
+                color: 'rgb(11 10 10)',
+                width: '40px',
+                height: '15px',
+                position: 'relative',
+                top: '20px',
+                left: '10px',
+                border: '1px solid',
+                margin:'unset',
+              }}
+              >
+              </Button>
+              <input
+                  type="file"
+                  ref={fileInput}
+                  onChange={handlefileuploadChange}
+                  style={{ display: "none" }}
+            />
             </div>
 
             <Text
@@ -389,10 +507,10 @@ const Configcontainer = ({containerStyle}) => {
                     containerStyle={{
                       position: "relative",
                       backgroundColor: "#dad7d7",
-                      width: "30px",
+                      width: "20px",
                       marginLeft: "10px",
-                      padding:"5px 0px",
-                      marginTop:"-10px",
+                      padding:"2.5px 0px",
+                      marginTop:"-5px",
                       borderRadius: "5px",
                     }}
                   />
@@ -423,10 +541,10 @@ const Configcontainer = ({containerStyle}) => {
                     containerStyle={{
                       position: "relative",
                       backgroundColor: "#dad7d7",
-                      width: "30px",
+                      width: "20px",
                       marginLeft: "10px",
-                      padding:"5px 0px",
-                      marginTop:"-10px",
+                      padding:"2.5px 0px",
+                      marginTop:"-5px",
                       borderRadius: "5px",
                     }}
                   />
@@ -457,10 +575,10 @@ const Configcontainer = ({containerStyle}) => {
                     containerStyle={{
                       position: "relative",
                       backgroundColor: "#dad7d7",
-                      width: "30px",
+                      width: "20px",
                       marginLeft: "10px",
-                      padding:"5px 0px",
-                      marginTop:"-10px",
+                      padding:"2.5px 0px",
+                      marginTop:"-5px",
                       borderRadius: "5px",
                     }}
                   />
@@ -505,10 +623,10 @@ const Configcontainer = ({containerStyle}) => {
                     containerStyle={{
                       position: "relative",
                       backgroundColor: "#dad7d7",
-                      width: "30px",
+                      width: "20px",
                       marginLeft: "10px",
-                      padding:"5px 0px",
-                      marginTop:"-10px",
+                      padding:"2.5px 0px",
+                      marginTop:"-5px",
                       borderRadius: "5px",
                     }}
                   />
@@ -551,10 +669,10 @@ const Configcontainer = ({containerStyle}) => {
                 containerStyle={{
                   position: "relative",
                   backgroundColor: "#dad7d7",
-                  width: "30px",
+                  width: "20px",
                   marginLeft: "10px",
-                  padding:"5px 0px",
-                  marginTop:"-10px",
+                  padding:"2.5px 0px",
+                  marginTop:"-5px",
                   borderRadius: "5px",
                 }}
               />
@@ -600,10 +718,10 @@ const Configcontainer = ({containerStyle}) => {
                 containerStyle={{
                   position: "relative",
                   backgroundColor: "#dad7d7",
-                  width: "30px",
+                  width: "20px",
                   marginLeft: "10px",
-                  padding:"5px 0px",
-                  marginTop:"-10px",
+                  padding:"2.5px 0px",
+                  marginTop:"-5px",
                   borderRadius: "5px",
                 }}
               />
@@ -636,10 +754,10 @@ const Configcontainer = ({containerStyle}) => {
                 containerStyle={{
                   position: "relative",
                   backgroundColor: "#dad7d7",
-                  width: "30px",
+                  width: "20px",
                   marginLeft: "10px",
-                  padding:"5px 0px",
-                  marginTop:"-10px",
+                  padding:"2.5px 0px",
+                  marginTop:"-5px",
                   borderRadius: "5px",
                 }}
               />

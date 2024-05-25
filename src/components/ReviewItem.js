@@ -51,18 +51,25 @@ const ReviewDataItem = styled.div`
 `
 
 const ReviewContentItem = styled.div`
-    padding : 10px 10px 20px 40px;
+    padding : 10px;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-height: 20px;
+    height: 40px;
+    word-break: break-word;
 `
 const ReviewContentItem2 = styled.div`
     padding : 10px 10px 20px 20px;
+
 `
 const ReviewTagItem = styled.div`
     display : flex;
     flex-direction : row;
-    margin-top:10px;
     align-items:center;
     padding-left:30px;
-
 `
 const ReviewTag = styled.div`
 

@@ -194,7 +194,7 @@ const ProfileImage = styled.div`
 const Registerlogincontainer  = ({containerStyle})=>{
 
     const navigate = useNavigate(); 
-    const [imgs, setImgs] = useState('');
+    const [imgs, setImgs] = useState('https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fbottom_gps.png?alt=media&token=efce5849-b3cb-414b-b082-2e96d9d24bfa');
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [repassword, setRepassword] = useState('');

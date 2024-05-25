@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect, useRef } from "react";
 import {
   HashRouter,
   Route,
@@ -12,7 +12,7 @@ import {
 import styled from "styled-components";
 import { getDateFullTime, getDateOrTime, getTime, useSleep } from "../utility/common";
 import Loading from "../common/Loading";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "../api/config";
 import GuideLabel from "../components/GuildeLable";
 import ChatItem from "../components/ChatItem";
@@ -31,6 +31,7 @@ import { PiSiren } from "react-icons/pi";
 import { createIntroMessage, createMainMessage, createMessage, get_channelInfo } from "../service/ChatService";
 import { setRef } from "@mui/material";
 import { CHATCONTENTTYPE } from "../utility/contentDefine";
+import { uploadImage } from "../service/CheckService";
 
 const Container = styled.div`
   background: #d8d8d8;
@@ -79,12 +80,12 @@ const ItemBoxB = styled.div`
 `;
 const ChatbtnLayer = styled.div`
   display: flex;
-  height: 30px;
+
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
   position: relative;
-  top: -10px;
+
 `;
 const ChatIconLayer = styled.div`
   display: flex;
@@ -104,7 +105,7 @@ const InputChat = styled.textarea`
 `;
 
 const BottomLine = styled.div`
-  height: 80px;
+  height: 50px;
   background-color: white;
   position: fixed;
   width: 100%;
@@ -168,14 +169,36 @@ const ItemLayerB = styled.div`
   margin-bottom: 5px;
 `;
 
+const ItemLayerBBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+
+`;
+
+
 const ItemLayerBdate = styled.div`
   font-size: 12px;
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 10px;
+  padding-bottom: 2px;
 `;
+const ItemLayerBUnread = styled.div`
+  font-size: 11px;
+  display: flex;
+  justify-content: flex-end;
+  color :#ff6e11;
+  font-family:'SF-Pro-Text-Semibold';
+`;
+const ImageLayer = styled.image`
+  width: 60%;
+    height: 150px;
+    padding: 10px;
+    border-radius: 20px;  
+`
 
-const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) => {
+const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, ALLUSER }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -184,6 +207,97 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
   const [refresh, setRefresh] = useState(1);
 
 
+  const fileInput = useRef();
+
+  const handleUploadClick = (e) => {
+    fileInput.current.click();
+  };
+
+  const ALLOW_IMAGE_FILE_EXTENSION = "jpg,jpeg,png,bmp";
+
+  const ImagefileExtensionValid = (name) => {
+    const extention = removeFileName(name);
+
+    if (
+      ALLOW_IMAGE_FILE_EXTENSION.indexOf(extention) <= -1 ||
+      extention == ""
+    ) {
+      return false;
+    }
+    return true;
+  };
+  const removeFileName = (originalFileName) => {
+    const lastIndex = originalFileName.lastIndexOf(".");
+
+    if (lastIndex < 0) {
+      return "";
+    }
+    return originalFileName.substring(lastIndex + 1).toLowerCase();
+  };
+
+  const ImageUpload = async (data, data2) => {
+    const uri = data;
+    const email = data2;
+    const URL = await uploadImage({ uri, email });
+    return URL;
+  };
+  
+  
+  const handlefileuploadChange = async (e) => {
+    let filename = "";
+    const file = e.target.files[0];
+    filename = file.name;
+
+
+    if (!ImagefileExtensionValid(filename)) {
+      window.alert(
+        "업로드 대상 파일의 확장자는 bmp, jpg, jpeg, png 만 가능 합니다"
+      );
+      return;
+    }
+
+
+
+    var p1 = new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        let img = reader.result;
+        resolve(img);
+      };
+    });
+    const getRandom = () => Math.random();
+    const email = getRandom();
+
+    p1.then(async (result) => {
+      const uri = result;
+      console.log("uri", uri);
+
+      let msg = await ImageUpload(uri, email);
+      const IMGTYPE = true;
+
+      let read= [];
+      read.push(user.uid);
+
+      await createMessage({
+        CHANNEL_ID,
+        msg,
+        user,
+        read,
+        ALLUSER,
+        IMGTYPE,
+      });
+
+      msg ="파일을 첨부하였습니다";
+      await createMainMessage({
+        CHANNEL_ID,
+        msg,
+        user,
+      });
+      
+
+    });
+  };
 
   const _handlesend = async () => {
 
@@ -193,11 +307,21 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
     const msg = message;
     setRefresh((refresh) => refresh + 1);
 
+    let read= [];
+    read.push(user.uid);
+
+    const IMGTYPE = false;
+
     try {
+      // 최초 작성자도 read로 적어주자
+      // 참여 사용자도 작어주자
       await createMessage({
         CHANNEL_ID,
         msg,
         user,
+        read,
+        ALLUSER,
+        IMGTYPE,
       });
       await createMainMessage({
         CHANNEL_ID,
@@ -222,7 +346,7 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
 
   useEffect(() => {
     setMessage(message);
-    // window.scrollTo(0, document.body.scrollHeight);
+    window.scrollTo(0, document.body.scrollHeight);
   }, [refresh]);
 
   useEffect(() => {
@@ -234,8 +358,31 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
       const list = [];
       querySnapshot.forEach((doc) => {
         list.push(doc.data());
+
+        if(doc.data().READ != undefined){
+
+          let readuserDB = doc.data().READ;
+          const FindIndex = readuserDB.findIndex(x=>x == user.uid);
+          if(FindIndex == -1){
+            //업데이트하자
+              let readuser= [];
+              let readuseritem = doc.data().READ;
+              readuseritem.map((data)=>{
+                readuser.push(data);
+              })
+     
+              readuser.push(user.uid);
+              console.log("업데이트가 필요한 내용입니다", readuser);
+              updateDoc(doc.ref, {
+                READ  : readuser,
+              });
+          }
+        }
+
       });
 
+      // 자신이 read 사용자에 없다면 자신을 read로 업데이트 하자
+     
 
       setMessages(list);
     
@@ -257,6 +404,11 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
 
   })
 
+  function ReadCount(data){
+
+    return (ALLUSER.length - data.READ.length);
+  }
+
   return (
     <Container style={containerStyle}>
       {loading == true ? (
@@ -265,11 +417,12 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
 
           <div id="chatbottom"></div>
           <BottomLine>
-            <InputChat />
+  
             <ChatbtnLayer>
               <ChatIconLayer>
-                <SlPaperClip size={20} color={"#999"} />
+                <SlPaperClip size={20} color={"#999"}  onClick={handleUploadClick} />
               </ChatIconLayer>
+              <InputChat />
               <Row>
                 <Button
                   callback={_handlesend}
@@ -285,6 +438,14 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
                 />
               </Row>
             </ChatbtnLayer>
+
+            <input
+                  type="file"
+                  ref={fileInput}
+                  onChange={handlefileuploadChange}
+                  style={{ display: "none" }}
+            />
+
           </BottomLine>
         </>
       ) : (
@@ -312,7 +473,8 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
                               style={{
                                 width: 30,
                                 height: 30,
-                                borderRadius: 10,
+                                borderRadius: 30,
+                                background:'#ff4e19',
                               }}
                             />
                           </ChatUserImg>
@@ -326,7 +488,16 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
                             )}
 
                             <ItemLayerAcontent>
-                              <ItemBoxA>{data.TEXT}</ItemBoxA>
+                              {
+                                data.IMGTYPE == true ? (<img src={data.TEXT}
+                                  style={{width: '60%',
+                                  height: '150px',
+                                  padding: '10px',
+                                  borderRadius: '20px'  
+                                  }}
+                                />):( <ItemBoxA>{data.TEXT}</ItemBoxA>)
+                              }
+                             
                               <ItemLayerAdate>
                                 {getTime(data.CREATEDAT)}
                               </ItemLayerAdate>
@@ -336,10 +507,26 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
                       </ItemLayerA>
                     ) : (
                       <ItemLayerB>
-                        <ItemLayerBdate>
-                          {getTime(data.CREATEDAT)}
-                        </ItemLayerBdate>
-                        <ItemBoxB>{data.TEXT}</ItemBoxB>
+                        <ItemLayerBBox>
+                          {
+                            //read 사용자를 계산해서 보여주는 function를 만들자
+                             ReadCount(data)> 0 &&
+                            <ItemLayerBUnread>{ReadCount(data)}</ItemLayerBUnread>
+                          }
+                         
+                          <ItemLayerBdate>{getTime(data.CREATEDAT)}</ItemLayerBdate>
+                        </ItemLayerBBox>
+                
+
+                        {
+                          data.IMGTYPE == true ? (<img src={data.TEXT}
+                            style={{width: '60%',
+                            height: '150px',
+                            padding: '10px',
+                            borderRadius: '20px'  
+                            }}
+                          />):( <ItemBoxB>{data.TEXT}</ItemBoxB>)
+                        }
                       </ItemLayerB>
                     )}
                   </>
@@ -349,16 +536,18 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
           </ShowContainer>
 
           <BottomLine>
-            <InputChat
+       
+            <ChatbtnLayer>
+              <ChatIconLayer>
+                <SlPaperClip size={20} color={"#999"} onClick={handleUploadClick} />
+              </ChatIconLayer>
+
+              <InputChat
               value={message}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
             />
-            <ChatbtnLayer>
-              <ChatIconLayer>
-                <SlPaperClip size={20} color={"#999"} />
-              </ChatIconLayer>
               <Row>
                 <Button
                   callback={_handlesend}
@@ -374,6 +563,14 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME }) 
                 />
               </Row>
             </ChatbtnLayer>
+
+            <input
+                  type="file"
+                  ref={fileInput}
+                  onChange={handlefileuploadChange}
+                  style={{ display: "none" }}
+            />
+
           </BottomLine>
         </>
       )}

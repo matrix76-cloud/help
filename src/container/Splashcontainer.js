@@ -94,7 +94,7 @@ const Splashcontainer = ({containerStyle}) => {
     
   
         const userData =  await getStoreDB({user, latitude, longitude});
-        dispatch2(userData);
+        dispatch2(user);
         window.location.replace("/home");
       });
     }
@@ -134,12 +134,12 @@ const Splashcontainer = ({containerStyle}) => {
     async function FetchData(){
 
      getStoreData({user, latitude, longitude}).then((result)=>{
-      dispatch2(result);
+      dispatch2(user);
      })
 
     }
 
-    FetchData();
+   // FetchData();
 
     // async function FetchData() {
     //   const stores = await get_stores();

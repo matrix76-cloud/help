@@ -127,9 +127,9 @@ const Roomowner = styled.div`
   padding: 0px 8px;
   margin-top:5px;
 `;
-const RoomMember = styled.div`
+const RoomUnreadcount = styled.div`
   font-size: 12px;
-  background-color: #afafaf;
+  background-color: #ff4219;
   color: #fff;
   border-radius: 50%;
   padding: 3px 0px;
@@ -146,6 +146,8 @@ const ChatItem = (({item,containerStyle })=>{
     const [room, setRoom] = useState('');
     const [refresh, setRefresh] = useState(1);
 
+    const [unreadcount, setUnreadcount] = useState(0);
+
     const _handleChat = () => {
         
         if (item.TYPE == ChatType.GENERAL) {
@@ -154,6 +156,7 @@ const ChatItem = (({item,containerStyle })=>{
                 CHANNEL_ID: item.CHANNEL_ID,
                 NICKNAME: currentname,
                 GENERAL: true,
+                ALLUSER : item.ALLUSER,
               },
             });     
         } else if (item.TYPE == ChatType.GROUP) {
@@ -162,6 +165,7 @@ const ChatItem = (({item,containerStyle })=>{
                 CHANNEL_ID: item.CHANNEL_ID,
                 NICKNAME: room,
                 GROUP: "group",
+                ALLUSER : item.ALLUSER,
               },
             });           
         }else if (item.TYPE == ChatType.CHECKER) {
@@ -170,6 +174,7 @@ const ChatItem = (({item,containerStyle })=>{
               CHANNEL_ID: item.CHANNEL_ID,
               NICKNAME: currentname,
               CHECKER: true,
+              ALLUSER : item.ALLUSER,
             },
           });
         } 
@@ -188,6 +193,9 @@ const ChatItem = (({item,containerStyle })=>{
             const store = await get_storeinfoForUSERID({ USER_ID });
             setRoom(store.STORENAME);
             setCurrentname("그룹체팅방");
+
+
+
           }
 
           if (item.TYPE == ChatType.GENERAL) {      
@@ -224,6 +232,34 @@ const ChatItem = (({item,containerStyle })=>{
       
             }
           }
+
+
+          // 카운트 구하기
+
+          let unReadCount = 0;
+          const q = query(
+            collection(db, `CHANNEL/${item.CHANNEL_ID}/messages`),
+            orderBy("CREATEDAT", "asc")
+          );
+          const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const list = [];
+            querySnapshot.forEach((doc) => {
+          
+      
+              if(doc.data().READ != undefined){
+      
+                let readuserDB = doc.data().READ;
+                const FindIndex = readuserDB.findIndex(x=>x == user.uid);
+                if(FindIndex == -1){
+                  unReadCount++;
+                }
+              }
+      
+            });
+            setUnreadcount(unReadCount);
+          });
+
+
  
         }
         FetchData();
@@ -295,8 +331,11 @@ const ChatItem = (({item,containerStyle })=>{
                 </ItemDesc>
               )}
               {item.TITLE == undefined && <ItemDesc></ItemDesc>}
-
-              <RoomMember>1</RoomMember>
+              {
+                unreadcount >0 &&
+                <RoomUnreadcount>{unreadcount}</RoomUnreadcount>
+              }
+             
             </div>
           </ItemTextContainer>
         </ItemContainer>

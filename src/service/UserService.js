@@ -368,6 +368,32 @@ export const update_userdistance = async({USERID, DISTANCE}) =>{
 
 }
 
+
+export const Update_userimg = async({USERID, img}) =>{
+
+
+  const userRef = collection(db, "USERS");
+
+
+  const rows = query(userRef, where("USER_SESSION",'==', USERID ));
+
+  try{
+      const querySnapshot =  await getDocs(rows);
+
+      querySnapshot.forEach(function (doc) {
+          updateDoc(doc.ref, {
+              USER_IMAGE  : img,
+          });
+      });
+
+  }catch(e){
+       console.log("error", e.message);
+  }finally{
+      return;
+  }
+
+}
+
 export const DuplicatePhone = async ({ USER_TEL }) => {
   const reviewRef = collection(db, "USERS");
   const q = query(reviewRef, where("USER_TEL", "==", USER_TEL));

@@ -193,6 +193,7 @@ const Idlogincontainer  = ({containerStyle})=>{
             user['type'] = user3.USER_TYPE;
             user['nickname'] = user3.USER_NICKNAME;
             user['user_type'] = user3.USER_TYPE;
+            user['img'] = user3.USER_IMAGE;
 
             user["distance"] = user3.DISTANCE;
 
@@ -201,9 +202,8 @@ const Idlogincontainer  = ({containerStyle})=>{
             const userData = getStoreData({ user,latitude,longitude });
 
             getStoreData({ user,latitude,longitude }).then((userData)=>{
-                dispatch2(userData);
+                dispatch2(user);
       
-
                 setLoading(false);
                 navigate("/loading");
               });

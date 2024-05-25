@@ -237,15 +237,19 @@ export const updateChannel = async ({ ALLUSER, CHANNEL_ID }) => {
 // };
 
 
-export const createMessage = async ({ CHANNEL_ID, msg, user }) => {
+export const createMessage = async ({ CHANNEL_ID, msg, user,read,ALLUSER,IMGTYPE }) => {
   const messageRef = doc(collection(db, `CHANNEL/${CHANNEL_ID}/messages`));
   const id = messageRef.id;
+
 
   const newMessage = {
     MESSAGE_ID: id,
     TEXT: msg,
     CREATEDAT: Date.now(),
     USER: user,
+    READ:read,
+    ALLUSER: ALLUSER,
+    IMGTYPE,
   };
 
   try {

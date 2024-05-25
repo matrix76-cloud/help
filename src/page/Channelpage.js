@@ -57,7 +57,9 @@ const Channelpage = ({ containerStyle }) => {
           : state.NICKNAME + "그룹대화방"
       }
     >
-      <Channelcontainer CHANNEL_ID={state.CHANNEL_ID} GENERAL={state.GENERAL} GENERALNAME={state.NICKNAME} />
+      <Channelcontainer CHANNEL_ID={state.CHANNEL_ID} GENERAL={state.GENERAL} 
+      ALLUSER={state.ALLUSER}
+      GENERALNAME={state.NICKNAME} />
     </ChannelLayout>
   );
 };
