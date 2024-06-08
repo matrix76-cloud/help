@@ -41,7 +41,9 @@ import UseScrollRestoration from "./components/UseScrollRestoration";
 import RouteTransition from "./components/RouteTransition";
 import ReviewAllpage from "./page/ReviewAllpage";
 import Loadingpage from "./page/Loadingpage";
-import Eventcreatepage from "./page/Eventcreatepage";
+// import Eventcreatepage from "./page/Eventcreatepage";
+import Mystoreconfigpage from "./page/Mystoreconfigpage";
+import Loginloadingpage from "./page/Loginloadingpage";
 
 
 
@@ -100,6 +102,7 @@ const App =() =>  {
       <Route path="/" element={<Splashpage />} />
       <Route path="/splash" element={<Splashpage />} />
       <Route path="/loading" element={<Loadingpage />} />
+      <Route path="/loginloading" element={<Loginloadingpage />} />
       <Route path="/home" element={<Homepage />} />
       <Route path="/region" element={<Regionpage />} />
       <Route path="/myregion" element={<MyRegionpage />} />
@@ -135,9 +138,10 @@ const App =() =>  {
       <Route path="/notice" element={<Noticepage />} />
       <Route path="/baduser" element={<Baduserpage />} />
       <Route path="/mystore" element={<Mystorepage />} />
+      <Route path="/mystoreconfig" element={<Mystoreconfigpage />} />
       <Route path="/auth" element={<Kakaoauthpage />} />
       <Route path="/authm" element={<Naverauthpage />} />
-      <Route path="/eventcreate" element={<Eventcreatepage />} />
+      {/* <Route path="/eventcreate" element={<Eventcreatepage />} /> */}
     </Routes>
   );
 

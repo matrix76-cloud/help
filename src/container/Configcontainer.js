@@ -19,7 +19,8 @@ import { get_checkuser, uploadImage } from '../service/CheckService';
 import Button from '../common/Button';
 import { logout, reset_userdevice, Update_userimg } from '../service/UserService';
 import { get_badalluser, get_baduser } from '../service/BadUserService';
-
+import { CiCamera } from "react-icons/ci";
+import { FaCamera } from "react-icons/fa";
 
 const Container = styled.div`
   height       : 100%;
@@ -54,7 +55,8 @@ const MainLoginView = styled.div`
     justify-content : center;
     align-items     : flex-start;
     margin          : 20px 3%;
-    background-color: #F7F7F7;
+    background-color: #FFF;
+    border          : 1px solid #ededed;
     height          : 60px;
     padding-left    : 30px;
     padding-top     : 20px;
@@ -77,6 +79,13 @@ const EmptyRow = styled.div`
   background-color: #F7F7F7;
   height          : 10px;
   margin-bottom : 20px;
+`
+const CameraView = styled.div`
+  height: 20px;
+  width: 20px;
+  position: relative;
+  top: -20px;
+  left: -15px;
 `
 
 const Configcontainer = ({containerStyle}) => {
@@ -172,6 +181,9 @@ const Configcontainer = ({containerStyle}) => {
   const _handleMystore = () => {
       navigation("/mystore", { state: { STORE_ID: storeitem.STORE_ID } });
   }
+  const _handleMystoreconfig = () => {
+    navigation("/mystoreconfig", { state: { STORE_ID: storeitem.STORE_ID } });
+}
   const _handleLogout = async() =>{
 
       setLoading(true);
@@ -374,7 +386,7 @@ const Configcontainer = ({containerStyle}) => {
     <Container style={containerStyle}>
     
     {
-      loading == true ? (<Loading containerStyle={{marginTop:"30%"}}/>) :(     
+      loading == true ? (<></>) :(     
          <>
         {user.uid == "" ? (
           <MainLoginView>
@@ -412,30 +424,14 @@ const Configcontainer = ({containerStyle}) => {
                 }}
               />
               <div style={{height:55,width: 55,
-                background: '#ff4e19',
                 borderRadius: 50}}>
               <img src={userimg}
-              style={{padding:10,height:35,width:35}}
+              style={{height:50,width:50, borderRadius:50}}
               />  
               </div>
       
-              <Button
-              buttonText={"사진변경"}
-              callback={handleUploadClick}
-              containerStyle={{
-                backgroundColor: 'rgb(255 255 255)',
-                fontSize: '10px',
-                color: 'rgb(11 10 10)',
-                width: '40px',
-                height: '15px',
-                position: 'relative',
-                top: '20px',
-                left: '10px',
-                border: '1px solid',
-                margin:'unset',
-              }}
-              >
-              </Button>
+              <CameraView onClick={handleUploadClick}><FaCamera /></CameraView>
+ 
               <input
                   type="file"
                   ref={fileInput}
@@ -455,10 +451,12 @@ const Configcontainer = ({containerStyle}) => {
               buttonText={"로그아웃"}
               callback={_handleLogout}
               containerStyle={{
-                backgroundColor: "#FF4E19",
+                backgroundColor: "#FFF",
+                color :"#000",
+                border :"1px solid #ededed",
                 borderRadius: "10px",
-                fontSize: 16,
-                color: "#fff",
+                fontSize: 17,
+                height:60,
                 margin: " 10px 0px",
                 width: "90%",
                 boxShadow: "1px 1px 1px #d1cccc",
@@ -477,7 +475,22 @@ const Configcontainer = ({containerStyle}) => {
                 containerStyle={{ paddingLeft: 10 }}
               />
             </Row>
+
+
             <Row onClick={_handleMystore}>
+              <Label
+                callback={_handleno}
+                content={"내 매장보기"}
+                fontweight={400}
+                containerStyle={{ paddingLeft: 10 }}
+              />
+              <Image
+                source={imageDB.right}
+                containerStyle={{ width: "18px", display: "flex" }}
+              />
+            </Row>
+
+            <Row onClick={_handleMystoreconfig}>
               <Label
                 callback={_handleno}
                 content={"매장정보관리"}
@@ -671,7 +684,7 @@ const Configcontainer = ({containerStyle}) => {
                   backgroundColor: "#dad7d7",
                   width: "20px",
                   marginLeft: "10px",
-                  padding:"2.5px 0px",
+                  padding:"3px 0px",
                   marginTop:"-5px",
                   borderRadius: "5px",
                 }}
@@ -867,14 +880,10 @@ const Configcontainer = ({containerStyle}) => {
               fontweight={400}
               containerStyle={{ paddingLeft: 10 }}
             />
-            {storeitem != null && (
-              <Badge
-                count={
-                  storeitem.STORESTATUS == STORE_STATUS.REGIST
-                    ? "입점상태입니다"
-                    : "입점대기상태입니다"
-                }
-                width={100}
+            {(storeitem != null && storeitem.STORESTATUS == STORE_STATUS.REGIST)  && 
+
+                <Badge
+                count={'입점상태입니다'}
                 height={40}
                 backgroundColor={"#FFF"}
                 color={"#000"}
@@ -886,7 +895,24 @@ const Configcontainer = ({containerStyle}) => {
                   borderRadius: "5px",
                 }}
               />
-            )}
+            }
+            {(storeitem != null && storeitem.STORESTATUS == STORE_STATUS.UNREGIST)  && 
+              <Badge
+              count={'입점대기 상태입니다'}
+              height={40}
+              backgroundColor={"#FFF"}
+              color={"#000"}
+              containerStyle={{
+                position: "relative",
+                backgroundColor: "#FFF",
+                width: "100px",
+                marginLeft: "10px",
+                borderRadius: "5px",
+              }}
+              />
+              }
+
+        
           </div>
           <Image
             source={imageDB.right}

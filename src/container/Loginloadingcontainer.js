@@ -15,7 +15,7 @@ const Container = styled.div`
 
 `
 
-const Loadingcontainer = ({containerStyle}) => {
+const Loginloadingcontainer = ({containerStyle}) => {
 
   const navigate = useNavigate();
 
@@ -35,12 +35,9 @@ const Loadingcontainer = ({containerStyle}) => {
   
      })
 
-     const u = await useSleep(1000);
-     navigate("/home", { state: { homerefresh: false } });
+     await useSleep(3000);
 
-
-
-
+     navigate("/config");
 
     } 
     Process();
@@ -56,4 +53,4 @@ const Loadingcontainer = ({containerStyle}) => {
   );
 }
 
-export default Loadingcontainer;
+export default Loginloadingcontainer;

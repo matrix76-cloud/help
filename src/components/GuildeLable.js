@@ -16,10 +16,11 @@ const Container = styled.div`
 
 const LabelMainView = styled.div`
     display: flex;
-    background-color: #e9e8e8;
+    background-color: #fff;
     flex-direction: column;
     padding: 20px 0px;
     color: #626060;
+    border :1px solid #ededed;
 `
 
 const LabelView = styled.div`
@@ -35,6 +36,7 @@ const Label = styled.span`
 const SubLabelView = styled.div`
     padding: 0px 10px;
     display : flex;
+    margin-top:10px;
 
 
 `

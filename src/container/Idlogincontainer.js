@@ -201,19 +201,10 @@ const Idlogincontainer  = ({containerStyle})=>{
             const longitude = user.longitude;
             const userData = getStoreData({ user,latitude,longitude });
 
-            getStoreData({ user,latitude,longitude }).then((userData)=>{
-                dispatch2(user);
-      
-                setLoading(false);
-                navigate("/loading");
-              });
-  
-              
+            dispatch2(user);
 
-
-
-    
-
+            navigate("/loginloading");
+   
         }
 
         UserLogin(uniqueId);
@@ -227,32 +218,28 @@ const Idlogincontainer  = ({containerStyle})=>{
       setPasswordview(false);
     }
     return(
-    <>
-    {
-        loading == true ? (<Loading containerStyle={{marginTop:300}}/>):(
-            <Container style={containerStyle}>
-
+        <Container style={containerStyle}>
             <View1>
                 <LabelView><LabelText>사용 아이디</LabelText></LabelView>
                 <ContentView>
-                  <input type="text"
-                  style={{border:"none", fontSize:14}}
-                  placeholder ={"아이디를 입력해주세요"}
-                  value={id}
-                  onSubmitEditing = {()=>{passwordref.current.focus()}}
-                  onChange = {e => {
-                      setId(e.target.value);
-                      setRefresh(refresh => refresh + 1);
-                  }}
+                    <input type="text"
+                    style={{border:"none", fontSize:14}}
+                    placeholder ={"아이디를 입력해주세요"}
+                    value={id}
+                    onSubmitEditing = {()=>{passwordref.current.focus()}}
+                    onChange = {e => {
+                        setId(e.target.value);
+                        setRefresh(refresh => refresh + 1);
+                    }}
                 />
-      
-               
+
+                
                 </ContentView>
             </View1>
             <View1>
                 <LabelView><LabelText>비밀 번호</LabelText></LabelView>
                 <ContentView>
-                  {
+                    {
                     passwordview == true &&  <input type="text"
                     ref = {passwordref}
                     style={{border:"none", fontSize:14}}
@@ -264,9 +251,9 @@ const Idlogincontainer  = ({containerStyle})=>{
                         setRefresh(refresh => refresh + 1);
                     }}
                     ></input>
-                  }
-          
-                  {
+                    }
+            
+                    {
                     passwordview == false &&  <input type="password"
                     ref = {passwordref}
                     style={{border:"none", fontSize:14}}
@@ -277,42 +264,22 @@ const Idlogincontainer  = ({containerStyle})=>{
                         setRefresh(refresh => refresh + 1);
                     }}
                     ></input>
-                  }
-                  <div style={{position: "absolute",right: "15%"}}>
+                    }
+                    <div style={{position: "absolute",right: "15%"}}>
                     {
                         passwordview == false ? (<div onClick={_handelPasswordHide}><GoEye /> </div> ):(
-                         <div onClick={_handelPasswordView}><GoEyeClosed /></div> 
+                            <div onClick={_handelPasswordView}><GoEyeClosed /></div> 
                         )
                     }
                 </div> 
                 </ContentView>
             </View1>
-            {/* <View1>
-                <LabelView><LabelText>자동 로그인</LabelText></LabelView>
-                <ConfigView>
-                <Switch
-                    button1={'해제'}  button2={'설정'} Switchcallback={Switchcallback}
-                    containerStyle={{display: "flex",justifyContent: "flex-start"}} 
-                    />
-                </ConfigView>
-            </View1> */}
-      
-        
-      
-      
-              {
-                  (id != '' && password !='') ? ( <Button buttonText ={'로그인'} callback={_handleLogin} containerStyle={{backgroundColor : "#FF4E19",
-                  color :'#fff', border :'1px solid #FF4E19',margin:' 10px 10%', width:"80%", borderRadius:5}}/>):(<Button buttonText ={'로그인'} containerStyle={{backgroundColor : "#d8d3d2",
-                  color :'#fff', border :'1px solid #d8d3d2',margin:' 10px 10%', width:"80%", borderRadius:5}}/>)
-              }
-       
-          
-      
-            </Container>
-        )
-    }
-    </>
-
+            {
+                (id != '' && password !='') ? ( <Button buttonText ={'로그인'} callback={_handleLogin} containerStyle={{backgroundColor : "#FFF",
+                color: 'rgb(24 23 23)', border :'1px solid #B3B3B3',margin:' 10px 10%', width:"80%", borderRadius:5, fontSize: '18px'}}/>):(<Button buttonText ={'로그인'} containerStyle={{backgroundColor : "#d8d3d2",
+                color :'#fff', border :'1px solid #d8d3d2',margin:' 10px 10%', width:"80%", borderRadius:5, fontSize: '18px'}}/>)
+            }  
+        </Container>
     );
 }
 

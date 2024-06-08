@@ -83,6 +83,14 @@ export const imageDB = {
   sample3: require("../assets/imageset/sample3.png"),
   banner1: require("../assets/imageset/banner1.png"),
   banner2: require("../assets/imageset/banner2.png"),
+  checksample1 : require("../assets/imageset/checksample1.png"),
+  checksample2 : require("../assets/imageset/checksample2.png"),
+  checksample3 : require("../assets/imageset/checksample3.png"),
+  checksample4 : require("../assets/imageset/checksample4.png"),
+  checksample5 : require("../assets/imageset/checksample5.png"),
+  checksample6 : require("../assets/imageset/checksample6.png"),
+  checksample7 : require("../assets/imageset/checksample7.png"),
+
 };
 
 

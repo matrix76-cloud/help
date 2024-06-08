@@ -14,6 +14,7 @@ import { MaroneContent } from '../utility/maroneDefine';
 import { get_userInfoForusername } from '../service/UserService';
 import { CHECK } from '../utility/contentDefine';
 import Loading from '../common/Loading';
+import { imageDB } from '../utility/imageData';
 
 const Container = styled.div`
   margin-top:60px;
@@ -65,6 +66,7 @@ const CheckButton = styled.div`
   padding: 10px;
   width: 20%;
   margin: 5px 10px;
+  border-radius :10px;
 `;
 
 const SelectView = styled.div`
@@ -94,6 +96,17 @@ const Info = styled.div`
   padding-bottom: 10px;
 `;
 
+const SelectImage = styled.div`
+
+margin-bottom: 10px;
+
+color: #242323;
+padding: 5px 10px;
+text-decoration: underline;
+
+`
+
+
 const Checkaddcontainer = ({containerStyle, type, item}) => {
 
   const { user, dispatch2 } = useContext(UserContext);
@@ -109,7 +122,7 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
   const [registenable, setRegistenable] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState("https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fwoman5.png?alt=media&token=2cc3f09f-44e9-4a5f-a6cd-0a8030324b0d");
+  const [imageUrl, setImageUrl] = useState(item.IMG);
 
   const fileInput = useRef();
 
@@ -118,6 +131,21 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
   };
 
   const ALLOW_IMAGE_FILE_EXTENSION = "jpg,jpeg,png,bmp";
+
+  const checkadminimg = [
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F55555.png?alt=media&token=0dfd3f8e-d1aa-4bdc-bcd2-1d42036868fc",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F444444.png?alt=media&token=d0c7b15a-c687-479f-bc44-16d83b40257d",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F949635.png?alt=media&token=6155cdb6-7623-4f8d-9913-d8b2c1f5a30c",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F2154481.png?alt=media&token=a2b0baea-153f-440a-8c9c-a0ae59ede7e2",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F3270686.svg?alt=media&token=6c653c0a-cfb4-4f30-b3da-0ea9d5c2312e",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F3577099.png?alt=media&token=3200234f-921d-44a1-aaa9-7b3df6065d6c",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2F4086577.png?alt=media&token=8fe9b909-7d3f-4e7b-b0fa-56b00870eefa",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fcartoon-sexy-woman-underwear-260nw-188165348.webp?alt=media&token=89b46c72-38d5-4a8e-8ddb-6adeeddb4be8",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fistockphoto-1224163694-612x612.jpeg?alt=media&token=7b04a99d-7e46-4bf6-92be-f472b5c1f329",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fmd_90a48b7f4837448509d59deb01e571e7.jpeg?alt=media&token=fdec9416-1365-40f3-a279-a1cb79ffd6fd",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fpng-transparent-sexy-girl-woman-in-red-bikini-sexy-woman-vector-template-svg-file-sexy-woman-in-red-bikini-thumbnail.png?alt=media&token=1e26585b-cb4f-4ad6-84ab-a6a4863c4654",
+   "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fpngtree-sexy-girl-wearing-a-wreath-image_1080943.jpeg?alt=media&token=5286e72d-cc2b-41f0-b8d7-2859a8a774de"
+  ]
 
   const ImagefileExtensionValid = (name) => {
     const extention = removeFileName(name);
@@ -263,6 +291,12 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
     // navigate("/checkadmin", {state :{STORE : item}});
   }
 
+  const selectImageButton = (index)=>{
+
+    setImageUrl(checkadminimg[index]);
+    setRefresh((refresh) => refresh +1);
+  }
+
   const _handleadjustcallback = async() => {
 
     if (
@@ -291,6 +325,10 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
     const DEVICEID = user.deviceid;
     const USER_ID = user.uid;
     const IMG = imageUrl;
+
+    console.log("image", IMG);
+
+  
     
     const a = await update_checkuserinfo({
       CHECKUSER_ID,
@@ -336,12 +374,13 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
 
   useEffect(() => {
     setAge(age);
+    setImageUrl(imageUrl);
   }, [refresh])
 
   return (
     <>
         {
-      loading == true ? (<Loading containerStyle={{marginTop:"30%"}}/>):(<Container style={containerStyle}>
+      loading == true ? (<Loading containerStyle={{marginTop:"60%"}}/>):(<Container style={containerStyle}>
         <CheckView>
           <GuideLabel
             containerStyle={{ marginTop: 10, padding: "unset" }}
@@ -376,12 +415,14 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
             <ContentView>
               <ContentLabel>관리사 사진 등록</ContentLabel>
        
-                  <Button
-                      buttonText={"등록하기"}
+                <div style={{display:"flex", flexDirection:"row", justifyContent:"space-around"}}>
+                <Button
+                      buttonText={"이미지 찾아보기"}
                       callback={handleUploadClick}
                       containerStyle={{
-                        backgroundColor: '#b4acac',
-                        color: "#fff",
+                        backgroundColor: '#fff',
+                        color: "#000",
+                        border :"1px solid",
                         margin: "10px",
                         width: "50%",
                         height: 30,
@@ -391,6 +432,20 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
                     }}
                   /> 
 
+                  {
+                    imageUrl != '' && 
+                    <div style={{display:"flex", flexDirection:"row", justifyContent:"center", marginBottom:10}}>
+                    <img
+                    src={imageUrl}
+                    style={{ height: "100px", width: "100px", borderRadius:"100px",
+                    border: "3px dashed #ff0000",
+                    borderRadius: "50px" }} />
+                    </div>
+        
+                  }
+                </div>
+
+
               <input
                 type="file"
                 ref={fileInput}
@@ -398,15 +453,21 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
                 style={{ display: "none" }}
               />
 
+              <div style={{display:"flex", justifyContent:"center"}}>
+                <SelectImage>이미지 선택하기</SelectImage>
+              </div>
+              
+
+              <div style={{display:"flex", flexDirection:"row", flexWrap:"wrap"}}>
               {
-                imageUrl != '' && 
-                <div style={{display:"flex", flexDirection:"row", justifyContent:"center", marginBottom:10}}>
-                <img
-                src={imageUrl}
-                style={{ height: "120px", width: "120px" }} />
-                </div>
-    
+                checkadminimg.map((data, index)=>(
+                  <img src={data} 
+                  onClick={()=>{selectImageButton(index)}}
+                  className="button"
+                  style={{width:"50px", height:"50px", borderRadius:"50px", marginLeft:20, marginBottom:30}}/>
+                ))
               }
+              </div>
 
   
             </ContentView>
@@ -501,11 +562,11 @@ const Checkaddcontainer = ({containerStyle, type, item}) => {
                     buttonText={"가능여부확인"}
                     callback={_handleverifycallback}
                     containerStyle={{
-                      backgroundColor: "#FF4E19",
+                      backgroundColor: "#FFF",
                       borderRadius: "10px",
                       fontSize: 14,
-                      color: "#fff",
-                      border: "1px solid #FF4E19",
+                      color: "#000",
+                      border: "1px solid #EDEDED",
                       margin: " 5px 0px",
                       width: "30%",
                       height: "30px",

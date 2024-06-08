@@ -119,6 +119,7 @@ export const update_checkuserinfo = async ({
   CHECKID,
   CHECKSTARTTIME,
   CHECKUSERNAME,
+  IMG,
 }) => {
   const checkuserRef = collection(db, "CHECKUSER");
 
@@ -136,6 +137,7 @@ export const update_checkuserinfo = async ({
         CHECKID: CHECKID,
         CHECKSTARTTIME: CHECKSTARTTIME,
         CHECKUSERNAME: CHECKUSERNAME,
+        IMG
       });
     });
   } catch (e) {

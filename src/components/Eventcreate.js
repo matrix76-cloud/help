@@ -11,10 +11,10 @@ import Button from '../common/Button';
 import { getStoreData } from '../utility/common';
 
 const Container = styled.div`
-  margin-top:60px;
+
 `
 
-const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
+const Eventcreate = ({containerStyle, STORE_ID}) => {
 
   const [couponeitems, setCouponeitems] = useState([]);
 
@@ -56,6 +56,11 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
   },[refresh])
 
  const _handleeventregister = async() =>{
+
+  if(eventname =='' || eventmoney == '' || eventsu == ''){
+    alert("이벤트 내용을 입력 해주세요");
+    return;
+  }
   const STORECOUPONECONTENT = eventname;
   const STORECOUPONEMONEY = eventmoney;
   const STORECOUPONEAMOUNT = eventsu;
@@ -67,7 +72,7 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
   getStoreData({user, latitude, longitude}).then((result)=>{
     dispatch2(result);
 
-    alert("정상적으로 등록 되었습니다");
+    alert("이벤트가 정상적으로 등록 되었습니다");
    })
 
  }
@@ -82,8 +87,8 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
 
       {
         load == true ? (<Loading/>):(<>
-            <div style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start"}}>
-            <Text value={'이벤트 내용'} containerStyle={{fontWeight:600, paddingLeft:20}} size={14}  />
+            <div style={{display:"flex", padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start"}}>
+            <Text value={'이벤트 내용'} containerStyle={{ paddingLeft:20}} size={14}  />
             <input type="text"
               style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
               placeholder ={"이벤트 내용을 입력 하세요"}
@@ -95,8 +100,8 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
             />
             </div>
 
-            <div style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
-            <Text value={'이벤트 금액'} containerStyle={{fontWeight:600, paddingLeft:20}} size={14}  />
+            <div style={{display:"flex",padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
+            <Text value={'이벤트 금액'} containerStyle={{ paddingLeft:20}} size={14}  />
             <input type="number"
               style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
               placeholder ={"이벤트 금액을 입력 하세요"}
@@ -109,8 +114,8 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
             </div>
 
 
-            <div style={{display:"flex", flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
-            <Text value={'쿠폰 수량'} containerStyle={{fontWeight:600, paddingLeft:20}} size={14}  />
+            <div style={{display:"flex",padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
+            <Text value={'쿠폰 수량'} containerStyle={{paddingLeft:20}} size={14}  />
             <input type="number"
               style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
               placeholder ={"쿠폰수량을 입력 하세요"}
@@ -126,13 +131,15 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
             buttonText={"이벤트 등록"}
             callback={_handleeventregister}
             containerStyle={{
-              backgroundColor : "#ff4e19",
-              color: "#fff",
-              width: "90%",
-              margin: "30px 0px 30px 10px",
+              backgroundColor : "#FFF",
+              color: "#000",
+              border : "1px solid #ededed",
+              width: "80%",
               height: "40px",
-              fontSize: "14px",
+              fontSize: "16px",
               borderRadius: "5px",
+              margin :"20px 10%"
+
             }}
           />
 
@@ -145,4 +152,4 @@ const Eventcreatecontainer = ({containerStyle, STORE_ID}) => {
   );
 }
 
-export default Eventcreatecontainer;
+export default Eventcreate;

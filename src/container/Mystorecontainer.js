@@ -85,6 +85,16 @@ const EmptyRow = styled.div`
   height:5px;
 `
 
+const MainLabel = styled.div`
+background: #4140408f;
+position: absolute;
+top: 100px;
+padding: 20px;
+text-align: left;
+color: #b2acac;
+
+`
+
 
 
 const MyStorecontainer = ({containerStyle, STORE_ID}) => {
@@ -137,10 +147,10 @@ const topcallback = () =>{
   });
 }
 const prevcallback = () =>{
-  //  navigation(-1);
+    navigation(-1);
   //navigation.push("/home");
   // navigate("/home",  { replace: true});
-  navigation("/home", { state: { homerefresh: false } });
+  // navigation("/home", { state: { homerefresh: false } });
 }
 const homecallback = () =>{
   //navigation.push("/home");
@@ -180,35 +190,17 @@ const homecallback = () =>{
   }
     
   useEffect(() => {
-    // getstoreview().then((result) => {
-    //     // 포함되어 있지 않다면 데이타 베이스에 포함 시키고
-    //     if(result == 0){
- 
-    //       const USER_SESSION = user.uid;
-      
-    //       registstoreview().then((result)=>{
 
-    //         let storeviewlist = user.storeviewlist;
-    //         storeviewlist.push(store);
-    //         user["storeviewlist"] = storeviewlist;
-  
-    //         dispatch2(user);
-
-   
-    //       }); 
-
-    //     }
-    //   })
   }, [])
 
  useEffect( ()=>{
-   setLoading(true);
+    setLoading(true);
    async function Process(){
 
     const store = await get_storeinfoForSTOREID({STORE_ID});
 
     setStore(store);
-    setLoading(false);
+   setLoading(false);
    } 
    Process();
  }, [])
@@ -216,10 +208,12 @@ const homecallback = () =>{
   return (
     <Container style={containerStyle}>
       {loading == true ? (
-        <Loading containerStyle={{ marginTop: 300 }} />
+        <></>
       ) : (
         <div>
-          <Storeimageaccessory store={store} prevcallback={prevcallback} />
+
+          <MainLabel>자신의 상점이 마원에서 노출되는 상태를 확인하는 페이지입니다. 수정하시려면 내 설정 - 점주 메뉴에서 진행하시기 바랍니다</MainLabel>
+          <Storeimageaccessory store={store} prevcallback={prevcallback} mode= {1} />
           <Image
             source={store.STOREIMAGEARY[0]}
             Radius={false}
@@ -269,7 +263,7 @@ const homecallback = () =>{
                     _scrollTo("event", 0);
                   }}
                 >
-                  <StoreTypeText contenttype={contenttype} type={"event"}>
+                  <StoreTypeText contenttype={contenttype} type={"event"} >
                     {"이벤트"}
                   </StoreTypeText>
                 </StoreTypeName>
@@ -375,7 +369,7 @@ const homecallback = () =>{
           <EmptyRow />
 
           <div id="event"></div>
-          <Storeevent store={store}  create={true}/>
+          <Storeevent store={store}  create={false}/>
           <EmptyRow />
 
           <div id="price"></div>
@@ -395,11 +389,11 @@ const homecallback = () =>{
           <EmptyRow />
 
           <div id="check"></div>
-          <Storecheck store={store} />
+          <Storecheck store={store} SELF={true} />
           <EmptyRow />
 
           <div id="review"></div>
-          <Storereview store={store} />
+          <Storereview store={store}  create={false} SELF={true} />
         </div>
       )}
     </Container>

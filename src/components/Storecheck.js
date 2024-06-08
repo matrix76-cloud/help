@@ -33,13 +33,13 @@ const CheckView = styled.div`
 `
 const PersonItem = styled.div`
     width :100%;
-    height : 160px;
+    height : 180px;
     border-width :1px;
     border-color : #EBEBEB;
     border-radius :10px;
     margin :5px;
-    padding :10px 35px;
-    background-color :#f2f2f2;
+    padding :10px 15px;
+    background-color :#f9f9f9;
     display:flex;
     justify-content:center;
     flex-direction: column;
@@ -107,17 +107,35 @@ const StopCheckButtonData = styled.div`
 `
 const ChatView = styled.div`
     background-color : ${({bgcolor})=>bgcolor};
-    width: 80px;
+    width: 50%;
     height: 25px;
     border-radius: 5px;
     justify-content: center;
     align-items: center;
     display: flex;
 `
+const ChatViewhelp = styled.div`
+  background-color: #ffffff;
+  width: 200px;
+  border-radius: 5px;
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  text-align: left;
+  padding: 5px;
+  color: #000;
+  border: 1px solid #ededed;
+  margin-bottom:10px;
+`
 const ChatText = styled.span`
     color :#fff;
     font-family : ${({theme}) =>theme.EXTRABOLD};
     font-size: 14px;
+`
+const ChatTextHelp = styled.span`
+    color :#000;
+    font-family : ${({theme}) =>theme.EXTRABOLD};
+    font-size: 11px;
 `
 
 const CheckButtonDataText = styled.span`
@@ -219,6 +237,10 @@ const Storecheck = ({containerStyle, store, SELF}) => {
       if (user.uid == "") {
       alert("로그인이 필요한 메뉴 입니다");
       return;
+      }
+
+      if(SELF == true){
+        return true;
       }
 
       // 관리사의 사용자 아이디를  찾아내
@@ -407,9 +429,9 @@ const Storecheck = ({containerStyle, store, SELF}) => {
                     </>
                   ) :(<>
                     {data.CHECKCHAT == true ? (
-                      <ChatView bgcolor={theme.main} onClick={() => { _handlechat(data) }}>
-                      <ChatText>{"채팅 가능"}</ChatText>
-                      </ChatView>
+                      <ChatViewhelp bgcolor={theme.main} onClick={() => { }}>
+                      <ChatTextHelp>{"아래 관리사 이미지를 클릭하시면 관리사와 채팅이 가능합니다"}</ChatTextHelp>
+                      </ChatViewhelp>
                     ) : ( <ChatView bgcolor={"#8d8582"}>
                     <ChatText>{"채팅 불가능"}</ChatText>
                     </ChatView>)}
@@ -420,9 +442,25 @@ const Storecheck = ({containerStyle, store, SELF}) => {
 
   
                 <div style={{display:"flex", flexDirection:"row"}}>
-                  <div onClick={()=>{_handleAdjust(data)}} className="imgblink" style={{width:"50%", display:"flex", justifyContent:"center", alignItms:"center", flexDirection:"column"}}>
-                    <img    src={data.IMG} style={{width:"80px", height:"80px", borderRadius:"40px",}}/>
-                  </div>
+
+                  {
+                    SELF == true ? (<div onClick={()=>{}}  style={{width:"50%", display:"flex", justifyContent:"center", alignItms:"center", flexDirection:"column"}}>
+                    <img  src={data.IMG} style={{width:"100px", height:"100px", borderRadius:"100px",}}/>
+                  </div>):(
+                    <>
+                     {
+                      data.CHECKCHAT == true ? ( <div onClick={()=>{_handlechat(data)}} className="imgblink" style={{width:"50%", display:"flex", justifyContent:"center", alignItms:"center", flexDirection:"column"}}>
+                        <img  src={data.IMG} style={{width:"100px", height:"100px", borderRadius:"100px",}}/>
+                        </div>) :(     <div onClick={()=>{}}  style={{width:"50%", display:"flex", justifyContent:"center", alignItms:"center", flexDirection:"column"}}>
+                        <img  src={data.IMG} style={{width:"100px", height:"100px", borderRadius:"100px",}}/>
+                      </div>)
+                     }
+                    </>
+                  )
+                  }
+                
+               
+             
                   <div style={{display:"flex", justifyContent:"flex-end", flexDirection:"column", width:"50%"}}>      
                       <PersonNameView onClick={()=>{_handleAdjust(data)}} >
                         <div style={{ marginRight: 3, paddingTop: 4 }}>

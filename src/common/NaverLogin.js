@@ -1,18 +1,39 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect,useWindowDimensions} from 'react';
 import { HashRouter, Route, Switch, Redirect, BrowserRouter, Routes, Link, useNavigate} from "react-router-dom";
 import styled from 'styled-components';
 
+import useDimensions from "react-use-dimensions";
+import Text from './Text';
+
 const Container = styled.div`
 
-    background: #03C70A;
 
 `
+
+const SocialButton = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction : row;
+    width :250px;
+    height: 40px;
+    align-items: center;
+    margin: 10px;
+    font-weight:700;
+    font-size:14px;
+    background-color : ${({bgcolor}) => bgcolor};
+    color :  ${({color}) => color};
+`
+
 
 const { naver } = window;
 
 const NaverLogin = ({containerStyle}) => {
 
   const [user, setUser] = useState(null);
+  const [stepRef, stepSize] = useDimensions();
+
+  console.log("useDimensions", stepSize.x);
+
 
   const navigate = useNavigate();
    useEffect(()=>{
@@ -29,8 +50,9 @@ const NaverLogin = ({containerStyle}) => {
     loginButton: {
       color: "green",
       type: 3,
+      fontsize:14,
       height: 40,
-      width: "300px",
+      width : 200
     },
   });
 
@@ -48,6 +70,12 @@ const NaverLogin = ({containerStyle}) => {
     });
   };
 
+  const handleLogin = () =>{
+    const naverLoginButton = document.getElementById(
+      "naverIdLogin_loginButton"
+    );
+    if (naverLoginButton) naverLoginButton.click();
+  }
 
   useEffect(() => {
     naverLogin.init();
@@ -56,8 +84,14 @@ const NaverLogin = ({containerStyle}) => {
 
 
   return (
-    <Container style={containerStyle}>
-        <div id="naverIdLogin" style={{width:'300px'}}></div>
+    <Container style={containerStyle}  ref={stepRef}>
+        <div id="naverIdLogin" style={{display:"none"}}></div>
+
+        <SocialButton bgcolor={'#03CF5D'} onClick={handleLogin} >    
+        {/* <Image source={imageDB.kakaomsg} containerStyle={{width:30}}/> */}
+        <Text value={'네이버로 로그인'} color = {'#fff'}> </Text>    
+      </SocialButton>
+
     </Container>
   );
 }

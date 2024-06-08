@@ -35,6 +35,7 @@ const Row = styled.div`
   position: fixed;
   top: 0px;
   z-index: 10;
+  justify-content:center;
 
 `
 
@@ -51,12 +52,15 @@ const PrevHeader = ({containerStyle, headername}) => {
 
     <Container>
       <Row>
-        <div onClick={_handlePrev}>
-          <Image source={imageDB.prev} containerStyle={{width:15, paddingLeft:10,height:20}}/>
+        <div onClick={_handlePrev} style={{display:"flex"}}>
+          <Image source={imageDB.prev} containerStyle={{width:15, paddingLeft:10,height:20, marginTop:3}}/>
+
+          <div style={{paddingLeft:15}}>
+          <Text size={20} value={headername}></Text>
+          </div>
+
         </div>
-        <div style={{paddingLeft:30}}>
-          <Text size={18} value={headername}></Text>
-        </div>
+    
     
       </Row>
 

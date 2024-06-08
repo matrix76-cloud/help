@@ -12,13 +12,12 @@ import { get_review } from '../service/ReviewService';
 import { get_checkuser } from '../service/CheckService';
 
 const Container = styled.div`
+
 `
 const ProductContentView = styled.div`
     display:flex;
     flex-direction: column;
-    background-color  : #E0DDDA;
-    padding: 0px 2.5%;
-
+    background-color  : #FFF;
 `
 
 const ProductRegion = styled.div`
@@ -188,8 +187,8 @@ const CloseView = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    right: 25px;
-    margin-top: 10px;
+    right: 15px;
+    margin-top: 5px;
 `
 const CloseViewText = styled.span`
     color : #9f9d9d;
@@ -333,155 +332,41 @@ const Mapshop = ({containerStyle, shopdata, simple, callback}) => {
         </TagView>  }
     
         <CloseView onClick={_handleClose}>
-            <Image source={imageDB.close} containerStyle={{width:"25px", height:"25px"}}/>
+            <Image source={imageDB.close} containerStyle={{width:"15px", height:"15px"}}/>
         </CloseView>
     
 
-        <div style={{backgroundColor:"#E0DDDA"}}>
-            <img  onClick={()=>{_handleStore(storedata.STORE_ID)}} src={storedata.STOREIMAGEARY[0]} style={{width:"100%", height:"200px"}}></img>
+        <div style={{backgroundColor:"#FFF", display:"flex", flexDirection:"row"}}>
+            <img  onClick={()=>{_handleStore(storedata.STORE_ID)}} src={storedata.STOREIMAGEARY[0]} style={{width:"30%", height:"100px", padding:"10px", borderRadius:"15px"}}></img>
+
+            <ProductContentView>
+                <ProductNameView>
+                    <Text size={17} value={storedata.STORENAME} containerStyle={{fontWeight:700}} />
+                </ProductNameView>
+                <ProductInfoView>
+                    <ProductRegion>
+                        <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+                        <Image source ={imageDB.NavigationImage} containerStyle={{width:"30px", display:"flex", justifyContent:"center"}} Radius={false}/>
+                        <Text size={12} value ={distance + 'km · ' + KeywordAddress(storedata.STOREADDR)} containerStyle={{width:"140px",justifyContent:"flex-start"}} Radius={false} />
+                        </div>
+                    </ProductRegion>
+
+            
+                    
+                </ProductInfoView>    
+                <ProductPriceView>
+                    <Text size={12} value={storedata.STOREREPRESENTIVEPRICENAME} />
+                </ProductPriceView>
+                <ProductSubPriceView>
+                    <Text size={14} value={storedata.STOREREPRESENTIVERATIO + '%'} color={theme.main} containerStyle={{fontWeight:700, width:"30px"}} />
+                    <Text size={14} value={CommaFormatted(storedata.STOREREPRESENTIVEPRICE) + '원'} color={theme.grey} containerStyle ={{textDecorationLine: "line-through", width:"70px"}} />
+                    <Text size={14} value={CommaFormatted(storedata.STOREREPRESENTIVESALEPRICE) + '원'} containerStyle ={{ fontWeight:"700"}} />
+                </ProductSubPriceView>
+            </ProductContentView>
         </div>
 
 
-        <ProductContentView>
-          <ProductNameView>
-            <Text size={16} value={storedata.STORENAME} containerStyle={{fontWeight:700}} />
-          </ProductNameView>
-          <ProductDescView>
-              <Text size={14} value={storedata.STOREDESC} color={theme.grey} />
-          </ProductDescView>
-          <ProductInfoView>
-              <ProductRegion>
-                  <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-                  <Image source ={imageDB.NavigationImage} containerStyle={{width:"30px", display:"flex", justifyContent:"center"}} Radius={false}/>
-                  <Text size={10} value ={distance + 'km · ' + KeywordAddress(storedata.STOREADDR)} containerStyle={{width:"140px",justifyContent:"flex-start"}} Radius={false} />
-                  </div>
-              </ProductRegion>
 
-              <Text value={'|'}/>
-          
-        
-              <ProductReview>
-                  <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>             
-                  <Image source ={imageDB.ReviewImage} containerStyle={{width:"30px", display:"flex", justifyContent:"center"}} Radius={false}/>
-                  <Text size={10} value={reviewdata.length} />
-                  </div>
-            
-              </ProductReview>
-
-              <Text value={'|'} containerStyle={{width:"20px"}}/>
-
-              <ProductHeartview onClick={_handleHeart}>
-                  <div style={{display:"flex", flexDirection:"row", alignItems:"center", justifyContent:"center"}}>
-                  <Image source ={imageDB.HeartImage} containerStyle={{width:"30px", display:"flex", justifyContent:"center"}} Radius={false}/>
-                  <Text size={10} value={storedata.HEARTUSER == undefined ? (0):(storedata.HEARTUSER.length)} />
-                  </div>
-              </ProductHeartview>
-              
-          </ProductInfoView>
-
-          {
-            (storedata.STORECHAT == true || 
-            storedata.STOREGROUPCHAT == true 
-            || checks.length > 0) &&
-            <ProductOptionView>
-            {storedata.STORECHAT == true && <GeneralChatoption>일반 체팅</GeneralChatoption>}
-            {storedata.STOREGROUPCHAT == true &&  <GroupChatoption>그룹 체팅</GroupChatoption>}    
-            {checks.length > 0 &&   <Checkoption>관리사 출근부</Checkoption>}   
-            </ProductOptionView>
-          }
- 
-          <ProductPriceView>
-              <Text size={14} value={storedata.STOREREPRESENTIVEPRICENAME} />
-          </ProductPriceView>
-          <ProductSubPriceView>
-              <Text size={14} value={storedata.STOREREPRESENTIVERATIO + '%'} color={theme.main} containerStyle={{fontWeight:700, width:"30px"}} />
-              <Text size={14} value={CommaFormatted(storedata.STOREREPRESENTIVEPRICE) + '원'} color={theme.grey} containerStyle ={{textDecorationLine: "line-through", width:"70px"}} />
-              <Text size={15} value={CommaFormatted(storedata.STOREREPRESENTIVESALEPRICE) + '원'} containerStyle ={{ fontWeight:"700"}} />
-          </ProductSubPriceView>
-          <ProductTagView>
-
-            {
-                storedata.STORETHEMAARY.map((data, index = 0)=>(
-                <Fragment key={index}>
-                    {
-                        data =='four'&& index < 5 && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#40대 관리사'}</ProductTagText>
-                        </ProductTag>
-                    }  
-
-                    {
-                        data=='car' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#주차가능'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='shower'&& index < 5   && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#샤워가능'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='oneshop' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#1인샵'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='two' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#20대 관리사'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='three' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#30대 관리사'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='couple' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#커플환영'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='group' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#단체환영'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='allhour' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#24시간'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='male' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white}>{'#남자관리사'}</ProductTagText>
-                        </ProductTag>
-                    }
-                    {
-                        data=='female' && index < 5  && 
-                        <ProductTag key={index} color={theme.main}>
-                        <ProductTagText color={theme.white} >{'#여자관리사'}</ProductTagText>
-                        </ProductTag>
-                    }
-                </Fragment>
-                ))
-            }
-            {
-                storedata.STORETHEMAARY.length >= 5 &&
-                <ProductPlusTag>
-                <ProductTagText2>{'+'}{storedata.STORETHEMAARY.length-4}</ProductTagText2>
-                </ProductPlusTag>
-            }
-   
-          </ProductTagView>
-        </ProductContentView>
     </Container>
   );
 }

@@ -150,17 +150,57 @@ const MyRegioncontainer = ({containerStyle,region0, region1, region2}) => {
   useLayoutEffect(() => {
 
     console.log("user", user.storelist);
+
+    let shops_ = [];
+  
+    user.storelist.map((data) =>{
+      if (data.STOREADDR.indexOf(region2) != -1) {
+        shops_.push(data);
+      }
+    })
    
-    setStoreviewitems(user.storelist);
+    setStoreviewitems(shops_);
 
     
-    setPremiumshops(user.premiumshoplist);
-    setGoldshops(user.goldshoplist);
-    setSilvershops(user.silvershoplist);
+    shops_ = [];
+    let premiumshopcount = 0;
+    user.premiumshoplist.map((data) =>{
+      if (data.STOREADDR.indexOf(region2) != -1) {
+        shops_.push(data);
+        premiumshopcount++;
+      }
+    })
+
+    setPremiumshops(shops_);
+
+
+    shops_ = [];
+    let goldshopcount = 0;
+    user.goldshoplist.map((data) =>{
+      if (data.STOREADDR.indexOf(region2) != -1) {
+        shops_.push(data);
+        goldshopcount++;
+      }
+    })
+
+    setGoldshops(shops_);
+
+    shops_ = [];
+    let silvershopcount = 0;
+    user.silvershoplist.map((data) =>{
+      if (data.STOREADDR.indexOf(region2) != -1) {
+        shops_.push(data);
+        silvershopcount++;
+      }
+    })
+
+    setSilvershops(shops_);
+
+
     setShopcount(
-      user.premiumshoplist.length +
-      user.goldshoplist.length +
-      user.silvershoplist.length
+      premiumshopcount+
+      goldshopcount +
+      silvershopcount
     );
 
 
@@ -377,12 +417,14 @@ const MyRegioncontainer = ({containerStyle,region0, region1, region2}) => {
           />
         )}
 
-          <Shop
-            premiumshop={[]}
-            goldshop={[]}
-            silvershop ={[]}
-            allshop ={storeviewitems}
-            />
+        <Shop
+
+          label = {true}
+          premiumshop={premiumshops}
+          goldshop={goldshops}
+          silvershop ={silvershops}
+          allshop={[]}
+        />
 
         <div style={{ height: 80 }}></div>
       </>

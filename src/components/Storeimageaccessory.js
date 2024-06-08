@@ -81,6 +81,7 @@ const Storeimageaccessory = ({
   prevcallback,
   homecallback,
   clickcallback,
+  mode,
 }) => {
   const { user, dispatch2 } = useContext(UserContext);
   const navigate = useNavigate();
@@ -127,26 +128,24 @@ const Storeimageaccessory = ({
           containerStyle={{ width: "18px", height: "20px" }}
         />
       </Prev>
-      <Home onClick={homecallback}>
-        <Image
+      {
+        mode != 1 && <>
+          <Home onClick={homecallback}>
+          <Image
           source={imageDB.Home}
           containerStyle={{ width: "25px", height: "25px" }}
-        />
-      </Home>
-      {/* <Heart onClick={_handleHeart}>
-  
-        {ArrayIncludeData(store.HEARTUSER, user.uid) == true ? (
-          <Image source={imageDB.hearton} containerStyle={{ width: 30 }} />
-        ) : (
-          <Image source={imageDB.heart} containerStyle={{ width: 30 }} />
-        )}
-      </Heart> */}
-      <Picture onClick={_handlePhoto}>
-        <FiImage color={"#fff"} size={23} />
-      </Picture>
-      <Page onClick={_handlePhoto}>
-        <Text value={"1/" + store.STOREIMAGEARY.length} color={"#fff"}></Text>
-      </Page>
+          />
+          </Home>
+
+          <Picture onClick={_handlePhoto}>
+          <FiImage color={"#fff"} size={23} />
+          </Picture>
+          <Page onClick={_handlePhoto}>
+          <Text value={"1/" + store.STOREIMAGEARY.length} color={"#fff"}></Text>
+          </Page>
+        </>
+      }
+
     </Container>
   );
 };

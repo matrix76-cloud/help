@@ -64,6 +64,8 @@ import Progress from "../common/Progress";
 import { FiAlertCircle } from "react-icons/fi";
 import UseScrollRestoration from "../components/UseScrollRestoration";
 import Shop from "../components/Shop";
+import AdvertiseModalEx from "../components/AdvertiseModalEx";
+import moment from "moment";
 
 
 const Row = styled.div`
@@ -181,6 +183,8 @@ const Homecontainer = () => {
 
   const [scrollY, setScrollY] = useState(0);
 
+  const [advertise, setAdvertise] = useState(true);
+
   const Switchcallback = (data) => {
     setSwitchcheck(data);
 
@@ -211,6 +215,24 @@ const Homecontainer = () => {
   
   useLayoutEffect(() => {
     //   setLoading(true);
+
+    const now = moment();
+
+    let time = moment(now).subtract(1, "days").unix();
+
+    let time2 = moment(now).unix();
+
+    const popupdate = window.localStorage.getItem("popup");
+
+    if (popupdate /1000 >= time && popupdate /1000 < time2 ) {
+      setAdvertise(false);
+    }else{
+      setAdvertise(true);
+    }
+
+
+
+    console.log("popupdate", popupdate);
 
     let banner1 = [];
     banner1.push(imageDB.sample);
@@ -483,7 +505,12 @@ const Homecontainer = () => {
   
   return (
     <>
-    {loading == true ? (<Loading containerStyle={{ marginTop: 300 }} />) :
+
+    {
+      advertise == true && 
+        <AdvertiseModalEx/>
+    }
+    {loading == true ? (<Loading containerStyle={{ marginTop: 200 }} />) :
       <div>
         <Swipe
           delaytime={5000}
@@ -644,66 +671,6 @@ const Homecontainer = () => {
               silvershop ={silvershops}
               allshop={[]}
             />
-
-        {/* {goldshops.length > 0 && (
-          <div>
-            <Row>
-              <Label content={"프리미엄 제휴 업소"} />
-            </Row>
-          </div>
-        )} */}
-
-        {/* <TrendingXScroll>
-          {premiumshops.map((data, index) => (
-            <Shop
-              key={index}
-              // scrollY={scrollY}
-              premiumshop={premiumshops}
-            />
-          ))}
-        </TrendingXScroll> */}
-
-        {/* {goldshops.length > 0 && (
-          <div>
-            <Row>
-              <Label content={"골드 제휴 업소"} />
-            </Row>
-          </div>
-        )}
-
-        <TrendingXScroll>
-          {goldshops.map((data, index) => (
-            <Goldshop
-              key={index}
-              shopdata={data}
-              containerStyle={{
-                margin: "10px 2.5%",
-                boxShadow: "#c1c0c0 1px 1px 3px 3px",
-              }}
-            />
-          ))}
-        </TrendingXScroll>
-
-        {silvershops.length > 0 && (
-          <div>
-            <Row>
-              <Label content={"실버 제휴 업소"} />
-            </Row>
-          </div>
-        )}
-
-        <TrendingXScroll>
-          {silvershops.map((data, index) => (
-            <Silvershop
-              key={index}
-              shopdata={data}
-              containerStyle={{
-                margin: "0px 10px 10px 10px",
-                display: "flex",
-              }}
-            />
-          ))}
-        </TrendingXScroll> */}
 
         <StoreInfo height={170} containerStyle={{ marginBottom: "20px" }} />
       </div>

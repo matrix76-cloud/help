@@ -312,7 +312,7 @@ const Header = () => {
               <div onClick={_handlePosition}>
                 <Text
                   value={user.region1 + " " + user.region2}
-                  size={13}
+                  size={16}
                   containerStyle={{ fontWeight: 700 }}
                 ></Text>
               </div>

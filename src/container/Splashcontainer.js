@@ -9,6 +9,9 @@ import { get_storeallview, get_stores } from '../service/StoreService';
 import { get_review } from '../service/ReviewService';
 import { get_checkuser } from '../service/CheckService';
 
+import Fade from "react-reveal/Fade";
+
+
 const Container = styled.div`
   background-color :#FF4E19;
   height:800px
@@ -23,7 +26,7 @@ const Splashcontainer = ({containerStyle}) => {
 
   useEffect(()=>{
     async function Process(){
-      await useSleep(3000);
+      await useSleep(5000);
       navigate("/home", { state: { homerefresh: false } });
     } 
     Process();
@@ -64,6 +67,10 @@ const Splashcontainer = ({containerStyle}) => {
         user["region2"] = regionresult.region2;
         user["latitude"] = regionresult.latitude;
         user["longitude"] = regionresult.longitude;
+
+        user["curlatitude"]= regionresult.latitude;
+        user["curlongitude"]  = regionresult.longitude;
+
         user["deviceid"] = data.deviceid;
 
         const DEVICEID = data.deviceid;
@@ -87,7 +94,8 @@ const Splashcontainer = ({containerStyle}) => {
         user["region2"] = regionresult.region2;
         user["latitude"] = regionresult.latitude;
         user["longitude"] = regionresult.longitude;
-
+        user["curlatitude"]= regionresult.latitude;
+        user["curlongitude"]  = regionresult.longitude;
 
         const latitude = regionresult.latitude;
         const longitude = regionresult.longitude;
@@ -125,6 +133,8 @@ const Splashcontainer = ({containerStyle}) => {
     user["region2"] = "다산동";
     user["latitude"] = "37.630013553801";
     user["longitude"] = "127.15545777991";
+    user["curlatitude"] = "37.630013553801";
+    user["curlongitude"] = "127.15545777991";
     user["distance"] = 20;
 
     
@@ -139,145 +149,8 @@ const Splashcontainer = ({containerStyle}) => {
 
     }
 
-   // FetchData();
+   FetchData();
 
-    // async function FetchData() {
-    //   const stores = await get_stores();
-
-    //   console.log("stores", stores);
-    //   let premiumshoplist = [],goldshoplist = [],silvershoplist = [], allshoplist = [];
-
-    //   stores.map(async(data) => {
-    //     const lat1 = "37.630013553801";
-    //     const lon1 = "127.15545777991";
-    //     const lat2 = data.STORELATITUDE;
-    //     const lon2 = data.STORELONGITUDE;
-    //     const dist = distanceFunc(lat1, lon1, lat2, lon2);
-
-    //     console.log("dist", dist, user.distance);
-    //     let policydistance = 0;
-
-    //     if (user.distance == "") {
-    //       policydistance = 10;
-    //     } else {
-    //       policydistance = user.distance;
-    //     }
-    //     if (dist <= policydistance) {
-    //       if (data.STORELEVEL.indexOf("premium") != -1) {
-    //         data["dist"] = dist;
-
-    //         const STORE_ID = data.STORE_ID;
-    //         const reviewdata = await get_review({ STORE_ID });
-      
-    //         data["reviewdata"] =reviewdata;
-    //         const USER_ID = data.USER_ID;
-    //         const checks = await get_checkuser({ USER_ID });
-
-    //         data["checks"] =checks;
-    //         premiumshoplist.push(data);
-    //       }
-    //       if (data.STORELEVEL.indexOf("gold") != -1) {
-    //         data["dist"] = dist;
-
-    //         const STORE_ID = data.STORE_ID;
-    //         const reviewdata = await get_review({ STORE_ID });
-      
-    //         data["reviewdata"] =reviewdata;
-    //         const USER_ID = data.USER_ID;
-    //         const checks = await get_checkuser({ USER_ID });
-
-    //         data["checks"] =checks;
-
-    //         goldshoplist.push(data);
-    //       }
-    //       if (data.STORELEVEL.indexOf("silver") != -1) {
-    //         data["dist"] = dist;
-
-    //         const STORE_ID = data.STORE_ID;
-    //         const reviewdata = await get_review({ STORE_ID });
-      
-    //         data["reviewdata"] =reviewdata;
-    //         const USER_ID = data.USER_ID;
-    //         const checks = await get_checkuser({ USER_ID });
-
-    //         data["checks"] =checks;
-
-    //         silvershoplist.push(data);
-    //       }
-    //       const STORE_ID = data.STORE_ID;
-    //       const reviewdata = await get_review({ STORE_ID });
-    
-    //       data["reviewdata"] =reviewdata;
-    //       const USER_ID = data.USER_ID;
-    //       const checks = await get_checkuser({ USER_ID });
-
-    //       data["checks"] =checks;
-    //       allshoplist.push(data);
-    
-    //     }
-    //   });
-
-    //   allshoplist.sort(function (a, b) {
-    //     // 오름차순
-    //     return parseInt(a.dist) < parseInt(b.dist)
-    //       ? -1
-    //       : parseInt(a.dist) > parseInt(b.dist)
-    //       ? 1
-    //       : 0;
-    //   });
-
-    //   premiumshoplist.sort(function (a, b) {
-    //     // 오름차순
-    //     return parseInt(a.dist) < parseInt(b.dist)
-    //       ? -1
-    //       : parseInt(a.dist) > parseInt(b.dist)
-    //       ? 1
-    //       : 0;
-    //   });
-
-    //   goldshoplist.sort(function (a, b) {
-    //     // 오름차순
-    //     return parseInt(a.dist) < parseInt(b.dist)
-    //       ? -1
-    //       : parseInt(a.dist) > parseInt(b.dist)
-    //       ? 1
-    //       : 0;
-    //   });
-    //   silvershoplist.sort(function (a, b) {
-
-    //     console.log("silvershop sort", parseFloat(a.dist),parseFloat(b.dist));
-    //     // 오름차순
-    //     return parseFloat(a.dist) < parseFloat(b.dist)
-    //       ? -1
-    //       : parseFloat(a.dist) > parseFloat(b.dist)
-    //       ? 1
-    //       : 0;
-    //   });
-
-
-    //   user["storelist"] = allshoplist;
-    //   user["premiumshoplist"] = premiumshoplist;
-    //   user["goldshoplist"] = goldshoplist;
-    //   user["silvershoplist"] = silvershoplist;
-
-    
-    
-    //   const deviceid = user.deviceid;
-    //   const recentstoresTmp = await get_storeallview({ deviceid });
-    //   user["storeviewlist"] = recentstoresTmp;
-
-
-
-    //   dispatch2(user);
-
-    //   console.log("silvershoplist", user);
-
-      
-    //   // const userObjString = JSON.stringify(user);
-    //   // window.localStorage.setItem("user", userObjString);
-    //   setLoading(true);        
-    // }
-    // FetchData();
   }, []);
 
   useEffect(()=>{
@@ -287,7 +160,48 @@ const Splashcontainer = ({containerStyle}) => {
 
   return (
     <Container style={containerStyle}>
-        <Splash/>
+   
+ 
+
+        <Fade bottom delay={500}>
+                  <div
+                    style={{
+                      fontSize: 30,
+                      fontWeight:800,
+                      letterSpacing: 1.2,
+                      fontFamily:'Pretendard-Bold',
+                      top: '25%',
+                      left: '10%',
+                      color: '#fff',
+                      position:'absolute',
+                    }}
+                  >
+                    {'마사지샵을 찾아 떠나는'}
+                  </div>
+        </Fade>
+
+        <Fade left delay={1500}>
+                  <div
+                    style={{
+                      fontSize: 30,
+                      fontWeight:800,
+                      letterSpacing: 1.2,
+                      fontFamily:'Pretendard-Bold',
+                      top: '33%',
+                      left: '25%',
+                      color: '#fff',
+                      position:'absolute',
+                    }}
+                  >
+                    {'마사지 원정대'}
+                  </div>
+        </Fade>
+        <Fade bottom delay={2500}>
+
+            <Splash/>
+        </Fade>
+ 
+
     </Container>
   );
 }

@@ -19,7 +19,7 @@ import Mapshop from '../components/Mapshop';
 import { FiRotateCcw } from "react-icons/fi";
 import Text from '../common/Text';
 import Loading from '../common/Loading';
-
+import Fade from "react-reveal/Fade";
 
 const Container = styled.div`
   margin-top:60px;
@@ -28,7 +28,7 @@ const { kakao } = window;
 
 const CurrentLayout = styled.div`
   position: absolute;
-  top: 300px;
+  bottom: 30px;
   left: 5%;
   z-index: 10;
   height: 150px;
@@ -41,33 +41,54 @@ const RefreshLayout = styled.div`
   position: absolute;
   top: 70px;
   z-index: 10;
-  height: 30px;
-  width: 150px;
+  height: 50px;
+  width: 200px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  left: 30%;
+  left: 20%;
   background: #ff4e19;
   margin-top: 10px;
   border-radius: 20px;
   font-size: 14px;
+  flex-direction:column;
 `;
+
+const RegionLayout = styled.div`
+    position: absolute;
+    top: 105px;
+    z-index: 10;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+    background-color: #ffffffc9;
+`;
+
 
 const Detailmapcontainer = ({containerStyle}) => {
 
-  const{user, dispath2} = useContext(UserContext);
+  const{user, dispatch2} = useContext(UserContext);
   const [map, setMap] = useState({});
 
-  const [latitude, setLatitude] = useState(user.latitude);
-  const [longitude, setLongitude] = useState(user.longitude);
+  const [latitude, setLatitude] = useState(user.curlatitude);
+  const [longitude, setLongitude] = useState(user.curlongitude);
   const [storeitem, setStoreitem] = useState({});
   const [storestatus, setStorestatus] = useState(false);
   const [storelatitude, setStoreLatitude] = useState('');
   const [storelongitude, setStoreLongitude] = useState('');
 
+  const [currentaddr, setCurrentaddr] = useState('');
+  const [currentaddr2, setCurrentaddr2] = useState('');
+
   const [loading, setLoading] = useState(false);
 
   const infostart = async(latitude, longitude) =>{
+
+    setStorestatus(false);
 
     const store = await get_storeinfoForLng({latitude, longitude});
 
@@ -81,17 +102,124 @@ const Detailmapcontainer = ({containerStyle}) => {
   }
   const navigate = useNavigate();
 
+
+  const _handlemapclick = ()=>{
+    alert(test);
+  }
+
+
+  function searchAddrFromCoords(coords, callback){
+    // 좌표로 행정동 주소 정보를 요청합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+    
+    geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);         
+  }
+
+  function searchAddrFromCoords2(coords, callback) {
+    // 좌표로 행정동 주소 정보를 요청합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+    
+    geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);            
+  }
+
+  function getTexts( count ) {
+
+    // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다 
+    if(count < 10) {
+      return count;        
+    } else if(count < 30) {
+      return count;
+    } else if(count < 50) {
+      return count;
+    } else {
+      return count;
+    }
+  }
+
+
   useEffect(()=>{
 
     const container = document.getElementById("map");
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
-      level: 3,
+      level: user.maplevel,
     };
   
     const map = new kakao.maps.Map(container, options);
-
     setMap(map);
+
+    var clusterer = new kakao.maps.MarkerClusterer({
+      map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+      averageCenter: false, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+      minLevel: 3,// 클러스터 할 최소 지도 레벨 ,
+      calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+      texts: getTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
+      styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+              width : '40px', height : '40px',
+              background: '#ff4e198a',
+              borderRadius: '40px',
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '41px'
+          },
+          {
+              width : '50px', height : '50px',
+              background: '#ff4e198a',
+              borderRadius: '50px',
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '51px'
+          },
+          {
+              width : '60px', height : '60px',
+              background: '#ff4e198a',
+              borderRadius: '60px',
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '61px'
+          },
+          {
+              width : '70px', height : '70px',
+              background: '#ff4e198a',
+              borderRadius: '70px',
+              color: '#000',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              lineHeight: '71px'
+          }
+      ]
+   
+    });
+
+
+    searchAddrFromCoords2(new kakao.maps.LatLng(latitude, longitude), function(result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+
+          console.log("addr1", result[0].address.address_name);
+
+          setCurrentaddr(result[0].address.address_name);
+
+      }   
+     });
+
+
+
+    function makeOverListener(map, marker, infowindow) {
+    return function() {
+        infowindow.open(map, marker);
+    };
+    }
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+    function makeOutListener(infowindow) {
+        return function() {
+            infowindow.close();
+        };
+    }
+
 
     async function fetchData(){
       const storeitemsTmp = await get_stores();
@@ -108,18 +236,6 @@ const Detailmapcontainer = ({containerStyle}) => {
         const dist= distanceFunc(lat1, lon1, lat2, lon2);
 
         
-          
-        let policydistance = 0;
-
-        if(user.distance == ''){
-          policydistance = 10;
-        }else{
-          policydistance = user.distance;
-        }
-
-
-
-        if(dist < policydistance){
           let locationitem = [];
           locationitem.push(element.STORELATITUDE);
           locationitem.push(element.STORELONGITUDE);
@@ -127,79 +243,160 @@ const Detailmapcontainer = ({containerStyle}) => {
           locationitem.push(element.STOREREPRESENTIVEPRICE);
           locationitem.push(element.STOREIMAGEARY[0])
           location.push(locationitem);
-        }
-
       
-
       })
   
 
-  
-      var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
+      var imageSrc = "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2FKakaoTalk_Photo_2024-06-02-06-23-45.png?alt=media&token=0bebcfff-bd9d-4a5d-85f7-5df45fabb3af";
+
 
       location.map((e) => {
-          // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          var content = '<div class="customoverlay">' +
-              '<div class="main">' +
-              '    <div class="title">'+e[2]+'</div>' +
-              '    <img src='+e[4]+' class="image"/>'+
-              '</div>'+
-              '    <span class="price">'+CommaFormatted(e[3])+'원&nbsp&nbsp&nbsp/&nbsp&nbsp&nbsp13km</span>' +           
-              '</div>';
-  
+     
           // 커스텀 오버레이가 표시될 위치입니다 
-          var position = new kakao.maps.LatLng(e[0], e[1]);  
+        var position = new kakao.maps.LatLng(e[0], e[1]);  
+
+         // 마커 이미지의 이미지 크기 입니다
+          var imageSize = new kakao.maps.Size(1, 1); 
+          
+          // 마커 이미지를 생성합니다    
+          var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+
   
-          // 커스텀 오버레이를 생성합니다
-          var customOverlay = new kakao.maps.CustomOverlay({
-              map: map,
-              position: position,
-              content: content,
-              yAnchor: 1,
-      
+   
+          var infocontent = '<div class="customoverlay">' +
+          '<div class="main">' +
+          '    <div class="title">'+e[2]+'</div>' +
+          // '    <img src='+e[4]+' class="image"/>'+
+          '</div>'+
+          '    <span class="price">'+CommaFormatted(e[3])+'원' +           
+          '</div>';
+
+          var marker = new kakao.maps.Marker({
+            position: position,
+            image : markerImage,
+            clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+            });
+
+          var infowindow = new kakao.maps.InfoWindow({
+              content: infocontent,
           });
 
-          // var imageSize = new kakao.maps.Size(24, 35); 
-          // var imageOption = {offset: new kakao.maps.Point(36, 98)}; 
-          // // 마커 이미지를 생성합니다    
-          // var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption); 
-          
-          // // 마커를 생성합니다
-          // var marker = new kakao.maps.Marker({
-          //     map: map, // 마커를 표시할 지도
-          //     position: position, // 마커를 표시할 위치
-          //     image : markerImage, // 마커 이미지 ~
-          // });
 
-        //   kakao.maps.event.addListener(marker, 'click', function() {
-        //     // 마커 위에 인포윈도우를 표시합니다
-        //     console.log("marker position", marker);
 
-        //     // setStoreLatitude(marker.getPosition().Ma);
-        //     // setStoreLongitude(marker.getPosition().La);
+         marker.setMap(map);
 
-        // //    infostart(marker.getPosition().Ma,marker.getPosition().La);
-
-        //  });
-
+         kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+         kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+       
          kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
     
           // 클릭한 위도, 경도 정보를 가져옵니다 
-          var latlng = mouseEvent.latLng;
-          
-          var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-          message += '경도는 ' + latlng.getLng() + ' 입니다';
-          
+ 
+          user["curlatitude"] = mouseEvent.latLng.getLat();
+          user["curlongitude"] = mouseEvent.latLng.getLng();
+          user["maplevel"]  = map.getLevel();
+   
+          dispatch2(user);
 
-          infostart(latlng.getLat(),latlng.getLng());
-  
-          setLatitude(latlng.getLat());
-          setLongitude(latlng.getLng());
-          
-      });
+    
+ 
+           searchAddrFromCoords2(mouseEvent.latLng, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                setCurrentaddr(result[0].address.address_name);
+            }   
+           });
+
+          });
+
+
+    
+        kakao.maps.event.addListener(marker, 'click', function() {
+          // 마커 위에 인포윈도우를 표시합니다
       
 
+          searchAddrFromCoords2(marker.getPosition(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+
+                console.log("addr1", result[0].address.address_name);
+
+                setCurrentaddr(result[0].address.address_name);
+
+            }   
+           });
+
+
+          infostart(marker.getPosition().Ma,marker.getPosition().La);
+      
+          setLatitude(marker.getPosition().La);
+          setLongitude(marker.getPosition().Ma);
+
+          user["curlatitude"] = marker.getPosition().La;
+          user["curlongitude"] = marker.getPosition().Ma;
+          user["maplevel"]  = map.getLevel();
+          dispatch2(user);
+
+
+
+        });
+
+
+  
+
       });
+
+
+
+
+      var clustermarkers = location.map((e)=>{
+
+        console.log("position", e[0]);
+
+        // 마커 이미지의 이미지 크기 입니다
+        var imageSize = new kakao.maps.Size(30, 35); 
+
+        // 마커 이미지를 생성합니다    
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+
+        var marker =  new kakao.maps.Marker({
+            position : new kakao.maps.LatLng(e[0], e[1]),
+            image : markerImage,
+            clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+        });
+
+            
+        kakao.maps.event.addListener(marker, 'click', function() {
+          // 마커 위에 인포윈도우를 표시합니다
+      
+
+          searchAddrFromCoords2(marker.getPosition(), function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+
+                console.log("addr1", result[0].address.address_name);
+
+                setCurrentaddr(result[0].address.address_name);
+
+            }   
+           });
+
+
+          infostart(marker.getPosition().Ma,marker.getPosition().La);
+      
+          setLatitude(marker.getPosition().La);
+          setLongitude(marker.getPosition().Ma);
+
+        });
+
+        marker.setMap(map);
+
+
+        return marker;
+
+      });
+
+      console.log("clustermarkers",clustermarkers);
+
+      clusterer.addMarkers(clustermarkers);
+
 
   
 
@@ -215,124 +412,13 @@ const Detailmapcontainer = ({containerStyle}) => {
     setStorestatus(false);
   }
  
-  const _handleMapSearch = (map)=>{
+  const _handleMapSearch = async(map)=>{
 
     setLoading(true);
-    let location = [[],];
+    setStorestatus(false);
 
-
-    
-    async function FetchData(){
-      const storeitemsTmp = await get_stores();
-
-
-
-      storeitemsTmp.forEach((element)=>{
-
-        const lat1  = latitude;
-        const lon1 = longitude;
-        const lat2  = element.STORELATITUDE;
-        const lon2 = element.STORELONGITUDE;
-    
-        const dist = distanceFunc(lat1, lon1, lat2, lon2);
-
-         
-        let policydistance = 0;
-
-        if(user.distance == ''){
-          policydistance = 10;
-        }else{
-          policydistance = user.distance;
-        }
-
-        if(dist < policydistance){
-          let locationitem = [];
-          locationitem.push(element.STORELATITUDE);
-          locationitem.push(element.STORELONGITUDE);
-          locationitem.push(element.STORENAME);
-          locationitem.push(element.STOREREPRESENTIVEPRICE);
-          locationitem.push(element.STOREIMAGEARY[0])
-          location.push(locationitem);
-        }
-
-      
-
-      })
-  
-
-  
- 
-      location.map((e) => {
-          // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          var content = '<div class="customoverlay">' +
-          '<div class="main">' +
-          '    <div class="title">'+e[2]+'</div>' +
-          '    <img src='+e[4]+' class="image"/>'+
-          '</div>'+
-          '    <span class="price">'+CommaFormatted(e[3])+'원&nbsp&nbsp&nbsp/&nbsp&nbsp&nbsp13km</span>' +           
-          '</div>';
-  
-          // 커스텀 오버레이가 표시될 위치입니다 
-          var position = new kakao.maps.LatLng(e[0], e[1]);  
-  
-          // 커스텀 오버레이를 생성합니다
-          var customOverlay = new kakao.maps.CustomOverlay({
-              map: map,
-              position: position,
-              content: content,
-              yAnchor: 1,
-      
-          });
-
-          // var imageSize = new kakao.maps.Size(24, 35); 
-          // var imageOption = {offset: new kakao.maps.Point(36, 98)}; 
-          // // 마커 이미지를 생성합니다    
-          // var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption); 
-          
-          // // 마커를 생성합니다
-          // var marker = new kakao.maps.Marker({
-          //     map: map, // 마커를 표시할 지도
-          //     position: position, // 마커를 표시할 위치
-          //     image : markerImage, // 마커 이미지 ~
-          // });
-
-        //   kakao.maps.event.addListener(marker, 'click', function() {
-        //     // 마커 위에 인포윈도우를 표시합니다
-        //     console.log("marker position", marker);
-
-        //     // setStoreLatitude(marker.getPosition().Ma);
-        //     // setStoreLongitude(marker.getPosition().La);
-
-        // //    infostart(marker.getPosition().Ma,marker.getPosition().La);
-
-        //  });
-
-         kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-    
-          // 클릭한 위도, 경도 정보를 가져옵니다 
-          var latlng = mouseEvent.latLng;
-          
-          var message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-          message += '경도는 ' + latlng.getLng() + ' 입니다';
-          
-          console.log("message", message);
-          infostart(latlng.getLat(),latlng.getLng());
-  
-          setLatitude(latlng.getLat());
-          setLongitude(latlng.getLng());
-          
-      });
-      
-
-      });
-
-      await useSleep(2000);
-
-      setLoading(false);
-
-		}
-		FetchData();
-
+    await useSleep(2000);
+    setLoading(false);
 
   }
 
@@ -340,18 +426,32 @@ const Detailmapcontainer = ({containerStyle}) => {
     <Container style={containerStyle}>
       {
         storestatus== true && 
-        <CurrentLayout>
-          <Mapshop  simple = {true} shopdata ={storeitem} callback={mapshopclose} />
-        </CurrentLayout>
+
+          <CurrentLayout>
+            <Fade right delay={100}>
+            <Mapshop  simple = {true} shopdata ={storeitem} callback={mapshopclose} />
+            </Fade>
       
+          </CurrentLayout>
+  
       }
       {
         loading == true && <Loading containerStyle={{marginTop:"50%", marginLeft:"20%", zIndex:5, position:"absolute"}}/>
       }
-      <RefreshLayout onClick={()=>{_handleMapSearch(map)}}>
-      <FiRotateCcw color={'#fff'} />
-      <Text value={'지역내 재검색'} color={'#fff'}></Text>
+      <RefreshLayout onClick={()=>{_handleMapSearch(map)}} >
+        <div style={{display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+          <FiRotateCcw color={'#fff'}  />
+          <div style={{paddingLeft:10}}>
+          <Text value={'지역내 재검색'} color={'#fff'} ></Text>
+          </div>
+        </div>
+        <div>
+          <Text value={currentaddr} color={'#fff'}></Text>
+        </div>
       </RefreshLayout>
+
+  
+
       {/* {
         loading == true ? <Loading/> :<div id="map" className="Map"></div>
       } */}

@@ -253,6 +253,34 @@ export const updatechatsettingstore = async ({ STORE_ID, STORECHAT }) => {
 
 }
 
+export const updatenoticesettingstore = async ({ STORE_ID, STORENOTICE }) => {
+    
+
+
+    const storeRef = collection(db, "STORE");
+
+    const rows = query(storeRef, where("STORE_ID",'==', STORE_ID ));
+
+    try{
+        const querySnapshot =  await getDocs(rows);
+
+        querySnapshot.forEach(function (doc) {
+            updateDoc(doc.ref, {
+                STORENOTICE : STORENOTICE,              
+            });
+        });
+     
+
+    }catch(e){
+         console.log("error", e.message);
+    } finally {
+
+        return;
+    }
+
+}
+
+
 export const updatecouponsettingstore = async ({ STORE_ID, STORECOUPONECONTENT, STORECOUPONEMONEY,STORECOUPONEAMOUNT }) => {
     
 

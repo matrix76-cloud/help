@@ -2,6 +2,7 @@ import React,{useState, useEffect} from 'react';
 import { HashRouter, Route, Switch, Redirect, BrowserRouter, Routes, Link, useNavigate} from "react-router-dom";
 import styled from 'styled-components';
 import Loadingcontainer from '../container/Loadingcontainer';
+import Loginloadingcontainer from '../container/Loginloadingcontainer';
 import Splashcontainer from '../container/Splashcontainer';
 import HomeLayout from '../screen/Layout/HomeLayout';
 import Layout from '../screen/Layout/HomeLayout';
@@ -10,7 +11,7 @@ const Container = styled.div`
 
 `
 
-const Loadingpage = ({containerStyle}) => {
+const Loginloadingpage = ({containerStyle}) => {
 
   const navigate = useNavigate();
 
@@ -20,10 +21,10 @@ const Loadingpage = ({containerStyle}) => {
 
   return (
     <HomeLayout menu ={true} bottom ={true} header={false}>
-      <Loadingcontainer/>
+      <Loginloadingcontainer/>
     </HomeLayout>
 
   );
 }
 
-export default Loadingpage;
+export default Loginloadingpage;

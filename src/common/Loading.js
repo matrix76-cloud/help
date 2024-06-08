@@ -4,9 +4,22 @@ import styled from 'styled-components';
 import { imageDB } from '../utility/imageData';
 
 const Container = styled.div`
-  padding-right:30px;
+  display : flex;
+  align-items:center;
+ 
+ 
 `
 
+const LoadingBg = styled.div`
+
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;   
+
+`
 const Loading = ({containerStyle}) => {
 
 
@@ -15,7 +28,12 @@ const Loading = ({containerStyle}) => {
 
   return (
     <Container style={containerStyle}>
-         <img src={imageDB.loading} alt="로딩중" width="20%" />
+   {/*       <img src={imageDB.loading} alt="로딩중" width="20%" /> */}
+
+      <LoadingBg >
+          <img  className="movingforward" src={imageDB.bottom_gps}  style={{width: 50,height: 50}}/>
+      </LoadingBg>
+
     </Container>
   );
 }

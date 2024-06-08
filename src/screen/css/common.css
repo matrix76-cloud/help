@@ -149,10 +149,24 @@
   animation-timing-function: linear;
   min-width: 50px;
   text-align: center;
-  width:50%;
+  width:65%;
   /* animation: blink-effect 2s step-end infinite; */
   animation: box-ani 1s linear infinite;
   z-index: -5;
+  &:after{
+    right: 88%;
+    top: -5px;
+    border-bottom: 8px solid #652ce2;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+  }
+}
+.maxheaderblink:after {
+  right: 88%;
+  top: -5px;
+  border-bottom: 8px solid #652ce2;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
 }
 
 .imgblink{

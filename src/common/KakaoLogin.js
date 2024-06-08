@@ -10,9 +10,9 @@ const Container = styled.div`
 `
 const SocialButton = styled.div`
     display: flex;
-    width: 300px;
     justify-content: space-evenly;
     flex-direction : row;
+    width :250px;
     height: 40px;
     align-items: center;
     margin: 10px;
@@ -46,7 +46,7 @@ const KaKaoLogin = ({containerStyle}) => {
 
       <SocialButton bgcolor={'#FEE500'} onClick={handleLogin} >    
         {/* <Image source={imageDB.kakaomsg} containerStyle={{width:30}}/> */}
-        <Text value={'카카오톡으로 로그인'} color = {'#000'}> </Text>    
+        <Text value={'카카오톡으로 로그인'} color = {'#514f4f'}> </Text>    
       </SocialButton>
 
     </Container>

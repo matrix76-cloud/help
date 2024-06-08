@@ -17,11 +17,12 @@ const Container = styled.div`
 `
 const LoginInfo = styled.div`
   display:flex;
-  background-color :#f9f9f9;
+  background-color :#fff;
   padding: 20px;
-  margin: 50px 20px;
+  margin: 60px 20px 50px;
   flex-direction:column;
   font-size:14px;
+  border: 1px solid #ededed;
 
 `
 
@@ -54,7 +55,8 @@ const LoginButtonLayout = styled.div`
   height: 50px;
   align-items: center;
   margin: 10px;
-  font-size:14px;
+  font-size:15px;
+  padding: 0px 10%;
 
 `
 
@@ -64,6 +66,12 @@ const BottomButtonLayout = styled.div`
  bottom :10px;
  height : 40px;
  background-color : #ededed;
+`
+
+const LoginButton = styled.div`
+  text-decoration : underline;
+  text-underline-offset: 3px;
+  font-size:15px;
 `
 
 
@@ -132,8 +140,8 @@ const Logincontainer = ({containerStyle}) => {
       <NaverLogin/>
     </SocialButtonLayout>
     <LoginButtonLayout>
-      <div onClick={_handleIdlogin}><Text value={'이메일로 로그인'}/></div>
-      <div onClick={_handleRegisterlogin}><Text value={'회원 가입'}/></div>
+      <LoginButton onClick={_handleIdlogin}><Text value={'이메일로 로그인'}/></LoginButton>
+      <LoginButton onClick={_handleRegisterlogin}><Text value={'회원 가입'}/></LoginButton>
       
     </LoginButtonLayout>
     <StoreInfo height={150} containerStyle={{position:"absolute", bottom:0}} />   

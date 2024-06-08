@@ -166,7 +166,7 @@ const Storemap = ({containerStyle, latitude, longitude}) => {
         }
 
         <div style={{position: "absolute",top: "300px", left: "150px", zIndex:5}}>
-          <FaExpand size={40} color ={'#FF4E19'} />
+          <FaExpand size={20} color ={'#FF4E19'} />
         </div>
 
         <div style={{position: "absolute",top: "540px",width:"100%", zIndex:5 }}>

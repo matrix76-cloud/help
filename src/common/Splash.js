@@ -19,6 +19,7 @@ const Splash = ({containerStyle}) => {
   const [ref, { x, y, width, height }] = useDimensions();
 
 
+
   return (
     <Container style={containerStyle}>
         <img src={imageDB.splash} style={{width:"100%", height:"600px"}}/>

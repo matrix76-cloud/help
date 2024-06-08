@@ -259,11 +259,11 @@ const Checkadmincontainer = ({containerStyle, STORE}) => {
           buttonText={"관리사 등록"}
           callback={_handlecheckcallback}
           containerStyle={{
-            backgroundColor: "#FF4E19",
+            backgroundColor: "#FFF",
             borderRadius: "10px",
             fontSize: 14,
-            color: "#fff",
-            border: "1px solid #FF4E19",
+            color: "#000",
+            border: "1px solid #EDEDED",
             margin: " 5px 0px",
             width: "30%",
             height: "30px",

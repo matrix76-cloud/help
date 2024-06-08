@@ -5,6 +5,7 @@ import Text from '../common/Text';
 import { UserContext } from '../context/User';
 import { add_couponemember, add_couponestore, get_enablestorecoupone } from '../service/CouponeService';
 import { updatecouponestore } from '../service/StoreService';
+import { imageDB } from '../utility/imageData';
 
 const Container = styled.div`
   display: flex;
@@ -85,6 +86,44 @@ const EventMoreButtonView = styled.div`
  
 `
 
+const Maxheaderblink = styled.div`
+
+    color: #fff;
+    background-color :#fb5555;
+    padding: 5px;
+    font-size: 12px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+    animation-duration: .2s;
+    animation-name: point-move;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    min-width: 50px;
+    text-align: center;
+    width:65%;
+    animation: box-ani 1s linear infinite;
+    z-index: -5;
+    display:flex;
+
+    &:after { 
+        content: "";
+        border-top: 15px solid #ff4e19;
+        border-left: 15px solid transparent;
+        border-right: 8px solid transparent;
+        position: absolute;
+        left: 0;
+        right: 80%;
+        top: 35px;
+        margin: 0 auto;
+        width: 0;
+        height: 0;
+    }
+`
+
+
 const Storeevent = ({containerStyle, store, create, customer}) => {
 
   const navigate = useNavigate();
@@ -107,7 +146,7 @@ const Storeevent = ({containerStyle, store, create, customer}) => {
 
     if(create == true){
  
-        navigate("/eventcreate", { state: { STORE_ID: store.STORE_ID } });
+    //    navigate("/eventcreate", { state: { STORE_ID: store.STORE_ID } });
     }
     if(customer == true){
 
@@ -215,12 +254,13 @@ const Storeevent = ({containerStyle, store, create, customer}) => {
   return (
     <Container style={containerStyle}>
          <Text value={'이벤트'} containerStyle={{fontWeight:600}} size={14}  />
-         <div style={{marginTop:5, display:"flex", flexDirection:"column", width:"100%"}}>
+         <div style={{marginTop:25, display:"flex", flexDirection:"column", width:"100%"}}>
                 {
                     store.STORECOUPONECONTENT != undefined && 
-
                     <>
-                     <div className='maxheaderblink'>아래 버튼을 누르면 쿠폰을 받을수가 있습니다</div>
+                     <Maxheaderblink>
+                        <img src={imageDB.bottom_gps} style={{ width: '20px',height: '20px',paddingLeft: '5px'}}/>
+                        <div>아래 버튼을 누르면 <br/> 쿠폰을 받을수가 있습니다</div></Maxheaderblink>
                      <EventButtonView  activeOpacity={0.8} onClick={_handleCoupon} className="Button"   >
                    
                    <EventTextView>

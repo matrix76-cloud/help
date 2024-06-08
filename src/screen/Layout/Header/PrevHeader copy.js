@@ -54,7 +54,7 @@ const PrevHeader = ({containerStyle, headername}) => {
         <div onClick={_handlePrev}>
           <Image source={imageDB.prev} containerStyle={{width:15, paddingLeft:10,height:20}}/>
         </div>
-        <div style={{paddingLeft:30}}>
+        <div style={{paddingLeft:30, paddingTop:5}}>
           <Text size={18} value={headername}></Text>
         </div>
     

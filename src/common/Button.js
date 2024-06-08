@@ -10,6 +10,7 @@ const Container = styled.div`
     align-items: center;
     margin: 10px;
     font-size:14px;
+    box-shadow: rgb(209, 204, 204) 1px 1px 1px;
 `
 
 const Button = ({containerStyle, buttonText, callback}) => {

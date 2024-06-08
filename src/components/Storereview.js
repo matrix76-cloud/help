@@ -71,7 +71,7 @@ const ReviewPercentItem = styled.div`
   align-items: center;
   padding: 0px 10px;
 `
-const Storereview = ({containerStyle, store}) => {
+const Storereview = ({containerStyle, store, create, SELF}) => {
 
   const navigate = useNavigate();
   const { user, dispatch2 } = useContext(UserContext);
@@ -82,6 +82,14 @@ const Storereview = ({containerStyle, store}) => {
   const [categoryreviewitems, setCategoryreviewitems]= useState([]);
   const [refresh, setRefresh] = useState(1);
   const _handlereviewwrite = async (store) => {
+
+    if(SELF == true){
+      return;
+    }
+    if(create == false){
+      alert("본인 상점입니다");
+      return;
+    }
     
     console.log("user inforamtion", user);
     
