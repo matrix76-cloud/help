@@ -5,6 +5,7 @@ import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import DetailHeader from "./Header/DetailHeader";
 import ConfigHeader from "./Header/ConfigHeader";
+import HomeFooter from "./Footer/HomeFooter";
 
 
 
@@ -20,7 +21,7 @@ const ConfigLayout = (props) => {
         <main>
           {props.children}
         </main>
-      <Footer  menu ={props.menu} bottom ={props.bottom} type={"config"}/>
+        <HomeFooter  menu ={props.menu} bottom ={props.bottom} type={'config'}/>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Splashcontainer from '../container/Splashcontainer';
 import Layout from '../screen/Layout/HomeLayout';
 
+
 const Container = styled.div`
 
 `
@@ -11,10 +12,6 @@ const Container = styled.div`
 const Splashpage = ({containerStyle}) => {
 
   const navigate = useNavigate();
-
-
-
-  
 
   return (
     <Layout menu ={false} bottom ={false} header={false}>

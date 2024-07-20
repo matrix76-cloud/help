@@ -4,6 +4,76 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 
+export const registerstore = async({user,STORENAME,STORESTARTTIME,STOREENDTIME,STOREINTRODUCE,STORENOTICE
+,STORETEL,STOREIMAGEARY,STORESTATUS})=>{
+    console.log("registerstore : user", user);
+    const storeRef = doc(collection(db, "STORE"));
+    const id = storeRef.id;
+    const newstore = {
+        STORE_ID : id,
+        USER_ID :user.uid,
+        USER_LOGINID : user.email,
+        USER_TYPE: user.type,
+        NICKNAME : user.nickname,
+        STORENAME : STORENAME,
+        STORESTARTTIME : STORESTARTTIME,
+        STOREENDTIME : STOREENDTIME,
+        STOREINTRODUCE : STOREINTRODUCE,
+        STORENOTICE : STORENOTICE,
+        STORETEL : STORETEL,
+        STOREIMAGEARY : STOREIMAGEARY,
+        STORECHAT: false,
+        STOREGROUPCHAT: false,
+        REGISTDATE : Date.now(),
+        STORESTATUS : STORESTATUS,
+
+    }
+    try{
+        await setDoc(storeRef, newstore);
+    }catch(e){
+        console.log("error", e.message);
+    }finally{
+        return id;
+    }
+}
+
+
+export const updatestore = async({USER_ID,STORENAME,STORESTARTTIME,STOREENDTIME,STOREINTRODUCE,STORENOTICE
+    ,STORETEL,STOREIMAGEARY,STORESTATUS}) =>{
+
+    const storeRef = collection(db, "STORE");
+
+
+
+    const rows = query(storeRef, where("USER_ID",'==', USER_ID ));
+
+    try{
+        const querySnapshot =  await getDocs(rows);
+
+        querySnapshot.forEach(function (doc) {
+            updateDoc(doc.ref, {
+                STORENAME : STORENAME,
+                STORESTARTTIME : STORESTARTTIME,
+                STOREENDTIME : STOREENDTIME,
+                STOREINTRODUCE : STOREINTRODUCE,
+                STORENOTICE : STORENOTICE,
+                STORETEL : STORETEL,
+                STOREIMAGEARY : STOREIMAGEARY,
+                STORECHAT: false,
+                STOREGROUPCHAT: false,
+                REGISTDATE : Date.now(),
+                STORESTATUS : STORESTATUS,
+            });
+        });
+     
+
+    }catch(e){
+         console.log("error", e.message);
+    }finally{
+        return true;
+    }
+
+}
 export const get_stores= async() =>{
     const storeRef = collection(db, "STORE");
     const q = query(storeRef);

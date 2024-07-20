@@ -21,6 +21,7 @@ import { get_storeinfoForUSERID } from "../../../service/StoreService";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+
 `;
 
 const Row = styled.div`
@@ -28,7 +29,7 @@ const Row = styled.div`
   flex-direction: row;
   align-items: center;
   height: 50px;
-  background-color: #d8d8d8;
+  background-color: #fff;
   color: white;
   position: fixed;
   top: 0px;
@@ -40,9 +41,9 @@ const Row = styled.div`
 const ButtonLayer = styled.div`
   width: 100px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-end;
   position: absolute;
-  right: 0px;
+  right: 20px;
 `;
 const ExpandDiv = styled.div`
   background-color: #fff;
@@ -55,7 +56,7 @@ const Member = styled.div`
   height: 20px;
   border: 1px solid #444343;
   color: #444343;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -175,20 +176,18 @@ const ChannelHeader = ({containerStyle,CHANNEL_ID, headername}) => {
             marginLeft: 20,
           }}
         >
-          <Text value={headername} size={16}></Text>
+          <Text value={'이순지님과 대화'} size={16}></Text>
         </div>
 
         <ButtonLayer>
-          <SlUser size={20} color={"#000"} onClick={_handleUser} />
-          {/* <SlUserUnfollow size={20} color={"#000"} /> */}
+     
           <SlLogout size={20} color={"#000"} onClick={_handleLogout} />
         </ButtonLayer>
       </Row>
-      {expand == true && (
-        <div style={{ paddingTop: 50 }}>
+      <div style={{ paddingTop: 50 }}>
           <div
             style={{
-              fontSize: 14,
+              fontSize: 16,
               display: "flex",
               background: "#fff",
               justifyContent: "center",
@@ -196,7 +195,7 @@ const ChannelHeader = ({containerStyle,CHANNEL_ID, headername}) => {
               height: 30,
             }}
           >
-            {"대화 참여자(" + channelinfo.ALLUSER.length + "명)"}
+            {"대화 참여자"}
           </div>
           <ExpandDiv>
             {usernames.map((data, index) => (
@@ -204,7 +203,6 @@ const ChannelHeader = ({containerStyle,CHANNEL_ID, headername}) => {
             ))}
           </ExpandDiv>
         </div>
-      )}
     </Container>
   );
 };

@@ -11,7 +11,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import styled from "styled-components";
-import Chatcontainer from "../container/Chatcontainer";
+
 import Layout from "../screen/Layout/HomeLayout";
 import DetailLayout from "../screen/Layout/DetailLayout";
 import Channelcontainer from "../container/Channelcontainer";
@@ -29,6 +29,8 @@ const Channelpage = ({ containerStyle }) => {
   const [headername, setHeadername] = useState('');
   const [refresh, setRefresh] = useState(1);
 
+
+  console.log("CHANNEL PAGE", state.STORE);
   useEffect(() => {
   
     if (state.GROUP == undefined && state.CHECKER == undefined) {
@@ -58,7 +60,8 @@ const Channelpage = ({ containerStyle }) => {
       }
     >
       <Channelcontainer CHANNEL_ID={state.CHANNEL_ID} GENERAL={state.GENERAL} 
-      ALLUSER={state.ALLUSER}
+      ALLUSERIMG ={state.ALLUSERIMG}
+      ALLUSER={state.ALLUSER} STORE={state.STORE}
       GENERALNAME={state.NICKNAME} />
     </ChannelLayout>
   );

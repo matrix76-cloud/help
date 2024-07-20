@@ -49,6 +49,18 @@ export const getFullTime = ts =>{
     return moment(ts).format();
 }
 
+export const AddressSummmary =(address)=>{
+
+	if(address == '' || address == undefined){
+		return "";
+	}
+
+	let addr = [];
+	addr = address.split(" ");
+
+	return addr[0] + ' '+ addr[1];
+}
+
 
 export const PriceRateConvert = (price,saleprice) =>{
 
@@ -437,7 +449,7 @@ export const convertTo_security = (data) => {
 
 		await useSleep(1000);
 
-		console.log("stores", stores);
+
 		let premiumshoplist = [],goldshoplist = [],silvershoplist = [], allshoplist = [];
 	
 		stores.map(async(data) => {
@@ -452,7 +464,7 @@ export const convertTo_security = (data) => {
 		  const lon2 = data.STORELONGITUDE;
 		  const dist = distanceFunc(lat1, lon1, lat2, lon2);
 	
-		  console.log("policydistance",  dist, user.distance);
+
 		  let policydistance = 0;
 	
 		  if (user.distance == "") {
@@ -474,7 +486,6 @@ export const convertTo_security = (data) => {
 			  data["checks"] =checks;
 			  premiumshoplist.push(data);
 
-			  console.log("premium", data);
 			}
 			if (data.STORELEVEL.indexOf("gold") != -1) {
 			  data["dist"] = dist;
@@ -579,10 +590,9 @@ export const convertTo_security = (data) => {
 		user["goldshoplist"] = goldshoplist;
 		user["silvershoplist"] = silvershoplist;
 	
-	
-		console.log("user info", user);
-	
-	
+	    const userData = getStoreData({ user,latitude,longitude });
+
+
 	
 		resolve(user);
 	})

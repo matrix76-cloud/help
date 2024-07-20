@@ -12,6 +12,7 @@ import Loading from '../common/Loading';
 
 const Container = styled.div`
 
+  background-color:#ff4e19
 
 `
 
@@ -35,9 +36,9 @@ const Loginloadingcontainer = ({containerStyle}) => {
   
      })
 
-     await useSleep(3000);
+     await useSleep(5000);
 
-     navigate("/config");
+     navigate("/home");
 
     } 
     Process();
@@ -48,7 +49,7 @@ const Loginloadingcontainer = ({containerStyle}) => {
 
   return (
     <Container style={containerStyle}>
-        <Loading containerStyle={{marginTop:200}}/>
+        <Loading containerStyle={{height:700,display:"flex", alignItems:"center"}}/>
     </Container>
   );
 }

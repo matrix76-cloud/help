@@ -11,6 +11,7 @@ import { get_checkuser } from '../service/CheckService';
 import Loading from '../common/Loading';
 
 const Container = styled.div`
+  background-color : #ff4e19;
 
 
 `
@@ -51,7 +52,7 @@ const Loadingcontainer = ({containerStyle}) => {
 
   return (
     <Container style={containerStyle}>
-        <Loading containerStyle={{marginTop:200}}/>
+     <Loading containerStyle={{height:700,display:"flex", alignItems:"center"}}/>
     </Container>
   );
 }

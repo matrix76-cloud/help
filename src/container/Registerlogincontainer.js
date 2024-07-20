@@ -187,6 +187,15 @@ const ProfileImage = styled.div`
     width :30px;
     height :30px;
 `
+const RegistBtn = {
+    backgroundColor: 'rgb(255, 255, 255)',
+    color: 'rgb(24, 23, 23)',
+    border: '1px solid rgb(179, 179, 179)',
+    margin: '10px 10%',
+    width: '80%',
+    borderRadius: '5px',
+    fontSize: '18px'
+}
 
 
 // let DirectSms = NativeModules.DirectSms;
@@ -345,22 +354,22 @@ const Registerlogincontainer  = ({containerStyle})=>{
  
     const _handleSuccessNext = async()=>{
 
-        let USER_ID = id +'@gmail.com';
+        // let USER_ID = id +'@gmail.com';
 
 
-        setLoading(true);
+        // setLoading(true);
 
-        const user=  await signup({USER_ID, password,nickname,tel, membertype, imgs});
+        // const user=  await signup({USER_ID, password,nickname,tel, membertype, imgs});
 
-        if(user != null){
+        // if(user != null){
 
-            setSuccess(true);
-            setLoading(false);
-        }else{
+        //     setSuccess(true);
+        //     setLoading(false);
+        // }else{
    
-            setLoading(false);
-        }
-
+        //     setLoading(false);
+        // }
+        navigate("/home");
    
   
     }
@@ -443,7 +452,9 @@ const Registerlogincontainer  = ({containerStyle})=>{
       //인증 사진을 업로드 하자
     }
 
-
+    const _handleAgree = () =>{
+        navigate("/licenseagree"); 
+    }
 
     
 
@@ -466,56 +477,15 @@ const Registerlogincontainer  = ({containerStyle})=>{
       
         (loading == true ) ? (<Loading/>):(
                 <Container>
+
                 <View1>
-                    <LabelView><LabelText>사용 아이디</LabelText></LabelView>
-                    <ContentView>
-                        <input type="text"
-                          style={{border:"none", fontSize:14}}
-                          placeholder ={"아이디를 입력해주세요"}
-                          value ={id}
-                          onSubmitEditing = {()=>{passwordref.current.focus()}}
-                          onChange = {e => {
-                              setId(e.target.value);
-                              setRefresh(refresh => refresh + 1);
-                          }}
-                        />
-            
-                    </ContentView>
+
+                    최초에 앱 진입시에 나오는 화면입니다.
+
+                    이페이지는 한번 가입된 사용자는 나오지 않습니다.
+
                 </View1>
-                <View1>
-                    <LabelView><LabelText>사용 비밀번호</LabelText></LabelView>
-                    <ContentView>
-                        <input type="password"
-                          ref = {passwordref}
-                          style={{border:"none", fontSize:14}}
-                          placeholder ={"비밀번호를 입력해주세요"}
-                          value ={password}
-                          onSubmitEditing = {()=>{repasswordref.current.focus()}}
-                          onChange = {e => {
-                              setPassword(e.target.value);
-                              setRefresh(refresh => refresh + 1);
-                          }}
-                        />
-            
-                    </ContentView>
-                </View1>
-                <View1>
-                    <LabelView><LabelText>확인 비밀번호</LabelText></LabelView>
-                    <ContentView>
-                        <input type="password"
-                          ref = {repasswordref}
-                          style={{border:"none", fontSize:14}}
-                          placeholder ={"비밀번호를 확인해주세요"}
-                          value ={repassword}
-                          onSubmitEditing = {()=>{nameRef.current.focus()}}
-                          onChange = {e => {
-                              setRepassword(e.target.value);
-                              setRefresh(refresh => refresh + 1);
-                          }}
-                        />
-            
-                    </ContentView>
-                </View1>
+           
                 <View1>
                     <LabelView><LabelText>사용할 대화명</LabelText></LabelView>
                     <ConfigView>
@@ -530,43 +500,15 @@ const Registerlogincontainer  = ({containerStyle})=>{
                               setRefresh(refresh => refresh + 1);
                           }}
                         />
-                    <Button buttonText ={'자동생성'} callback={_handleCreateName} containerStyle={{backgroundColor : "#EDEDED",
-                    color :'#000',margin:'10px', width:"150px", height:35}}/>
+                    {/* <Button buttonText ={'자동생성'} callback={_handleCreateName} containerStyle={{backgroundColor : "#EDEDED",
+                    color :'#000',margin:'10px', width:"150px", height:35}}/> */}
             
                     </ConfigView>
 
                 </View1>
     
 
-                <View1>
-                    <LabelView><LabelText>가입 형태</LabelText></LabelView>
-                    <ConfigView>
-                    <Switch
-                        button1={'일반회원'}  button2={'사장님'} Switchcallback={Switchcallback1}
-                        containerStyle={{display: "flex",justifyContent: "flex-start"}} 
-                        />
-                    </ConfigView>
-                </View1>
-
-                <View1>
-                    <LabelView><LabelText>SMS 수신</LabelText></LabelView>
-                    <ConfigView>
-                    <Switch
-                        button1={'미수신'}  button2={'수신'} Switchcallback={Switchcallback2}
-                        containerStyle={{display: "flex",justifyContent: "flex-start"}} 
-                        />
-                    </ConfigView>
-                </View1>
-
-                <View1>
-                    <LabelView><LabelText>이메일 수신</LabelText></LabelView>
-                    <ConfigView>
-                    <Switch
-                        button1={'미수신'}  button2={'수신'} Switchcallback={Switchcallback3}
-                        containerStyle={{display: "flex",justifyContent: "flex-start"}} 
-                        />
-                    </ConfigView>
-                </View1>
+  
 
                 <View1>
                     <LabelView><LabelText>전화번호</LabelText></LabelView>
@@ -604,10 +546,11 @@ const Registerlogincontainer  = ({containerStyle})=>{
                         />
                    
                         {
-                            verifyCode != '' ? ( <Button buttonText ={'인증'} callback={_handleVericodeCheck} containerStyle={{backgroundColor : "#FF5826",
-                            color :'#fff',margin:'10px', width:"150px", height:35}}/>
-                            ) :( <Button buttonText ={'인증'} containerStyle={{backgroundColor : "#EDEDED",
-                            color :'#000',margin:'10px', width:"150px", height:35}}/>) 
+                            verifyCode != '' ? ( <Button buttonText ={'인증'} callback={_handleVericodeCheck} containerStyle={{backgroundColor : "#fff",
+                            color :'#000',margin:'10px', width:"150px", height:35, boxShadow:"none"}}/>
+                            ) :( <Button buttonText ={'인증'} containerStyle={{backgroundColor : "#fff",
+                            border: '1px solid rgb(179, 179, 179)',
+                            color :'#000',margin:'10px', width:"150px", height:35, boxShadow:"none"}}/>) 
                         }
                     </ConfigView>
                 </View1>
@@ -621,20 +564,29 @@ const Registerlogincontainer  = ({containerStyle})=>{
                   </View3>
                 }
 
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div style={{ display: "flex", justifyContent: "center", position:"absolute", bottom:20, flexDirection:"column", width:"100%" }}>
                     {authcheck == true && id != "" && password != "" && nickname != "" ? (
                         <Button buttonText={'가입'} callback={_handleSuccessNext} containerStyle={{
-                            backgroundColor: "#FF5826",
-                            color: '#fff', margin: '10px', width: "90%", height: 35
+                            backgroundColor: "#FFF", border: '1px solid rgb(179, 179, 179)',boxShadow:"none",
+                            color: '#000', margin: '10px', width: "90%", height: 35
                         }} />
-                    ) : (<Button buttonText={'가입'} containerStyle={{
-                        backgroundColor: "#EDEDED",
-                        color: '#fff', margin: '10px', width: "90%", height: 35
+                    ) : (<Button buttonText={'가입'} callback={_handleSuccessNext} containerStyle={{
+                        backgroundColor: "#FFF", border: '1px solid rgb(179, 179, 179)',boxShadow:"none",
+                        color: '#000', margin: '10px', width: "90%", height: 35
                     }} />)
                     }
 
+                    <Button buttonText={'개인정보 수집동의'} callback={_handleAgree} containerStyle={{
+                        backgroundColor: "#FFF", border: '1px solid rgb(179, 179, 179)',boxShadow:"none",
+                        color: '#000', margin: '10px', width: "90%", height: 35
+                    }} />
+
                 </div>
 
+
+                
+
+          
 
                 </Container>
 

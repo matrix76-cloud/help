@@ -10,6 +10,7 @@ import { get_userInfoForusername } from '../service/UserService';
 import { createChannel, createCheckerChannel, createIntroMessage, createMainMessage, get_channel, get_channelInfo } from '../service/ChatService';
 import { getStoreData } from '../utility/common';
 import CheckstatusModalEx from './CheckstatusModalEx';
+import { imageDB } from '../utility/imageData';
 
 
 const Container = styled.div`
@@ -27,7 +28,7 @@ const CheckView = styled.div`
     flex-wrap: wrap;
     margin-top :20px;
     margin-bottom :20px;
-    justify-content : flex-start;
+    justify-content : flex-end;
     align-items : center;
     width:100%;
 `
@@ -39,7 +40,7 @@ const PersonItem = styled.div`
     border-radius :10px;
     margin :5px;
     padding :10px 15px;
-    background-color :#f9f9f9;
+    border: 1px solid #ededed;
     display:flex;
     justify-content:center;
     flex-direction: column;
@@ -148,6 +149,45 @@ const StatusChangeView = styled.div`
 
 `
 
+
+const Maxheaderblink = styled.div`
+
+    color: #242323;
+    background-color: #f5f3f3;
+    border: 1px solid #ededed;
+    padding: 5px;
+    font-size: 12px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+    animation-duration: .2s;
+    animation-name: point-move;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    min-width: 50px;
+    text-align: right;
+    width:70%;
+    animation: box-ani 1s linear infinite;
+    z-index: 2;
+    display:flex;
+
+    &:after { 
+        content: "";
+        border-top: 50px solid #f5f3f3;
+        border-left: 30px solid transparent;
+        border-right: 8px solid transparent;
+        position: absolute;
+        left: 80%;
+        right: 80%;
+        top: 35px;
+        margin: 0 auto;
+        width: 0;
+        height: 0;
+    }
+`
+
 const Storecheck = ({containerStyle, store, SELF}) => {
 
   const [users, setUsers] = useState([]);
@@ -245,7 +285,7 @@ const Storecheck = ({containerStyle, store, SELF}) => {
 
       // 관리사의 사용자 아이디를  찾아내
       
-      const USER_NICKNAME = data.CHECKID;
+    const USER_NICKNAME = data.CHECKID;
     const CHECKUSERITEM = await get_userInfoForusername({ USER_NICKNAME });
     
 
@@ -413,6 +453,18 @@ const Storecheck = ({containerStyle, store, SELF}) => {
 
           <CheckView>
             {users.map((data, index) => (
+              <>
+              {
+                SELF == true &&
+                <Maxheaderblink>
+                <img src={imageDB.maroneperson2} style={{ width: '20px',height: '20px',paddingLeft: '5px'}}/>
+                <div>아래 부분을 누르면 <br/> 관리사 정보를 변경 할수가 있습니다</div>
+                </Maxheaderblink>
+              }
+
+          
+
+
               <PersonItem key={index}>
                 <>
                 {
@@ -438,9 +490,6 @@ const Storecheck = ({containerStyle, store, SELF}) => {
                     </>)
                 }
                 </>
-
-
-  
                 <div style={{display:"flex", flexDirection:"row"}}>
 
                   {
@@ -461,7 +510,9 @@ const Storecheck = ({containerStyle, store, SELF}) => {
                 
                
              
-                  <div style={{display:"flex", justifyContent:"flex-end", flexDirection:"column", width:"50%"}}>      
+
+                  <div style={{display:"flex", justifyContent:"flex-end", flexDirection:"column", width:"50%",}}>           
+
                       <PersonNameView onClick={()=>{_handleAdjust(data)}} >
                         <div style={{ marginRight: 3, paddingTop: 4 }}>
                           <PersonGeneralText>{"관리사"}</PersonGeneralText>
@@ -531,10 +582,9 @@ const Storecheck = ({containerStyle, store, SELF}) => {
                   </div>
 
                 </div>
-
-
-          
               </PersonItem>
+              </>
+   
             ))}
           </CheckView>
         </Container>

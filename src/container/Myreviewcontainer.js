@@ -9,6 +9,7 @@ import ReviewItem from '../components/ReviewItem';
 import { get_storeinfoForSTOREID } from '../service/StoreService';
 import Loading from '../common/Loading';
 import { useSleep } from '../utility/common';
+import Loginloadingcontainer from './Loginloadingcontainer';
 
 const Container = styled.div`
   margin-top:60px;
@@ -74,7 +75,7 @@ const MyReviewcontainer = ({containerStyle}) => {
   return (
     <Container style={containerStyle}>
       {
-        load == false ? <Loading /> : <>
+        load == false ? <Loginloadingcontainer /> : <>
         {
           reviewitems.map((data, index)=>(
                     

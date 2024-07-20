@@ -24,8 +24,8 @@ const SocialButton = styled.div`
 
 const KaKaoLogin = ({containerStyle}) => {
 
-  const Rest_api_key ='11ba702a58a4deb18f8dcd3f940d0a3d';
-  const redirect_uri = 'http://localhost:3000/auth';
+  const Rest_api_key ='d943f03d1af22dc77db2c9914ab142b5';
+  const redirect_uri = 'https://mapapp-30.web.app/auth';
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
 
   const handleLogin = () =>{

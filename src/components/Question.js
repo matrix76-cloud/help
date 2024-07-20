@@ -13,7 +13,7 @@ const QuestionLine = styled.div`
   justify-content : space-between;
   padding-bottom: 5px;
   border-bottom: 1px solid #ededed;
-  height       : 50px;
+  height       : 35px;
   align-items  : center;
 
 `
@@ -70,7 +70,7 @@ const Question = ({containerStyle, data1, data2}) => {
       </QuestionLine>
       {check == true &&
           <AnswerLine>
-              <Text value={data2} size={14} color={'#999'}/>
+              <Text value={data2} size={14} color={'#3d3c3c'}/>
           </AnswerLine>
       }
       

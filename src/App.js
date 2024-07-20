@@ -1,10 +1,9 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useContext, useEffect, useLayoutEffect } from "react";
 import { HashRouter, Route, Switch, Redirect, BrowserRouter, Routes, useLocation } from "react-router-dom";
 import Homepage from "./page/Homepage";
 import Splashpage from "./page/Splashpage";
 import Configpage from "./page/Configpage";
 import Regionpage from "./page/Regionpage";
-import Chatpage from "./page/Chatpage";
 import MyRegionpage from "./page/MyRegionpage";
 import Searchpage from "./page/Searchpage";
 import Loginpage from "./page/Loginpage";
@@ -44,16 +43,64 @@ import Loadingpage from "./page/Loadingpage";
 // import Eventcreatepage from "./page/Eventcreatepage";
 import Mystoreconfigpage from "./page/Mystoreconfigpage";
 import Loginloadingpage from "./page/Loginloadingpage";
+import Mystoreorderpage from "./page/Mystoreorderpage";
+import Requestpage from "./page/Requestpage";
+import Infopage from "./page/Infopage";
+import Hongpage from "./page/Hongpage";
+import Hongmappage from "./page/Hongmappage";
+import Roompage from "./page/Roompage";
+import Roommappage from "./page/Roommappage";
+import DetailTaskpage from "./page/DetailTaskpage";
+import RoomInfopage from "./page/RoomInfopage";
+import Eventpage from "./page/Eventpage";
+import Communitypage from "./page/Communitypage";
+import Rulletpage from "./page/Rulletpage";
+import LadyInfopage from "./page/LadyInfopage";
+import Workpage from "./page/Workpage";
+import { UserContext } from "./context/User";
+import CommunityDetailpage from "./page/CommunityDetailpage";
+import Helpfilterpage from "./page/Helpfilterpage";
+import ChatGatepage from "./page/ChatGatepage";
+import HongLadyAuthpage from "./page/HongLadyLicenseAuthpage";
+import HongLadyPhoneAuthpage from "./page/HongLadyPhoneAuthpage";
+import HongLadyLicenseAuthpage from "./page/HongLadyLicenseAuthpage";
+import Splashpage2 from "./page/Splashpage2";
+import LicenseAgreepage from "./page/LicenseAgreepage";
+import ProfilePictureChangepage from "./page/ProfilePictureChangepage";
+import Eventlistpage from "./page/Eventlistpage";
+import Guidepage from "./page/Guidepage";
+import HongLadyInfopage from "./page/HongLadyInfopage";
+import Historylistpage from "./page/Historylistpage";
+import Couponelistpage from "./page/Couponelistpage";
+import Pointlistpage from "./page/Pointlistpage";
+import DetailTaskpage2 from "./page/DetailTaskpage2";
+import Hongrequestpage from "./page/Hongrequestpage";
+import HongLadyProfilepage from "./page/HongLadyProfilepage";
 
 
 
 
 const App =() =>  {
 
-
+  const { dispatch2, user } = useContext(UserContext);
 
 
   const location = useLocation();
+
+  useLayoutEffect(() => {
+    const userObj = JSON.parse(window.localStorage.getItem("user"));
+
+    console.log("useLayoutEffect", userObj);
+    if (userObj != undefined) {
+      user.deviceid = userObj.deviceid;
+      user.region1 = userObj.region1;
+      user.region2 = userObj.region2;
+
+  
+      dispatch2(user);
+    }
+  }, []);
+
  
   return (
     // <RouteTransition location={location}>
@@ -101,12 +148,41 @@ const App =() =>  {
     <Routes>
       <Route path="/" element={<Splashpage />} />
       <Route path="/splash" element={<Splashpage />} />
+      <Route path="/splash2" element={<Splashpage2 />} />
       <Route path="/loading" element={<Loadingpage />} />
+      <Route path="/hongrequest" element={<Hongrequestpage />} />
       <Route path="/loginloading" element={<Loginloadingpage />} />
+      <Route path="/licenseagree" element={<LicenseAgreepage />} />
       <Route path="/home" element={<Homepage />} />
+      <Route path="/hong" element={<Hongpage />} />
+      <Route path="/work" element={<Workpage />} />
+      <Route path="/helpfilter" element={<Helpfilterpage />} />
+      <Route path="/hongmap" element={<Hongmappage />} />
+      <Route path="/hongladyprofile" element={<HongLadyProfilepage />} />
+      <Route path="/hongladylicenseauth" element={<HongLadyLicenseAuthpage />} />
+      <Route path="/hongladyphoneauth" element={<HongLadyPhoneAuthpage />} />
+      <Route path="/detailtask" element={<DetailTaskpage />} />
+      <Route path="/detailtask2" element={<DetailTaskpage2 />} />
+      <Route path="/room" element={<Roompage />} />
+      <Route path="/roommap" element={<Roommappage />} />
+      <Route path="/request" element={<Requestpage />} />
+      <Route path="/info" element={<Infopage />} />
+      <Route path="/hongladyinfo" element={<HongLadyInfopage />} />
+      <Route path="/ladyinfo" element={<LadyInfopage />} />
+      <Route path="/roominfo" element={<RoomInfopage />} />
+      <Route path="/community" element={<Communitypage />} />
+      <Route path="/communitydetail" element={<CommunityDetailpage />} />
+      <Route path="/rullet" element={<Rulletpage />} />
+      <Route path="/event" element={<Eventpage />} />
+      <Route path="/guide" element={<Guidepage />} />
+      <Route path="/profilepicturechange" element={<ProfilePictureChangepage />} />
       <Route path="/region" element={<Regionpage />} />
+      <Route path="/eventlist" element={<Eventlistpage />} />
+      <Route path="/historylist" element={<Historylistpage />} />
+      <Route path="/couponelist" element={<Couponelistpage />} />
+      <Route path="/pointlist" element={<Pointlistpage />} />
       <Route path="/myregion" element={<MyRegionpage />} />
-      <Route path="/chat" element={<Chatpage />} />
+      <Route path="/chat" element={<ChatGatepage />} />
       <Route path="/channel" element={<Channelpage />} />
       <Route path="/config" element={<Configpage />} />
       <Route path="/search" element={<Searchpage />} />
@@ -139,6 +215,7 @@ const App =() =>  {
       <Route path="/baduser" element={<Baduserpage />} />
       <Route path="/mystore" element={<Mystorepage />} />
       <Route path="/mystoreconfig" element={<Mystoreconfigpage />} />
+      <Route path="/mystoreorder" element={<Mystoreorderpage />} />
       <Route path="/auth" element={<Kakaoauthpage />} />
       <Route path="/authm" element={<Naverauthpage />} />
       {/* <Route path="/eventcreate" element={<Eventcreatepage />} /> */}

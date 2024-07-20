@@ -30,7 +30,7 @@ const StoreFeeTypeText = styled.span`
     font-size :16px;
     font-family : ${({theme}) =>theme.BOLD};
     letter-spacing:-1px;
-    font-weight:900;
+
 `
 const StoreFeeSubTypeText = styled.span`
     color :#989898;
@@ -89,13 +89,13 @@ const ProductSalePriceTypeText = styled.span`
     font-size:14px; 
     color :#FF6B3E;
     font-family : ${({ theme }) => theme.BOLD};
-    font-weight:900;
+
 `
 
 const ProductSalePriceText = styled.span`
   font-size: 16px;
   font-family: ${({ theme }) => theme.BOLD};
-  font-weight: 900;
+
 `;
 
 const ProductRegularPriceTypeText = styled.span`

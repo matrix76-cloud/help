@@ -12,7 +12,7 @@ const Container = styled.div`
 const ImageLayer = styled.div`
   background: #ededed;
   border-radius: 100px;
-  height: 50px;
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,7 +33,7 @@ const ImageButton = ({containerStyle, source, buttontext, buttoncallback, imgwid
            <Image source={source} Radius={round} imgwidth={imgwidth} />
         </ImageLayer>
 
-        <Text value={buttontext} size = {10}  containerStyle={{ paddingTop:10, fontWeight:500}}/>
+        <Text value={buttontext} size = {9}  containerStyle={{ paddingTop:5, fontWeight:500}}/>
     </Container>
   );
 }

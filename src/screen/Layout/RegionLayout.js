@@ -6,6 +6,7 @@ import Footer from "./Footer/Footer";
 import DetailHeader from "./Header/DetailHeader";
 import ConfigHeader from "./Header/ConfigHeader";
 import RegionHeader from "./Header/RegionHeader";
+import HomeFooter from "./Footer/HomeFooter";
 
 
 
@@ -22,7 +23,7 @@ const RegionLayout = (props) => {
         <main>
           {props.children}
         </main>
-      <Footer  menu ={props.menu} bottom ={props.bottom} type={"region"}/>
+        <HomeFooter  menu ={props.menu} bottom ={props.bottom} type={'region'}/>
     </div>
   );
 };

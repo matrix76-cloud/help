@@ -20,6 +20,7 @@ const Container = styled.div`
   top: 0px;
   z-index: 10;
   width: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.05);
 `;
 
 const ChatHeader = ({containerStyle, headername}) => {

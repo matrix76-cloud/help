@@ -144,7 +144,7 @@ const MyStoreconfigcontainer = ({containerStyle, STORE_ID}) => {
         <StoreTypeText>{'사장님 한말씀'}</StoreTypeText>
 
         <input type="text"
-              style={{border:"none", fontSize:14, width:"80%", margin: "10px 5%"}}
+              className='inputgeneral'
               placeholder ={"사장님 한말씀 내용을 입력 하세요"}
               value ={storenotice}
               onChange = {e => {

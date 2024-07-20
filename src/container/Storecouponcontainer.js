@@ -5,6 +5,7 @@ import { UserContext } from '../context/User';
 import CouponeItem from '../components/CouponeItem';
 import { get_coupone, get_storecoupone } from '../service/CouponeService';
 import Loading from '../common/Loading';
+import Loginloadingcontainer from './Loginloadingcontainer';
 
 const Container = styled.div`
   margin-top:60px;
@@ -47,7 +48,7 @@ const Storecouponcontainer = ({containerStyle, STORE_ID}) => {
     <Container style={containerStyle}>
 
       {
-        load == true ? (<Loading/>):(<>
+        load == true ? (<Loginloadingcontainer />):(<>
         {
             couponeitems.map((data, index)=>(
               <CouponeItem store ={true} couponeitem={data} index={index} callback={couponecallback} />

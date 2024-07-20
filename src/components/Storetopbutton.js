@@ -12,7 +12,7 @@ const Container = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  bottom: 60px;
+  bottom: 70px;
   right: 10px;
   display:flex;
   justify-content:space-evenly;

@@ -131,10 +131,7 @@ export const get_allchannel = async ({USERID}) => {
   try {
     const querySnapshot = await getDocs(q);
       querySnapshot.forEach(function (doc) {
-          if (doc.data().ALLUSER.indexOf(USERID) != -1) {
-              channelitems.push(doc.data());
-              bSuccess = true; 
-          }
+        channelitems.push(doc.data());
     
 
     });

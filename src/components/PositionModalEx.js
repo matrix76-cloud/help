@@ -13,7 +13,7 @@ import Button from '../common/Button';
 import { BiCrosshair, BiMapAlt } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/User';
-import { SearchAddress } from '../utility/common';
+import { SearchAddress, useSleep } from '../utility/common';
 
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
@@ -58,13 +58,13 @@ Fade.propTypes = {
 
 const style = {
   position: 'absolute',
-  top: '90%',
+  top: '70%',
   left: '50%',
-  height:'150px',
+  height:'400px',
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+
   boxShadow: 24,
   p: 4,
 };
@@ -118,12 +118,34 @@ const FilterApplyButtonText = styled.span`
   font-family : ${({theme}) =>theme.REGULAR};
 `
 
+const { kakao } = window;
+
 export default function PostionModalEx({callback, data}) {
 
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const {user, dispatch2} = React.useContext(UserContext);
 
+
+
+  React.useEffect( ()=>{
+
+    
+    async function Process(){
+                      // 찜한목록, 
+
+      const Sleeptime =  await useSleep(1000);
+      var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+       mapOption = { 
+          center: new kakao.maps.LatLng(37.54699, 127.09598), // 지도의 중심좌표
+          level: 4 // 지도의 확대 레벨
+      };
+
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    } 
+    Process();
+  }, [])
 
   const handleClose = () =>{
     setOpen(false);
@@ -171,37 +193,7 @@ export default function PostionModalEx({callback, data}) {
               </IconCloseView>
               <Label content={'내위치 지정'} containerStyle={{marginTop:-30}}/>
 
-      
-              <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:20}}>
-                <div 
-                onClick={_handlecurrentpos}
-                style={{backgroundColor: "rgb(231 231 231)",width:"85%", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
-                <BiCrosshair size={22} />
-                <Button buttonText ={'현재위치로 재검색'} callback={_handlecurrentpos} containerStyle={{backgroundColor: "rgb(231 231 231)", fontWeight:700,
-                  color: "rgb(12 12 12)",margin:'10px', width:"120px", height:25,justifyContent: "flex-start"}}/>
-                </div>
-
-
-                <div 
-                onClick={_handlemap}
-                style={{backgroundColor: "#FF5826",width:"85%", display:"flex", flexDirection:"row", justifyContent:"center", alignItems:"center", marginTop:5}}>
-                <BiMapAlt size={22} color={'#fff'} />
-                <Button buttonText ={'지도에서 위치 지정'} callback={_handlemap} containerStyle={{backgroundColor: "#FF5826", fontWeight:700,
-                  color: "#fff",margin:'10px', width:"120px", height:25,justifyContent: "flex-start"}}/>
-                </div>
-
-              </div>
-            {/* <ApplyItem >
-                <div style={{dispaly:"flex", alignItems:"flex-end", marginRight :15, justifyContent:"center"}}>   
-                    <FilterApplyButton onClick ={_handlemapapply}><FilterApplyButtonText>현재위치로 재검색</FilterApplyButtonText></FilterApplyButton>
-                </div>
-            </ApplyItem>
-
-            <ApplyItem >
-                <div style={{dispaly:"flex", alignItems:"flex-end", marginRight :15, justifyContent:"center"}}>   
-                    <FilterApplyButton onClick ={_handlemapapply}><FilterApplyButtonText>지도로 위치 지정</FilterApplyButtonText></FilterApplyButton>
-                </div>
-            </ApplyItem> */}
+              <div id="map" className="ConfigMaxMap" style={{marginTop:30}}></div>
 
           </Box>
         </Fade>

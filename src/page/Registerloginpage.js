@@ -12,6 +12,8 @@ const Container = styled.div`
 
 `
 
+
+
 const Registerloginpage = ({containerStyle}) => {
 
   const navigate = useNavigate();
@@ -24,9 +26,9 @@ const Registerloginpage = ({containerStyle}) => {
 
 
   return (
-    <PrevLayout menu ={false} bottom ={false} header={true} headername={'회원가입'}>
+
       <Registerlogincontainer/>
-    </PrevLayout>
+
   );
 }
 

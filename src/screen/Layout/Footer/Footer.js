@@ -65,6 +65,7 @@ const Footer = ({menu, bottom, type, homecallback }) => {
   }
 
 
+
   return (
     <Fragment>
       <footer>
@@ -148,12 +149,12 @@ const Footer = ({menu, bottom, type, homecallback }) => {
                 <img src={imageDB.bottom_chat}  style={{width: 20,height: 20}}/>
               </div>
               <div className="buttonEnableText">
-                체팅
+                대화
               </div></>) : (<>   <div className="imageicon">
                   <img src={imageDB.bottom_chat_disable}  style={{width: 20,height: 20}}/>
                 </div>
                 <div className="buttonDisableText">
-                  체팅
+                대화
                 </div></>)
               }
              

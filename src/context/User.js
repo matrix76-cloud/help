@@ -1,4 +1,5 @@
 import React, { useState, createContext } from "react";
+import { ROLETYPE } from "../utility/contentDefine";
 
 const UserContext = createContext({
   user: {
@@ -12,7 +13,7 @@ const UserContext = createContext({
     longitude: "",
     curlatitude:"",
     curlongitude:"",
-    maplevel :3,
+    maplevel :2,
     region1: "",
     region2: "",
     storeviewlist: [],
@@ -27,6 +28,7 @@ const UserContext = createContext({
     goldshoplist: [],
     silvershoplist : [],
     reload : false,
+    role:ROLETYPE.JUBU
   },
   dispatch2: () => {},
 });
@@ -59,7 +61,8 @@ const UserProvider = ({ children }) => {
     premiumshoplist,
     goldshoplist,
     silvershoplist,
-    reload
+    reload,
+    role
   }) => {
     setUser({
       email,
@@ -86,7 +89,8 @@ const UserProvider = ({ children }) => {
       premiumshoplist,
       goldshoplist,
       silvershoplist,
-      reload
+      reload,
+      role
     });
   };
 

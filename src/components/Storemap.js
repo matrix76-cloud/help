@@ -6,7 +6,7 @@ import Loading from '../common/Loading';
 import { FaExpand } from "react-icons/fa";
 import { theme } from '../theme/theme';
 import Button from '../common/Button';
-import "../container/StoreMap.css"
+
 import { SearchAddress } from '../utility/common';
 
 import { UserContext } from '../context/User';

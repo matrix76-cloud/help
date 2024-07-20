@@ -90,7 +90,7 @@ const Eventcreate = ({containerStyle, STORE_ID}) => {
             <div style={{display:"flex", padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start"}}>
             <Text value={'이벤트 내용'} containerStyle={{ paddingLeft:20}} size={14}  />
             <input type="text"
-              style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
+              className='inputgeneral'
               placeholder ={"이벤트 내용을 입력 하세요"}
               value ={eventname}
               onChange = {e => {
@@ -103,7 +103,7 @@ const Eventcreate = ({containerStyle, STORE_ID}) => {
             <div style={{display:"flex",padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
             <Text value={'이벤트 금액'} containerStyle={{ paddingLeft:20}} size={14}  />
             <input type="number"
-              style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
+              className='inputgeneral'
               placeholder ={"이벤트 금액을 입력 하세요"}
               value ={eventmoney}
               onChange = {e => {
@@ -117,7 +117,7 @@ const Eventcreate = ({containerStyle, STORE_ID}) => {
             <div style={{display:"flex",padding:10,  flexDirection:"column", justifyContent:"flex-start", alignItems:"flex-start", marginTop:20}}>
             <Text value={'쿠폰 수량'} containerStyle={{paddingLeft:20}} size={14}  />
             <input type="number"
-              style={{border:"none", fontSize:14, width:"80%",marginLeft: "5%",marginTop: "10px"}}
+                 className='inputgeneral'
               placeholder ={"쿠폰수량을 입력 하세요"}
               value ={eventsu}
               onChange = {e => {

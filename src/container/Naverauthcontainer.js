@@ -12,8 +12,9 @@ import {
 import styled from "styled-components";
 import { getKaKaoUserData, getToken } from "../utility/api";
 import Button from "../common/Button";
-import { DuplicatePhone, get_userInfoForKakaoID, get_userInfoForPhone, get_userInfoForUID, login, update_userdevice, update_userkakaoid } from "../service/UserService";
+import { DuplicatePhone, get_userInfoForKakaoID, get_userInfoForNaverID, get_userInfoForPhone, get_userInfoForUID, login, update_userdevice, update_userkakaoid, update_usernaverid } from "../service/UserService";
 import { UserContext } from "../context/User";
+import GuideLabel from "../components/GuildeLable";
 
 const Container = styled.div`
     margin-top:50px;
@@ -61,6 +62,8 @@ const LabelText = styled.span`
   font-family: ${({ theme }) => theme.REGULAR};
 `;
 
+const { naver } = window;
+
 const Naverauthcontainer = ({ containerStyle }) => {
     const navigate = useNavigate();
 
@@ -77,146 +80,213 @@ const Naverauthcontainer = ({ containerStyle }) => {
     const [minutes, setMinutes] = useState(2);
     const [seconds, setSeconds] = useState(0);
     const [authstart, setAuthstart] = useState(false);
-    const [kakaoID, setKakaoID] = useState('');
+    const [naverexist, setNaverexist] = useState(true);
+    const [naverID, setNaverID] = useState('');
+
+
+    const _handlephonecheck = async () => {
+      // 이미 가입된 번호인지 확인하자
+  
+      const USER_TEL = tel;
+      const userdata = await DuplicatePhone({ USER_TEL });
+  
+      console.log("user phone check", user);
+  
+      if (userdata != null) {
+          alert("이미 등록된 전화번호로 기존 등록된 이용자 정보에 매핑합니다");
+          
+          const userinfo = await get_userInfoForPhone({ USER_TEL });
+          // 업데이트 
+          const USERID = userinfo.USER_SESSION;
+          console.log("kakao", USERID, naverID);
+  
+          const kakaoupdate = await get_userInfoForNaverID({USERID,naverID});
+  
+  
+          // 로그인 진행
+  
+          console.log("userinfo", userinfo);
+  
+  
+          user['email'] = userinfo.USER_ID;
+          user['uid'] = userinfo.USERS_INDEX;
+          user['type'] = userinfo.USER_TYPE;
+          user['nickname'] = userinfo.USER_NICKNAME;
+          user['user_type'] = userinfo.USER_TYPE;
+          user['img'] = userinfo.USER_IMAGE;
+  
+          user["distance"] = userinfo.DISTANCE;
+  
+          const latitude = user.latitude;
+          const longitude = user.longitude;
+  
+  
+          dispatch2(user);
+  
+          navigate("/loginloading");
+  
+  
+  
+  
+          
+        return;
+      }else{
+        alert("등록된 전화번호가 없습니다. 회원가입을 진행한후 가입된 동일 전화번호로 카카오 로그인을 사용하세요");
+      }
+  
+  
+  
+  
+    };
 
   useEffect(() => {
-    setAuthcheck(authcheck);
-  }, [refresh]);
 
-  useEffect(() => {
-    const countdown = setInterval(() => {
-      if (parseInt(seconds) > 0) {
-        setSeconds(parseInt(seconds) - 1);
-      }
-      if (parseInt(seconds) === 0) {
-        if (parseInt(minutes) === 0) {
-          clearInterval(countdown);
-        } else {
-          setMinutes(parseInt(minutes) - 1);
-          setSeconds(59);
-        }
-      }
-    }, 1000);
 
-    return () => clearInterval(countdown);
-  }, [minutes, seconds]);
+    initializeNaverLogin();
+
+  }, []);
+
+  const initializeNaverLogin = () => {
+    const naverLogin = new naver.LoginWithNaverId({
+      clientId: "7aect0NV3l30s2Lm369y",
+      callbackUrl: "https://mapapp-30.web.app/authm",
+      isPopup: false,
+      callbackHandle: true,
+    });
+    naverLogin.init();
+
+    naverLogin.getLoginStatus(async function (status) {
+      if (status) {
+        var email = naverLogin.user.getEmail();
+      
+        console.log("naver login",naverLogin.user.id );
+
+        const naverID = naverLogin.user.id;
+        console.log("NaverID",naverID);
+        setNaverID(naverID);
+
+        const naverexist = await get_userInfoForNaverID({ naverID });
+
+        console.log("naver exist", naverexist);
+    
+
+      if (naverexist == null) {
+          setNaverexist(false);
+
+      } else {
+
+          console.log("NaverID exist",naverID);
+
+          const userinfo = await get_userInfoForNaverID({ naverID });
+          // 업데이트 
+          const USERID = userinfo.USER_SESSION;
+          console.log("kakao", USERID, naverID);
+
+          const kakaoupdate = await update_usernaverid({USERID,naverID});
+
+          // 로그인 진행
+
+          console.log("userinfo", userinfo);
+
+
+          user['email'] = userinfo.USER_ID;
+          user['uid'] = userinfo.USERS_INDEX;
+          user['type'] = userinfo.USER_TYPE;
+          user['nickname'] = userinfo.USER_NICKNAME;
+          user['user_type'] = userinfo.USER_TYPE;
+          user['img'] = userinfo.USER_IMAGE;
+
+          user["distance"] = userinfo.DISTANCE;
+
+          const latitude = user.latitude;
+          const longitude = user.longitude;
+ 
+
+          dispatch2(user);
+
+          navigate("/loginloading");
+
+
+      }
+
+      } else {
+        console.log("로그인 실패");
+      }
+    });
+  };
 
   const _handleLoginpagemove = () => {
     navigate("/login");
   };
-  const _handleauthcode = async () => {
-    // 이미 가입된 번호인지 확인하자
-
-    const USER_TEL = tel;
-    const userdata = await DuplicatePhone({ USER_TEL });
-
-    console.log("user phone check", user);
-
-    if (userdata != null) {
-        alert("이미 등록된 전화번호로 기존 등록된 이용자 정보에 매핑합니다");
-        
-        const userinfo = await get_userInfoForPhone({ USER_TEL });
-        // 업데이트 
-        const USERID = userinfo.USER_SESSION;
-        console.log("kakao", USERID, kakaoID);
-
-        const kakaoupdate = await update_userkakaoid({USERID,kakaoID});
-       
-        //로그인 진행
-        async function UserLogin(uniqueId) {
-            // 아이디와 패스워드 값을 가져오자
-            const DEVICEID = uniqueId;
-
-            let email = userinfo.USER_ID;
-            let password = userinfo.USER_PW;
-            const user2 = await login({ email, password });
-
-            if (user2 == -1) {
-            alert("아이디와 비밀번호를 다시 확인해주시기 바랍니다");
-            return;
-            }
-
-            const USER_ID = userinfo.USER_SESSION;
-            const user3 = await get_userInfoForUID({ USER_ID });
-
-            user["email"] = email;
-            user["uid"] = user2.user.uid;
-            user["type"] = user3.USER_TYPE;
-            user["nickname"] = user3.USER_NICKNAME;
-            user["user_type"] = user3.USER_TYPE;
-
-            dispatch2(user);
-
-            navigate("/home", { state: { homerefresh: false } });
-        }
-
-        const uniqueId = user.deviceid;
-
-        UserLogin(uniqueId);
-
-        
-      return;
-    }
-
-    const getRandom1 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom1(1, 10));
-    const getRandom2 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom2(1, 10));
-    const getRandom3 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom3(1, 10));
-    const getRandom4 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom4(1, 10));
-    const getRandom5 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom5(1, 10));
-
-    let code =
-      String(getRandom1(1, 10)) +
-      String(getRandom2(1, 10)) +
-      String(getRandom3(1, 10)) +
-      String(getRandom4(1, 10)) +
-      String(getRandom5(1, 10));
-
-    setReqcode(code);
-
-    //인증코드를 보내자
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          command: "smssend",
-          param1: code,
-          param2: tel,
-        })
-      );
-    }
-
-    setAuthstart(true);
-
-    setMinutes(2);
-    setSeconds(0);
-  };
-
-  const _handleVericodeCheck = () => {
-    if (reqcode == verifyCode) {
-      setAuthstart(false);
-      setAuthcheck(true);
-      alert("인증코드가 일치 합니다");
-    } else {
-      alert("인증코드가 일치 하지 않습니다");
-    }
-  };
-
-  useEffect(() => {
-    navigate("/home", { state: { homerefresh: false } });
-  }, []);
 
   return (
     <Container style={containerStyle}>
+      {loginsuccess == false && (
+        <ButtonLayout>
+          <div>로그인이 실패 하였습니다.</div>
+          <div>로그인 페이지로 이동합니다</div>
+          <Button
+            buttonText={"로그인 페이지 이동"}
+            callback={_handleLoginpagemove}
+            containerStyle={{
+              backgroundColor: "#FF4E19",
+              borderRadius: "10px",
+              fontSize: 17,
+              color: "#fff",
+              border: "1px solid #FF4E19",
+              margin: " 10px 0px",
+              width: "90%",
+            }}
+          />
+        </ButtonLayout>
+      )}
 
+      {naverexist == false && (
+        <div>
+
+          <GuideLabel
+            containerStyle={{ marginTop: 50 }}
+            height={180}
+            LabelText={"마원 네이버 로그인"}
+            SubLabelText={
+              "마원 채팅입니다. 마원은 건전한 마사지 업소 문화를 선도하고 있습니다. 원활한 마원 앱 이용을 위해 마원에서는 딱한번 전화번호 인증을 통해 부정사용을 방지 하고 있습니다. 회원가입이  되어 있지 않다면 회원가입을 진행 해주시고 이미 회원가입이 되어 있다면 가입된 전화번호로 네이버 아이디를 일치시켜 주시기 바랍니다 "
+            }
+          />
+
+
+          <View1>
+            <LabelView>
+              <LabelText>전화번호</LabelText>
+            </LabelView>
+            <ConfigView>
+              <input
+                type="number"
+                style={{ border: "none", fontSize: 14 }}
+                placeholder={"전화번호"}
+                value={tel}
+                onChange={(e) => {
+                  setTel(e.target.value);
+                  setRefresh((refresh) => refresh + 1);
+                }}
+              />
+
+              <Button
+                buttonText={"확인"}
+                callback={_handlephonecheck}
+                containerStyle={{
+                  backgroundColor: "#307bf1",
+                  color: "#fff",
+                  margin: "10px",
+                  width: "150px",
+                  height: 35,
+                }}
+              />
+            </ConfigView>
+          </View1>
+
+
+        </div>
+      )}
     </Container>
   );
 };

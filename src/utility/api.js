@@ -5,8 +5,8 @@ import axios from 'axios'
 
 export const getToken = async code => {
     const grant_type = 'authorization_code'
-    const client_id = `11ba702a58a4deb18f8dcd3f940d0a3d`;
-    const REDIRECT_URI = "http://localhost:3000/auth";
+    const client_id = `d943f03d1af22dc77db2c9914ab142b5`;
+    const REDIRECT_URI = "https://mapapp-30.web.app/auth";
     const AUTHORIZE_CODE = code;
 
     const res = await axios.post(

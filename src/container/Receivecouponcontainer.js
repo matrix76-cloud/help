@@ -6,6 +6,7 @@ import CouponeItem from '../components/CouponeItem';
 import { get_coupone } from '../service/CouponeService';
 import Loading from '../common/Loading';
 import { useSleep } from '../utility/common';
+import Loginloadingcontainer from './Loginloadingcontainer';
 
 const Container = styled.div`
   margin-top:60px;
@@ -36,7 +37,7 @@ const Receivecouponcontainer = ({containerStyle}) => {
   return (
     <Container style={containerStyle}>
       {
-        loading == true ? (<Loading containerStyle={{ marginTop: 300 }} />) : (<>
+        loading == true ? (<Loginloadingcontainer />) : (<>
           {
           couponeitems.map((data, index)=>(
             <CouponeItem store ={false} couponeitem={data} index={index} />

@@ -12,7 +12,7 @@ const Container = styled.div`
   display:flex;
   flex-direction: column;
   height:100%;
-  margin-top:50px;
+  margin-top:10px;
 `
 const DataView = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ const Content1View = styled.div`
   flex-direction: column;
 `;
 const ContentItem1View = styled.div`
-  height: 40px;
+  height: 30px;
   width: 80px;
   background-color: ${({ select }) => (select == true ? "#000" : "#ededed")};
   align-items: center;
@@ -41,10 +41,9 @@ const Content2View = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  margin-bottom: 80px;
 `;
 const ContentItem2View = styled.div`
-  height: 40px;
+  height: 30px;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 0.3px;
@@ -128,15 +127,14 @@ const MapView = styled.div`
   margin-top:50px;
 `;
 
-const Regioncontainer = ({ containerStyle, type }) => {
+const Region = ({ containerStyle, type, callback, index }) => {
   const navigation = useNavigate();
 
   const { user, dispatch2 } = useContext(UserContext);
 
   console.log("user", user);
   useEffect(() => {
-    async function fetchData() {}
-    fetchData();
+
   }, []);
 
   const _handleSelect1 = (data) => {
@@ -145,8 +143,12 @@ const Regioncontainer = ({ containerStyle, type }) => {
     regionvalue[FindIndex].select = true;
     setRegionvalue(regionvalue);
     setSelectregion(data.name);
+  };
 
-    setRefresh((refresh) => refresh + 1);
+
+  const _handleSelect2 = (data1, data2) => {
+
+    callback(data1, data2, index);
   };
 
   const allSelectFree = () => {
@@ -155,11 +157,6 @@ const Regioncontainer = ({ containerStyle, type }) => {
     });
   };
 
-  const _handleSelect2 = (data1, data2) => {
-    navigation("/Myregion", {
-      state: { region0: "", region1: data1, region2: data2 },
-    });
-  };
 
   const MapView = styled.div`
     width: 100%;
@@ -223,7 +220,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
     let region = regionvalue;
     setRegionvalue(region);
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
       
   }, [refresh]);
 
@@ -234,35 +231,13 @@ const Regioncontainer = ({ containerStyle, type }) => {
     }
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    return () => {};
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  //   return () => {};
+  // }, []);
 
   return (
     <Container style={containerStyle}>
-      <RegionFilterView>
-        {regiontype == 0 ? (
-          <RegionFilterButtonOn onClick={_handleregion}>
-            <RegionFilterButtonOnText>지역별</RegionFilterButtonOnText>
-          </RegionFilterButtonOn>
-        ) : (
-          <RegionFilterButton onClick={_handleregion}>
-            <RegionFilterButtonText>지역별</RegionFilterButtonText>
-          </RegionFilterButton>
-        )}
-
-        {regiontype == 3 ? (
-          <RegionFilterButtonOn onClick={_handlemap}>
-            <RegionFilterButtonOnText>지도검색</RegionFilterButtonOnText>
-          </RegionFilterButtonOn>
-        ) : (
-          <RegionFilterButton onClick={_handlemap}>
-            <RegionFilterButtonText>지도검색</RegionFilterButtonText>
-          </RegionFilterButton>
-        )}
-      </RegionFilterView>
-      {regiontype == 0 && (
         <Fragment>
           <DataView>
             <Content1View>
@@ -282,17 +257,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
             </Content1View>
             <Content2View>
               {
-                <>
-                  {selectregion == "서울" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        서울 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+                <>  
                   {selectregion == "서울" &&
                     seoulregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -308,16 +273,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "경기" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        경기 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+  
                   {selectregion == "경기" &&
                     kyungkiregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -334,16 +290,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "인천" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        인천 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+        
                   {selectregion == "인천" &&
                     incheonregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -360,16 +307,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "강원" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        인천 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+      
                   {selectregion == "강원" &&
                     gangwoncheonregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -385,16 +323,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "대구" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        대구 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+       
                   {selectregion == "대구" &&
                     daeguregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -410,16 +339,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "대전" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        대전 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+      
                   {selectregion == "대전" &&
                     daegernregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -435,16 +355,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "광주" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        광주 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+  
                   {selectregion == "광주" &&
                     kwanjuregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -460,16 +371,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "울산" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        울산 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+        
                   {selectregion == "울산" &&
                     ulsanregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -485,16 +387,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "부산" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        부산 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+   
                   {selectregion == "부산" &&
                     busanregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -511,16 +404,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "세종" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        세종 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+            
                   {selectregion == "세종" &&
                     sejongregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -537,16 +421,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "제주" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        제주 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+      
                   {selectregion == "제주" &&
                     jejuregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -562,16 +437,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "충북" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        충북 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+      
                   {selectregion == "충북" &&
                     chungbukregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -588,16 +454,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "충남" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        충남 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+           
                   {selectregion == "충남" &&
                     chungnamregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -614,16 +471,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "경북" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        경북 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+                
                   {selectregion == "경북" &&
                     kyungbukregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -640,16 +488,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "경남" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        경남 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+     
                   {selectregion == "경남" &&
                     kyungnamregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -666,16 +505,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
 
               {
                 <>
-                  {selectregion == "전북" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        전북 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+             
                   {selectregion == "전북" &&
                     jernbukregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -691,16 +521,7 @@ const Regioncontainer = ({ containerStyle, type }) => {
               }
               {
                 <>
-                  {selectregion == "전남" && (
-                    <ContentItem2View>
-                      <ContentItem2ViewText style={{ fontWeight: 700 }}>
-                        전남 인기 업체
-                      </ContentItem2ViewText>
-                      <ContentHightItem>
-                        <ContentHightItemText>Hot</ContentHightItemText>
-                      </ContentHightItem>
-                    </ContentItem2View>
-                  )}
+           
                   {selectregion == "전남" &&
                     jernnamregionvalue.map((data, index) => (
                       <ContentItem2View
@@ -717,19 +538,9 @@ const Regioncontainer = ({ containerStyle, type }) => {
             </Content2View>
           </DataView>
         </Fragment>
-      )}
-      {regiontype == 3 && (
-        <Fragment>
-          <Storemap
-            containerStyle={{ marginTop: 10 }}
-            latitude={latitude}
-            longitude={longitude}
-          />
-        </Fragment>
-      )}
     </Container>
   );
 };
 
-export default Regioncontainer;
+export default Region;
 

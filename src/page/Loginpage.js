@@ -23,7 +23,7 @@ const Loginpage = ({containerStyle}) => {
 
 
   return (
-    <PrevLayout menu ={false} bottom ={false} header={true} headername={'로그인 및 회원가입'}>
+    <PrevLayout menu ={false} bottom ={false} header={true} headername={'로그인'}>
       <Logincontainer/>
     </PrevLayout>
   );

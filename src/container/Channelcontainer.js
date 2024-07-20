@@ -10,12 +10,12 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
-import { getDateFullTime, getDateOrTime, getTime, useSleep } from "../utility/common";
+import { CommaFormatted, distanceFunc, getDateFullTime, getDateOrTime, getTime, useSleep } from "../utility/common";
 import Loading from "../common/Loading";
 import { collection, onSnapshot, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "../api/config";
 import GuideLabel from "../components/GuildeLable";
-import ChatItem from "../components/ChatItem";
+import ChatItem from "../components/ChatGateItem";
 import { UserContext } from "../context/User";
 import Button from "../common/Button";
 import { MdOutlineAttachFile } from "react-icons/md";
@@ -31,32 +31,40 @@ import { PiSiren } from "react-icons/pi";
 import { createIntroMessage, createMainMessage, createMessage, get_channelInfo } from "../service/ChatService";
 import { setRef } from "@mui/material";
 import { CHATCONTENTTYPE } from "../utility/contentDefine";
-import { uploadImage } from "../service/CheckService";
+import { get_checkuser, uploadImage } from "../service/CheckService";
+import { get_review } from "../service/ReviewService";
+import LicenseModalEx from "../components/LicenseModalEx";
+import ApplyModalEx from "../components/ApplyModalEx";
+
 
 const Container = styled.div`
-  background: #d8d8d8;
+  background: #fff;
   min-height: 800px;
 `;
 const ShowContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 70px;
   padding-bottom:100px;
 
 `;
-const ItemContainer = styled.div`
-  display: flex;
-  background-color: ${({ theme }) => theme.background};
-  flex-direction: column;
-  justfy-content: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
-`;
+const InfoBox = styled.div`
+  font-size: 15px;
+  margin: 15px 0px 5px;
+  background: #fff6df;
+  margin: 10px auto;
+  width: 85%;
+  padding: 10px;
+  text-align: left;
+  line-height: 2;
+  border-radius: 10px;
+  color: #777309;
+
+`
 const ItemBoxA = styled.div`
-  background: #fff;
+  background: #e6e6e6;
   border-radius: 10px;
   padding: 10px;
-  margin: 5px 10px 0px;
+  margin: 5px 10px 0px 5px;
   color: black;
   display: flex;
   flex-direction: column;
@@ -66,11 +74,11 @@ const ItemBoxA = styled.div`
 `;
 
 const ItemBoxB = styled.div`
-  background: #f9e000;
+  background: #fa7b07;
   border-radius: 10px;
   padding: 10px;
   margin: 10px 10px 0px;
-  color: black;
+  color: white;
   display: flex;
   flex-direction: column;
   max-width: 50%;
@@ -125,6 +133,16 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const Enter = styled.div`
+  margin-top: 5%;
+  text-align: left;
+  padding: 3% 10px;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  display:flex;
+  margin-bottom:20px;
+`
 
 const ItemLayerA = styled.div`
   display: flex;
@@ -197,15 +215,47 @@ const ImageLayer = styled.image`
     padding: 10px;
     border-radius: 20px;  
 `
+const StoreName = styled.div`
+  font-size: 14px;
+  font-weight: 600
+`
+const StoreAddr = styled.div`
+  font-size: 12px;
+  color :#aba8a8;
 
-const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, ALLUSER }) => {
+`
+const StorePrice = styled.div`
+font-size: 14px;
+`
+
+const StoreIntroduce = styled.div`
+  font-size: 14px;
+
+`
+
+const QNAButton ={
+  color: 'rgb(245 105 105)',
+  background: 'rgb(238 235 235)',
+  width: '80%',
+  height: '45px',
+  fontSize: '12px',
+  margin: '5px auto',
+  borderRadius: '5px',
+  fontWeight: 700,
+  boxShadow: 'none',
+  padding :'0px 10px'
+}
+
+
+const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, ALLUSER, STORE, ALLUSERIMG }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState([]);
-  const { user, dispatch2 } = useContext(UserContext);
+  const {user, dispatch2 } = useContext(UserContext);
   const [message, setMessage] = useState("");
   const [refresh, setRefresh] = useState(1);
-
+  const [licensemodal, setLicensemodal] = useState(false);
+  const [applymodal, setApplymodal] = useState(false);
 
   const fileInput = useRef();
 
@@ -334,6 +384,28 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
     setMessage("");
   };
 
+  const _hanldebuy = async() =>{
+
+  }
+
+  const _handleStore = async() =>{
+
+    console.log("STORE",STORE);
+
+    const STORE_ID = STORE.STORE_ID;
+    const reviewdata = await get_review({STORE_ID});
+    STORE["reviewdata"] =reviewdata;
+
+  
+    const USER_ID = STORE.USER_ID;
+    const checks = await get_checkuser({USER_ID});
+
+    STORE["checks"] =checks;
+
+ 
+    navigate("/store", { state: { STORE: STORE, REFRESH : true } });
+  }
+
   useEffect(() => {
 
     async function Process() {
@@ -346,6 +418,11 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
 
   useEffect(() => {
     setMessage(message);
+    setLicensemodal(licensemodal);
+    setApplymodal(applymodal);
+
+    console.log("messages", messages);
+
     window.scrollTo(0, document.body.scrollHeight);
   }, [refresh]);
 
@@ -386,10 +463,8 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
 
       setMessages(list);
     
-       if (messages.length > 10) {
-         window.scrollTo(0, document.body.scrollHeight);
-       }
-     
+    
+       window.scrollTo(0, 0);
     });
 
     return () => unsubscribe();
@@ -399,7 +474,7 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
   
   useLayoutEffect(() => {
     if (messages.length > 10) {
-          window.scrollTo(0, document.body.scrollHeight);  
+      window.scrollTo(0, 0);
     }
 
   })
@@ -409,8 +484,73 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
     return (ALLUSER.length - data.READ.length);
   }
 
+  const _handleauto = async(index)=>{
+
+    let read= [];
+    read.push(ALLUSER[0]);
+    read.push(ALLUSER[1]);
+
+    const IMGTYPE = false;
+    const user = {img :ALLUSERIMG[0]};
+
+    try {
+      // 최초 작성자도 read로 적어주자
+      // 참여 사용자도 작어주자
+     let msg = STORE.QNA[index].QUESTION;
+      msg += ' ';
+      msg += STORE.QNA[index].ANSWER;
+
+      console.log("storeqna",CHANNEL_ID, msg, user, read, ALLUSER, IMGTYPE);
+      await createMessage({
+        CHANNEL_ID,
+        msg,
+        user,
+        read,
+        ALLUSER,
+        IMGTYPE,
+      });
+ 
+    } catch (e) {
+      console.log("error", e);
+    }
+
+  }
+
+  const licensemodalcallback =(data)=>{
+    console.log("sortmodal", data);
+    setLicensemodal(false);
+    setRefresh((refresh) => refresh +1);
+  }
+  const applymodalcallback =(data)=>{
+    console.log("sortmodal", data);
+    setApplymodal(false);
+    setRefresh((refresh) => refresh +1);
+  }
+
+  const _handlelicense = () =>{
+    setLicensemodal(!licensemodal);
+    setRefresh((refresh) => refresh +1);
+  }
+
+  const _handleapply = () =>{
+  
+    setApplymodal(!applymodal);
+    setRefresh((refresh) => refresh +1);
+  }
+
+
   return (
     <Container style={containerStyle}>
+
+    {
+      applymodal == true && <ApplyModalEx callback={applymodalcallback} data={[]}/>
+    }
+
+    {
+      licensemodal == true && <LicenseModalEx callback={licensemodalcallback} data={[]}/>
+    }
+
+
       {loading == true ? (
         <>
           <Loading />
@@ -428,8 +568,8 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
                   callback={_handlesend}
                   buttonText={"전송"}
                   containerStyle={{
-                    backgroundColor: "#f9e000",
-                    color: "#000",
+                    backgroundColor: "#fa7b07",
+                    color: "#fff",
                     margin: "10px 2px",
                     width: "60px",
                     borderRadius: 5,
@@ -453,23 +593,149 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
           <ShowContainer>
             {messages.map((data, index) => (
               <>
-                {data.CHAT_CONTENT_TYPE != undefined ? (
-                  <div style={{ fontSize: 12, margin: "15px 0px" }}>
-                    <div>{data.TEXT}</div>
-                    <div>
-                      <span style={{ paddingLeft: 10 }}>
-                        {getDateFullTime(data.CREATEDAT)}
-                      </span>
-                    </div>
+
+
+                <InfoBox>
+                  <div>{'홍여사 시스템에서 가장 중요한 곳입니다. 체팅도 하면서 해당 견적도 확인하고 사로 조율하여 계약서 까지 작성하는곳으로 가장 중요한곳입니다'}</div>
+          
+                </InfoBox>
+
+
+                {
+                  index % 30 == 0 &&
+                  <InfoBox>
+                  <div>{'홍여사 시스템에서는 건전한 체팅 문화를 이루기 위해 욕설이나 상대방 비방글을 사용 하는 경우 홍여사 신고센타를 운영하고 있습니다 많은 이용 바랍니다'}</div>
+          
+                  </InfoBox>
+                }
+
+
+      
+
+                {data.CHAT_CONTENT_TYPE == CHATCONTENTTYPE.ENTER && 
+                  <>
+
+                <InfoBox>
+                  <div>{'집청소 의뢰한 견적내용을 확인하고 상호 합의 하에 계약서를 작성할수 있습니다. 계약서는 의견 체팅을 총해 의견조율을 통해 온라인으로 작성되어 서명되면 법적 효력을 갖게 됩니다'}</div>
+                  <div style={{display:"flex", flexDirection:"row"}}>
+                  <Button
+                  buttonText={"의뢰서 확인"}
+                  callback={_handleapply}
+                  containerStyle={{
+                    color: "#fff",
+                    background: "#3575ff",
+                    width: "90px",
+                    height: "25px",
+                    fontSize: "14px",
+                    marginLeft:"unset",
+                    borderRadius:"5px"
+                  }}
+                />
+
+                <Button
+                  buttonText={"계약서 작성"}
+                  callback={_handlelicense}
+                  containerStyle={{
+                    color: "#fff",
+                    background: "#3575ff",
+                    width: "90px",
+                    height: "25px",
+                    fontSize: "14px",
+                    marginLeft:"unset",
+                    borderRadius:"5px"
+                  }}
+                />
+
+       
+
                   </div>
-                ) : (
+
+                  <ul style={{marginLeft:10}}>
+                    <li style={{listStyleType: "disc", textDecoration:"line-through"}}>{'의뢰자 님이 계약서에 서명 완료 하였습니다'}</li>
+                    <li style={{listStyleType: "disc"}}>{'홍여사 님이 계약서에 서명 대기중 입니다'}</li>
+                  </ul>
+               
+                  
+           
+                  <Button
+                  buttonText={"결재"}
+                  callback={_hanldebuy}
+                  containerStyle={{
+                    color: "#fff",
+                    background: "#3575ff",
+                    width: "90px",
+                    height: "25px",
+                    fontSize: "14px",
+                    marginLeft:"unset",
+                    borderRadius:"5px"
+                  }}
+                />
+                </InfoBox>
+
+
+                    <InfoBox>
+                      <div>{data.TEXT}</div>
+                      <div>{getDateFullTime(data.CREATEDAT)}</div>
+                    </InfoBox>
+
+                    <Enter onClick={()=>{}}>
+                      <div><img src={STORE.STOREIMAGEARY[0]} style={{width:"90px", height:"90px"}}/></div>
+                      <div style={{display:"flex", flexDirection:"column", paddingLeft:"10px",lineHeight:1.7}}>
+                        <div style={{display:"flex", flexDirection:"column"}}>
+                        <StoreName>{'이순지님 집청소 지원'}</StoreName>
+                        <StoreAddr>{'남양주시 다산동'} {parseInt(distanceFunc(user.latitude, user.longitude, STORE.STORELATITUDE, STORE.STORELONGITUDE) /1000)}km</StoreAddr>
+                        </div>
+                      
+                        <StoreIntroduce>{'집청소2회, 아이돌봄10회'}</StoreIntroduce>
+                        <StorePrice>가격 {CommaFormatted(STORE.STOREREPRESENTIVEPRICE)}원</StorePrice>
+                      </div>
+                    </Enter>
+
+                    {
+                    STORE.QNA != undefined && 
+                    <ItemLayerB>
+                      <ItemLayerBBox>
+                          <ItemLayerBdate>{getTime(data.CREATEDAT)}</ItemLayerBdate>
+                      </ItemLayerBBox>
+                        <ItemBoxB>
+                         일감에 대해 궁금 합니다. 다음을 편하게 물어보세여
+                         <Button
+                            buttonText={'집에 어린애가 있습니까?'}
+                            callback={()=>{}}
+                            containerStyle={QNAButton}
+                          />
+
+                          <Button
+                            buttonText={'청소를 최근에 언제 하셨나여?'}
+                            callback={()=>{}}
+                            containerStyle={QNAButton}
+                          />
+                         </ItemBoxB>
+                    </ItemLayerB>
+                    }
+                  </>
+               
+                }
+
+              { data.CHAT_CONTENT_TYPE == CHATCONTENTTYPE.EXIT && 
+                  <>
+                    <InfoBox>
+                      <div>{data.TEXT}</div>
+                      <div>{getDateFullTime(data.CREATEDAT)}</div>
+                    </InfoBox>       
+                  </>
+                }
+
+                {(data.CHAT_CONTENT_TYPE != CHATCONTENTTYPE.INFO
+                && data.CHAT_CONTENT_TYPE != CHATCONTENTTYPE.EXIT
+                && data.CHAT_CONTENT_TYPE != CHATCONTENTTYPE.ENTER) &&
                   <>
                     {user.uid != data.USER.uid ? (
                       <ItemLayerA>
                         <Row>
                           <ChatUserImg>
                             <img
-                              src={data.USER.img}
+                              src={ALLUSERIMG[0]}
                               style={{
                                 width: 30,
                                 height: 30,
@@ -497,7 +763,7 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
                                   }}
                                 />):( <ItemBoxA>{data.TEXT}</ItemBoxA>)
                               }
-                             
+                            
                               <ItemLayerAdate>
                                 {getTime(data.CREATEDAT)}
                               </ItemLayerAdate>
@@ -510,14 +776,12 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
                         <ItemLayerBBox>
                           {
                             //read 사용자를 계산해서 보여주는 function를 만들자
-                             ReadCount(data)> 0 &&
+                            ReadCount(data)> 0 &&
                             <ItemLayerBUnread>{ReadCount(data)}</ItemLayerBUnread>
                           }
-                         
+                        
                           <ItemLayerBdate>{getTime(data.CREATEDAT)}</ItemLayerBdate>
                         </ItemLayerBBox>
-                
-
                         {
                           data.IMGTYPE == true ? (<img src={data.TEXT}
                             style={{width: '60%',
@@ -528,9 +792,12 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
                           />):( <ItemBoxB>{data.TEXT}</ItemBoxB>)
                         }
                       </ItemLayerB>
-                    )}
+                    )
+                    }
                   </>
-                )}
+                }
+           
+                
               </>
             ))}
           </ShowContainer>
@@ -553,8 +820,8 @@ const Channelcontainer = ({ containerStyle, CHANNEL_ID, GENERAL, GENERALNAME, AL
                   callback={_handlesend}
                   buttonText={"전송"}
                   containerStyle={{
-                    backgroundColor: "#f9e000",
-                    color: "#000",
+                    backgroundColor: "#fa7b07",
+                    color: "#fff",
                     margin: "10px 2px",
                     width: "60px",
                     borderRadius: 5,

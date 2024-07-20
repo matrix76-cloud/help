@@ -27,7 +27,7 @@ const ButtonLayout = styled.div`
   display:flex;
   flex-direction : row;
   flex-wrap : wrap;
-  width: 400px;
+  width: 100%;
   justify-content: flex-start;
 `
 const QuestionLayout = styled.div`
@@ -55,6 +55,10 @@ const Frequentquestioncontainer = ({containerStyle}) => {
 		}
 		fetchData();
   }, [])
+  useEffect(()=>{
+    window.scrollTo(0, 0);
+    return () => {};
+  }, []);
 
 
   const _handleuseguide = () => {
@@ -106,31 +110,31 @@ const Frequentquestioncontainer = ({containerStyle}) => {
       <ButtonLayout>
         {
           useguidebtn == true ? (<Button buttonText={'이용문의'}  callback={_handleno}
-            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
+            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
               <Button buttonText={'이용문의'} callback={_handleuseguide}
-                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
+                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
             )
         }
              
         {
           couponguidebtn == true ? (<Button buttonText={'쿠폰/포인트'}  callback={_handleno}
-            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
+            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
               <Button buttonText={'쿠폰/포인트'} callback={_handlecouponguide}
-                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
+                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
             )
         }
         {
           reviewguidebtn == true ? (<Button buttonText={'리얼리뷰'}  callback={_handleno}
-            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
+            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
               <Button buttonText={'리얼리뷰'} callback={_handlereviewguide}
-                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
+                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
             )
         }
         {
           eventguidebtn == true ? (<Button buttonText={'이벤트'}  callback={_handleno}
-            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
+            containerStyle={{ backgroundColor: "#FF5826", color: '#fff', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />) : (
               <Button buttonText={'이벤트'} callback={_handleeventguide}
-                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "100px", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
+                containerStyle={{ backgroundColor: "#FFF", color: '#000', width: "29%", height: 40, borderRadius: 5, margin: "10px 10px 10px 0px", border: "1px solid #ededed" }} />
             )
         }
 

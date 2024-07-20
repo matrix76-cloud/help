@@ -42,7 +42,7 @@ const SocialButton = styled.div`
     height: 50px;
     align-items: center;
     margin: 10px;
-    font-weight:700;
+
     font-size:14px;
     background-color : ${({bgcolor}) => bgcolor};
     color :  ${({color}) => color};
@@ -58,6 +58,7 @@ const LoginButtonLayout = styled.div`
   font-size:15px;
   padding: 0px 10%;
 
+
 `
 
 const BottomButtonLayout = styled.div`
@@ -69,9 +70,10 @@ const BottomButtonLayout = styled.div`
 `
 
 const LoginButton = styled.div`
-  text-decoration : underline;
-  text-underline-offset: 3px;
+
+  border :1px solid;
   font-size:15px;
+  padding: 10px 20px;
 `
 
 
@@ -131,18 +133,13 @@ const Logincontainer = ({containerStyle}) => {
     <Container style={containerStyle}>
      <LoginInfo>
 
-      <Text value={'마원에 가입해서 로그인 하고 각종 혜택을 즐기세요'}/>
-      <Text value={'매장에서 발행되는 쿠폰, 이벤트를 바로 확인할수 있고 점주와의 체팅으로 쉽게 이용하세요'}/>
+      <Text value={'홍여사에 로그인 하고 각종 혜택을 즐기세요'}/>
+
      </LoginInfo>
 
-    <SocialButtonLayout>
-      <KaKaoLogin/>
-      <NaverLogin/>
-    </SocialButtonLayout>
+
     <LoginButtonLayout>
-      <LoginButton onClick={_handleIdlogin}><Text value={'이메일로 로그인'}/></LoginButton>
-      <LoginButton onClick={_handleRegisterlogin}><Text value={'회원 가입'}/></LoginButton>
-      
+      <LoginButton onClick={_handleIdlogin}><Text value={'전화번호로 로그인'}/></LoginButton>      
     </LoginButtonLayout>
     <StoreInfo height={150} containerStyle={{position:"absolute", bottom:0}} />   
 

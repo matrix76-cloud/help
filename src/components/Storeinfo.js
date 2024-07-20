@@ -64,7 +64,7 @@ const StoreInfo  = ({containerStyle, height})=>{
     return(
         <Container style={containerStyle} height={ height}>
             <StoreNameView>
-                <StoreNameText>시크로드</StoreNameText>
+                <StoreNameText>홍컴즈</StoreNameText>
             </StoreNameView>
 
 
@@ -76,19 +76,17 @@ const StoreInfo  = ({containerStyle, height})=>{
                     <StoreButtonText>개인정보 처리방침</StoreButtonText>
                 </StoreButton>
                 <StoreButton>
-                    <StoreButtonText>입점문의</StoreButtonText>
+                    <StoreButtonText>홍여사등록 문의</StoreButtonText>
                 </StoreButton>
-                <StoreButton>
-                    <StoreButtonText>마원 사장님</StoreButtonText>
-                </StoreButton>
+         
             </StoreButtonView>
 
             <StoreBusinessView>
-                <StoreBusinessText>(주)시크로드 사업자정보</StoreBusinessText>
+                <StoreBusinessText>(주)홍컴즈 사업자정보</StoreBusinessText>
             </StoreBusinessView>
             <StoreBusinessInfoView>
                 <StoreBusinessInfoText>
-                (주)시크로드는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
+                (주)홍컴즈는 통신판매중개자이며, 통신판매의 당사자가 아닙니다.
                 따라서, 상품의 예약, 이용 및 환불 등과 관련한 책임을 지지 않습니다.
                 </StoreBusinessInfoText>
             </StoreBusinessInfoView>

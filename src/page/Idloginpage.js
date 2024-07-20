@@ -24,7 +24,7 @@ const Idloginpage = ({containerStyle}) => {
 
 
   return (
-    <PrevLayout menu ={false} bottom ={false} header={true} headername={'아이디 패스워드 로그인'}>
+    <PrevLayout menu ={false} bottom ={false} header={true} headername={'전화번호로 로그인'}>
       <Idlogincontainer/>
     </PrevLayout>
   );

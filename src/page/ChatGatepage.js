@@ -10,26 +10,26 @@ import {
   useNavigate,
 } from "react-router-dom";
 import styled from "styled-components";
-import Chatcontainer from "../container/Chatcontainer";
 import Layout from "../screen/Layout/HomeLayout";
 import DetailLayout from "../screen/Layout/DetailLayout";
+import ChatGatecontainer from "../container/ChatGatecontainer";
 
 const Container = styled.div``;
 
-const Chatpage = ({ containerStyle }) => {
+const ChatGatepage = ({ containerStyle }) => {
   const navigate = useNavigate();
 
   return (
     <DetailLayout
-      menu={true}
+      menu={false}
       bottom={false}
       header={true}
       headerdetail={true}
-      headername={"채팅"}
+      headername={"대화"}
     >
-      <Chatcontainer />
+      <ChatGatecontainer />
     </DetailLayout>
   );
 };
 
-export default Chatpage;
+export default ChatGatepage;

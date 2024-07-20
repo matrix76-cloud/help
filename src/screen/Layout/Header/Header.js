@@ -20,8 +20,25 @@ import { TYPE } from "../../../utility/maroneDefine";
 import { AiOutlineCaretDown, AiOutlineDown } from "react-icons/ai";
 import PostionModalEx from "../../../components/PositionModalEx";
 import { get_stores } from "../../../service/StoreService";
+import { GrDocumentText } from "react-icons/gr";
+import { Badge } from "@mui/material";
+import MailIcon from '@mui/icons-material/Mail';
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 
 const Container = styled.div``;
+
+const LogoText = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'SF-Pro-Text-Semibold';
+    font-weight:600;
+    padding-top: 5px;
+    font-size: 20px;
+    padding-left: 10px;
+    color :#ff4e19;
+
+`
 
 const Header = () => {
   const navigation = useNavigate();
@@ -31,6 +48,8 @@ const Header = () => {
   const [region, setRegion] = useState("");
 
   const [positionstatus, setPositionstatus] = useState(false);
+
+
 
   let oldScroll = 0;
 
@@ -56,6 +75,9 @@ const Header = () => {
 
 
   useEffect(() => {
+
+    setRegion(user.region1 + " " + user.region2);
+
     const handleHeader = () => {
       if (oldScroll > window.scrollY) {
         document.getElementById("header").style.top = "0px";
@@ -97,174 +119,19 @@ const Header = () => {
     });
   };
 
-  // const listener = (event) => {
-  //   const { data, type } = JSON.parse(event.data);
-  //   if (type === "DEVICEID") {
-  //     const x = data.longitude;
-  //     const y = data.latitude;
-
-  //     SearchAddress(x, y).then((regionresult) => {
-  //       user["region1"] = regionresult.region1;
-  //       user["region2"] = regionresult.region2;
-  //       user["latitude"] = regionresult.latitude;
-  //       user["longitude"] = regionresult.longitude;
-  //       user["deviceid"] = data.deviceid;
-  //       dispatch2(user);
-  //       setRegion(user.region1 + " " + user.region2);
-  //       const DEVICEID = data.deviceid;
-
-  //       getuserInfoForPhone({ DEVICEID }).then((result) => {
-  //         const USER = result;
-
-  //         if (USER != null) {
-  //           let email = USER.USER_ID;
-  //           let password = USER.USER_PW;
-
-  //           postlogin(email, password, DEVICEID).then((result) => {
-  //             user["email"] = email;
-  //             user["uid"] = result.user.uid;
-  //             user["deviceid"] = DEVICEID;
-  //             user["type"] = USER.USER_TYPE;
-  //             user["nickname"] = USER.USER_NICKNAME;
-  //             user["user_type"] = USER.USER_TYPE;
-  //             user["region1"] = regionresult.region1;
-  //             user["region2"] = regionresult.region2;
-  //             user["latitude"] = regionresult.latitude;
-  //             user["longitude"] = regionresult.longitude;
-  //             user["distance"] = USER.DISTANCE;
-
-  //             dispatch2(user);
-  //           });
-  //         } else {
-  //           user["region1"] = regionresult.region1;
-  //           user["region2"] = regionresult.region2;
-  //           user["latitude"] = regionresult.latitude;
-  //           user["longitude"] = regionresult.longitude;
-  //           user["deviceid"] = DEVICEID;
-  //           user["distance"] = 20;
-  //           dispatch2(user);
-  //         }
-  //       });
-  //     });
-  //   } else if (type === "CURRENTPOSITION") {
-  //     const x = data.longitude;
-  //     const y = data.latitude;
-
-  //     SearchAddress(x, y).then((regionresult) => {
-  //       user["region1"] = regionresult.region1;
-  //       user["region2"] = regionresult.region2;
-  //       user["latitude"] = regionresult.latitude;
-  //       user["longitude"] = regionresult.longitude;
-
-  //       dispatch2(user);
-  //       window.location.replace("/home");
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setRegion(user.region1 + " " + user.region2);
-
-  //   if (window.ReactNativeWebView) {
-  //     /** android */
-  //     document.addEventListener("message", listener);
-  //     /** ios */
-  //     window.addEventListener("message", listener);
-  //   } else {
-  //     // 모바일이 아니라면 모바일 아님을 alert로 띄웁니다.
-  //   }
-  // }, []);
-
- // sample code
-  // useEffect(() => {
-  //   let DEVICEID = "245de8d2762f971f";
-  //   user["deviceid"] = DEVICEID;
-  //   user["region1"] = "남양주시";
-  //   user["region2"] = "다산동";
-  //   user["latitude"] = "37.630013553801";
-  //   user["longitude"] = "127.15545777991";
-  //   user["distance"] = 50;
-
-  //   async function FetchData() {
-  //     const stores = await get_stores();
-
-  //     console.log("stores", stores);
-  //     let premiumshoplist = [],
-  //       goldshoplist = [],
-  //       silvershoplist = [];
-
-  //     stores.map((data) => {
-  //       const lat1 = "37.630013553801";
-  //       const lon1 = "127.15545777991";
-  //       const lat2 = data.STORELATITUDE;
-  //       const lon2 = data.STORELONGITUDE;
-  //       const dist = distanceFunc(lat1, lon1, lat2, lon2);
-
-  //       // console.log("dist", dist, user.distance);
-  //       let policydistance = 0;
-
-  //       if (user.distance == "") {
-  //         policydistance = 10;
-  //       } else {
-  //         policydistance = user.distance;
-  //       }
-  //       if (dist <= policydistance) {
-  //         if (data.STORELEVEL.indexOf("premium") != -1) {
-  //           premiumshoplist.push(data);
-  //         }
-  //         if (data.STORELEVEL.indexOf("gold") != -1) {
-  //           goldshoplist.push(data);
-  //         }
-  //         if (data.STORELEVEL.indexOf("silver") != -1) {
-  //           silvershoplist.push(data);
-  //         }
-  //       }
-  //     });
-
-  //     user["premiumshoplist"] = premiumshoplist;
-  //     user["goldshoplist"] = goldshoplist;
-  //     user["silvershoplist"] = silvershoplist;
-  //     dispatch2(user);
-  //   }
-
-  //   FetchData();
-
-  //   // dispatch2(user);
-
-  //   getuserInfoForPhone({ DEVICEID }).then((result) => {
-  //     // console.log("phone", result);
-  //     const USER = result;
-  //     if (USER != null) {
-  //       let email = USER.USER_ID;
-  //       let password = USER.USER_PW;
-
-  //       postlogin(email, password, DEVICEID).then((result) => {
-  //         user["email"] = email;
-  //         user["uid"] = result.user.uid;
-  //         user["deviceid"] = DEVICEID;
-  //         user["type"] = USER.USER_TYPE;
-  //         user["nickname"] = USER.USER_NICKNAME;
-  //         user["user_type"] = USER.USER_TYPE;
-  //         user["region1"] = "남양주시";
-  //         user["region2"] = "다산동";
-  //         user["latitude"] = "37.630013553801";
-  //         user["longitude"] = "127.15545777991";
-  //         user["distance"] = USER.DISTANCE;
-
-  //         dispatch2(user);
-  //       });
-  //     } else {
-  //     }
-  //   });
-
-  //   // console.log("region", region);
-  //   setRefresh((refresh) => refresh + 1);
-  // }, []);
-
 
   useEffect(() => {
     setPositionstatus(positionstatus);
   }, [refresh]);
+
+  const _handleconfig = () =>{
+    navigation("/config");
+  }
+
+  const _handleDoc = () =>{
+    navigation("/chat");
+  }
+  
 
   return (
     <Container
@@ -279,18 +146,19 @@ const Header = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
       }}
     >
       {positionstatus == true ? (
         <PostionModalEx callback={positioncallback}></PostionModalEx>
       ) : null}
 
-      <div onClick={_handleHome}>
-        <Image
-          source={imageDB.logo}
-          containerStyle={{ width: 55, paddingLeft: 10, height: 35 }}
-        />
-      </div>
+      <LogoText onClick={_handleHome}>
+        홍여사
+      </LogoText>
 
       <div
         style={{
@@ -298,20 +166,16 @@ const Header = () => {
           justifyContent: "center",
           alignItems: "center",
           marginTop: 5,
-          width: 230,
+          marginLeft: 20,
         }}
       >
         {
           <>
-            <Image
-              onClick={_handlePosition}
-              source={imageDB.gps}
-              containerStyle={{ width: 18, display: "flex", marginRight: 10 }}
-            />
+      
             {
               <div onClick={_handlePosition}>
                 <Text
-                  value={user.region1 + " " + user.region2}
+                  value={region}
                   size={16}
                   containerStyle={{ fontWeight: 700 }}
                 ></Text>
@@ -326,14 +190,19 @@ const Header = () => {
           </>
         }
       </div>
-      <div style={{ marginTop: 5, marginRight: 15 }} onClick={_handleSearch}>
-        <ImageLeftButton
-          buttontext={"검색"}
-          round={false}
-          source={imageDB.search}
-          imgwidth={15}
-        />
+      <div style={{display:"flex", flexDirection:"row", justifyContent:"space-between", marginRight:10, width:50}}>
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center"}} >
+          <Image source={imageDB.bell} containerStyle={{width:20}} />
+          <Badge badgeContent={0} color="warning"  style={{paddingBottom:15}}></Badge>
+        </div>
+        <div style={{display:"flex", flexDirection:"row", alignItems:"center"}} onClick={_handleDoc}>
+        <IoChatbubbleEllipsesOutline size={22} />
+          <Badge badgeContent={1} color="warning" style={{paddingBottom:15}} className="alertblink" ></Badge>
+        </div>
       </div>
+ 
+
+
     </Container>
   );
 };

@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { imageDB } from '../../../utility/imageData';
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../../context/User";
+import { FiHome, FiUser, FiShare2,FiGrid } from "react-icons/fi";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const FooterContent = styled.div`
   padding: 20px;
@@ -26,46 +28,43 @@ const HomeFooter = ({menu, bottom, type ,callback}) => {
   const location = useLocation();
 
   const _handleHome = () => {
-  
-
     navigation("/home");
   }
   const _handleHomeSelf = () => {
-    callback();
+  
   
   };
 
-  const _handleRegion = () => {
-    callback(window.scrollY);
-    navigation("/region");
+  const _handleHong = () => {
+    navigation("/hong");
   }
   const _handleRegionSelf = () => {
-    callback(window.scrollY, "SELF");
-    navigation("/region");
+
   };
+
+  const _handleWork = () =>{
+    navigation("/room");
+  }
   
-  const _handleMyRegion = () =>{
-    callback(window.scrollY);
-    navigation("/myregion",{state:{region0 : "", region1:user.region1, region2:user.region2}});
+  const _handleRoom = () =>{
+
+    navigation("/room");
   }
 
   const _handleChat = () => {
-    callback(window.scrollY);
-    navigation("/chat");
+
+    navigation("/hongmap");
   }
     const _handleChatSelf = () => {
-     callback(window.scrollY, "SELF");
+
       navigation("/chat");
     };
   const _handleConfig = () => {
-    callback(window.scrollY);
+
     navigation("/config");
   }
 
-  const _handleConfigSelf = () => {
-     callback(window.scrollY, "SELF");
-    navigation("/config");
-  };
+
   return (
     <Fragment>
       <footer>
@@ -86,51 +85,38 @@ const HomeFooter = ({menu, bottom, type ,callback}) => {
                 {type == "home" ? (
                   <>
                     <div className="imageicon" onClick={_handleHomeSelf}>
-                      <img
-                        src={imageDB.bottom_home}
-                        style={{ width: 22, height: 22 }}
-                      />
+                    <FiHome size={25}/>
                     </div>
                     <div className="buttonEnableText">홈</div>
                   </>
                 ) : (
                   <>
                     <div className="imageicon" onClick={_handleHome}>
-                      <img
-                        src={imageDB.bottom_home_disable}
-                        style={{ width: 22, height: 22 }}
-                      />
+                    <FiHome size={25}/>
                     </div>
                     <div className="buttonDisableText">홈</div>
                   </>
                 )}
               </div>
               <div className="button">
-                {type == "region" ? (
+                {type == "hong" ? (
                   <>
-                    {" "}
-                    <div className="imageicon" onClick={_handleRegionSelf}>
-                      <img
-                        src={imageDB.bottom_location}
-                        style={{ width: 25, height: 25 }}
-                      />
+                    <div className="imageicon" onClick={_handleHong}>
+                    <FiUser size={25}/>
                     </div>
-                    <div className="buttonEnableText">지역</div>
+                    <div className="buttonEnableText">홍여사구함</div>
                   </>
                 ) : (
                   <>
-                    <div className="imageicon" onClick={_handleRegion}>
-                      <img
-                        src={imageDB.bottom_location_disable}
-                        style={{ width: 25, height: 25 }}
-                      />
+                    <div className="imageicon" onClick={_handleHong}>
+                    <FiUser size={25}/>
                     </div>
-                    <div className="buttonDisableText">지역</div>
+                    <div className="buttonDisableText">홍여사구함</div>
                   </>
                 )}
               </div>
-
-              <div className="upbutton" onClick={_handleMyRegion}>
+  
+              <div className="upbutton" onClick={_handleChat}>
                 <div
                   style={{
                     backgroundColor: "#FF4E19",
@@ -156,6 +142,8 @@ const HomeFooter = ({menu, bottom, type ,callback}) => {
                         src={imageDB.bottom_gps}
                         style={{ width: 25, height: 25 }}
                       />
+                      
+                  
                     </div>
                   </div>
 
@@ -174,39 +162,34 @@ const HomeFooter = ({menu, bottom, type ,callback}) => {
               </div>
 
               <div className="button">
-                {type == "chat" ? (
+                {type == "room" ? (
                   <>
-                    {" "}
-                    <div className="imageicon" onClick={_handleChatSelf}>
-                      <img
-                        src={imageDB.bottom_chat}
-                        style={{ width: 20, height: 20 }}
-                      />
+                    <div className="imageicon" onClick={_handleWork}>
+                    <FiGrid size={25}/>
                     </div>
-                    <div className="buttonEnableText">체팅</div>
+                    <div className="buttonEnableText">공간대여</div>
                   </>
                 ) : (
                   <>
-                    {" "}
-                    <div className="imageicon" onClick={_handleChat}>
-                      <img
-                        src={imageDB.bottom_chat_disable}
-                        style={{ width: 20, height: 20 }}
-                      />
+                    <div className="imageicon" onClick={_handleWork}>
+                    <FiGrid size={25}/>
+
                     </div>
-                    <div className="buttonDisableText">체팅</div>
+                    <div className="buttonDisableText">공간대여</div>
                   </>
                 )}
               </div>
+
+          
+
+       
+
               <div className="button">
                 {type == "config" ? (
                   <>
                     {" "}
-                    <div className="imageicon" onClick={_handleConfigSelf}>
-                      <img
-                        src={imageDB.bottom_profile}
-                        style={{ width: 20, height: 20 }}
-                      />
+                    <div className="imageicon" onClick={_handleConfig}>
+                    <IoSettingsOutline size={25}/>
                     </div>
                     <div className="buttonEnableText">내정보</div>
                   </>
@@ -214,12 +197,9 @@ const HomeFooter = ({menu, bottom, type ,callback}) => {
                   <>
                     {" "}
                     <div className="imageicon" onClick={_handleConfig}>
-                      <img
-                        src={imageDB.bottom_profile_disable}
-                        style={{ width: 20, height: 20 }}
-                      />
+                    <IoSettingsOutline size={25}/>
                     </div>
-                    <div className="buttonDisableText">내정보</div>
+                    <div className="buttonDisableText">내정보	</div>
                   </>
                 )}
               </div>

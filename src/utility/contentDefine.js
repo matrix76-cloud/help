@@ -24,3 +24,28 @@ export const CHATCONTENTTYPE = {
   ENTER: "입장",
   EXIT : "퇴장"
 }
+export const REQUESTTYPE = {
+  HOME: "집청소",
+  MOVE : "이사청소",
+  MEALPREPARAION: "식사준비",
+  WALKING :"등원하원",
+  DOLBOM:"아이돌봄",
+  ERRAND :'심부름',
+  TAKECARE:'간병하기',
+  HEAVYLOAD:'무거운짐',
+  HOSPITAL : '병원가기',
+  OFFICECLEAN : '시무실청소',
+  RECIPE :'요리비법전수',
+  SCHOOL :'학교행사참석',
+  SHOPPING : '장보기',
+  DOGHOSPITAL : "애견병원가기",
+  DOGWALKING : "애견산책",
+  HONGSEARCH : '홍여사',
+  ROOM :'공간대여',
+  ALLVIEW:'모두보기'
+}
+
+export const ROLETYPE={
+  JUBU :"주부",
+  HONGLADY :"홍여사"
+}

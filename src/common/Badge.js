@@ -52,7 +52,7 @@ const BadgeText = styled.span`
 const Badge  = ({containerStyle, count, height, width,backgroundColor, color, callback, Press})=>{
 
   const _handleBadge = ()=>{
-    callback();
+
   }
     return(
         <Container style={containerStyle}>

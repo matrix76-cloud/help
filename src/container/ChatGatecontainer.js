@@ -16,14 +16,17 @@ import Loading from "../common/Loading";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../api/config";
 import GuideLabel from "../components/GuildeLable";
-import ChatItem from "../components/ChatItem";
+import ChatItem from "../components/ChatGateItem";
 import { UserContext } from "../context/User";
 import { get_allchannel } from "../service/ChatService";
+import ChatGateItem from "../components/ChatGateItem";
+import Loading2 from "../common/Loading2";
 
 const Container = styled.div``;
 const ShowContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top:50px;
 `;
 const ItemContainer = styled.div`
   display: flex;
@@ -34,9 +37,9 @@ const ItemContainer = styled.div`
   padding-bottom: 10px;
 `;
 
-const Chatcontainer = ({ containerStyle }) => {
+const ChatGatecontainer = ({ containerStyle }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [channels, setChannels] = useState([]);
   const { user, dispath2 } = useContext(UserContext);
 
@@ -44,7 +47,7 @@ const Chatcontainer = ({ containerStyle }) => {
   useEffect(() => {
     setLoading(true);
     async function Process() {
-      await useSleep(1000);
+      await useSleep(8000);
       setLoading(false);
     }
     Process();
@@ -65,31 +68,31 @@ const Chatcontainer = ({ containerStyle }) => {
   return (
     <Container style={containerStyle}>
       <>
-        <ShowContainer>
-          <GuideLabel
-            containerStyle={{ marginTop: 50 }}
-            height={120}
-            LabelText={"채팅"}
-            SubLabelText={
-              "마원 채팅입니다. 마원은 건전한 마사지 업소 문화를 선도하고 있습니다 건전한 체팅 문화를 위해 노력해주시고 보다 편리하게 마사지 어플을 이용해 주시기 바랍니다."
-            }
-          />
 
-          <ItemContainer>
-            {channels.map((channel, index) => (
-              <ChatItem
-                key={index}
-                item={channel}
-                containerStyle={{
-                  backgroundColor: index % 2 == 0 ? "#FFFFFF" : "#f9f9f9",
-                }}
-              />
-            ))}
-          </ItemContainer>
-        </ShowContainer>
+      {
+      loading == true ? (<Loading2 containerStyle={{ marginTop: 300 }} />) 
+      :( <ShowContainer>
+     
+
+
+        <ItemContainer>
+          {channels.map((channel, index) => (
+            <ChatGateItem
+              key={index}
+              item={channel}
+              containerStyle={{
+                backgroundColor: index % 2 == 0 ? "#FFFFFF" : "#f9f9f9",
+              }}
+            />
+          ))}
+        </ItemContainer>
+      </ShowContainer>
+
+      ) }
+
       </>
     </Container>
   );
 };
 
-export default Chatcontainer;
+export default ChatGatecontainer;

@@ -21,7 +21,7 @@
   position: fixed;
   bottom:0px;
   z-index: 5;
-  border : 0.1px solid #f0f0f0;
+  border : 1px solid #f0f0f0;
 }
 
 .site-mobile-footer2 .buttonview{
@@ -81,7 +81,7 @@
   color :#bbb7b7;
   line-height: 25px;
   height:35px;
-  font-weight: 900;
+
 }
 
 .site-mobile-footer .content{

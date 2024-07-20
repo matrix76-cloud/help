@@ -69,7 +69,7 @@ const RegionLayout = styled.div`
 `;
 
 
-const Detailmapcontainer = ({containerStyle}) => {
+const Detailmapcontainer = ({containerStyle,}) => {
 
   const{user, dispatch2} = useContext(UserContext);
   const [map, setMap] = useState({});
@@ -155,26 +155,26 @@ const Detailmapcontainer = ({containerStyle}) => {
       calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
       texts: getTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
       styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
-              width : '40px', height : '40px',
-              background: '#ff4e198a',
+              width : '60px', height : '60px',
+              background: '#1974ff8a',
               borderRadius: '40px',
               color: '#000',
               textAlign: 'center',
               fontWeight: 'bold',
-              lineHeight: '41px'
+              lineHeight: '61px'
           },
           {
-              width : '50px', height : '50px',
-              background: '#ff4e198a',
+              width : '60px', height : '60px',
+              background: '#1974ff8a',
               borderRadius: '50px',
               color: '#000',
               textAlign: 'center',
               fontWeight: 'bold',
-              lineHeight: '51px'
+              lineHeight: '61px'
           },
           {
               width : '60px', height : '60px',
-              background: '#ff4e198a',
+              background: '#1974ff8a',
               borderRadius: '60px',
               color: '#000',
               textAlign: 'center',
@@ -183,7 +183,7 @@ const Detailmapcontainer = ({containerStyle}) => {
           },
           {
               width : '70px', height : '70px',
-              background: '#ff4e198a',
+              background: '#1974ff8a',
               borderRadius: '70px',
               color: '#000',
               textAlign: 'center',
@@ -247,7 +247,7 @@ const Detailmapcontainer = ({containerStyle}) => {
       })
   
 
-      var imageSrc = "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2FKakaoTalk_Photo_2024-06-02-06-23-45.png?alt=media&token=0bebcfff-bd9d-4a5d-85f7-5df45fabb3af";
+      var imageSrc = "https://firebasestorage.googleapis.com/v0/b/marone-d7e06.appspot.com/o/images%2Fmaron2.png?alt=media&token=98659ed3-1b80-4e11-838e-30f0df66b743";
 
 
       location.map((e) => {
@@ -256,7 +256,7 @@ const Detailmapcontainer = ({containerStyle}) => {
         var position = new kakao.maps.LatLng(e[0], e[1]);  
 
          // 마커 이미지의 이미지 크기 입니다
-          var imageSize = new kakao.maps.Size(1, 1); 
+          var imageSize = new kakao.maps.Size(0.5, 0.5); 
           
           // 마커 이미지를 생성합니다    
           var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 

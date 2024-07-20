@@ -23,6 +23,7 @@ const Container = styled.div`
   top: 0px;
   z-index: 10;
   width: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.05);
 `
 
 const Row = styled.div`
@@ -52,12 +53,12 @@ const PrevHeader = ({containerStyle, headername}) => {
 
     <Container>
       <Row>
-        <div onClick={_handlePrev} style={{display:"flex"}}>
-          <Image source={imageDB.prev} containerStyle={{width:15, paddingLeft:10,height:20, marginTop:3}}/>
+        <div onClick={_handlePrev} style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+          <Image source={imageDB.prev} containerStyle={{width:15, paddingLeft:10,height:20}}/>
 
-          <div style={{paddingLeft:15}}>
-          <Text size={20} value={headername}></Text>
-          </div>
+         
+          <Text size={20} value={headername} containerStyle={{paddingLeft:10}}></Text>
+          
 
         </div>
     

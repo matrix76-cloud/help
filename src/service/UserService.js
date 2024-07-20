@@ -188,6 +188,38 @@ export const get_userInfoForKakaoID = async ({ kakaoID }) => {
     });
   }
 };
+
+export const get_userInfoForNaverID = async ({ naverID }) => {
+  const userRef = collection(db, "USERS");
+
+  const q = query(userRef, where("NaverID", "==", naverID));
+
+  let useritem = null;
+
+  let success = false;
+  try {
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      useritem = doc.data();
+    });
+
+    if (querySnapshot.size > 0) {
+      success = true;
+    }
+  } catch (e) {
+  } finally {
+    return new Promise((resolve, resject) => {
+      if (success) {
+        resolve(useritem);
+      } else {
+        resolve(null);
+      }
+    });
+  }
+};
+
+
+
 export const update_userdevice = async({USERID, DEVICEID}) =>{
 
 
@@ -228,6 +260,26 @@ export const update_userkakaoid = async ({ USERID, kakaoID }) => {
     querySnapshot.forEach(function (doc) {
       updateDoc(doc.ref, {
         kakaoID: kakaoID,
+      });
+    });
+  } catch (e) {
+    console.log("error", e.message);
+  } finally {
+    return;
+  }
+};
+
+export const update_usernaverid = async ({ USERID, naverID }) => {
+  const userRef = collection(db, "USERS");
+
+  const rows = query(userRef, where("USER_SESSION", "==", USERID));
+
+  try {
+    const querySnapshot = await getDocs(rows);
+
+    querySnapshot.forEach(function (doc) {
+      updateDoc(doc.ref, {
+        naverID: naverID,
       });
     });
   } catch (e) {

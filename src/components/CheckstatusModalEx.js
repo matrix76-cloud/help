@@ -54,13 +54,12 @@ Fade.propTypes = {
 
 const style = {
   position: 'absolute',
-  top: '85%',
+  top: '75%',
   left: '50%',
-  height:'150px',
+  height:'300px',
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
@@ -101,10 +100,10 @@ const ApplyItem = styled.div`
   background-color : #fff;
   margin-bottom : 20px;
 `
-const FilterApplyButton = styled.div`
-  background-color :#ff4e19;
-  padding :5px 50px;
-  border-radius :5px;
+const Content = styled.div`
+  text-align: left;
+  margin-top: 10px;
+  padding: 0px 30px;
 
 `
 const FilterApplyButtonText = styled.span`
@@ -113,7 +112,7 @@ const FilterApplyButtonText = styled.span`
   font-family : ${({theme}) =>theme.REGULAR};
 `
 
-export default function CheckstatusModalEx({callback, data}) {
+export default function CheckstatusModalEx({callback, state}) {
   const [open, setOpen] = React.useState(true);
   const [refresh, setRefresh] = React.useState(1);
   const [themaType1, setThemaType1] = React.useState(0);
@@ -126,68 +125,7 @@ export default function CheckstatusModalEx({callback, data}) {
     setOpen(false);
 
   } 
-  const _handlecheckstatus = () =>{
-    let thematype = "";
-    if(themaType1 == true){thematype = ("퇴근")}
-    if(themaType2 == true){thematype = ("휴무")}
-    if(themaType3 == true){thematype = ("마감")}
-    if(themaType4 == true) { thematype = ("출근전") }
-    if(themaType5 == true) { thematype = ("출근") }
-
-    setOpen(false);
-    callback(thematype);
-
-  }
-
-  const _handleData1 = () => {
-    setThemaType1(!themaType1);
-    setThemaType2(false);
-    setThemaType3(false);
-    setThemaType4(false);
-    setThemaType5(false); 
-  }
-  const _handleData2 = () => {
-    setThemaType2(!themaType2);
-    setThemaType1(false);
-    setThemaType3(false);
-    setThemaType4(false);
-    setThemaType5(false); 
-
-  }
-  const _handleData3 = () => {
-    setThemaType3(!themaType3);
-    setThemaType1(false);
-    setThemaType2(false);
-    setThemaType4(false);
-    setThemaType5(false); 
-
-  }
-  const _handleData4 = () => {
-    setThemaType3(false);
-    setThemaType1(false);
-    setThemaType2(false);
-    setThemaType4(!themaType4);
-    setThemaType5(false); 
-  }
-  const _handleData5 = () => {
-    setThemaType3(false);
-    setThemaType1(false);
-    setThemaType2(false);
-    setThemaType4(false);
-    setThemaType5(!themaType5); 
-  }
-
-  React.useEffect(() => {
-    
-    setThemaType1(themaType1);
-    setThemaType2(themaType2);
-    setThemaType3(themaType3);
-    setThemaType4(themaType4);
-    setThemaType5(themaType5);
-    
-    
-  }, [refresh])
-
+ 
   return (
     <div>
 
@@ -209,20 +147,42 @@ export default function CheckstatusModalEx({callback, data}) {
               <IconCloseView onClick={handleClose} >
                 <img src={imageDB.close} style={{width:"15px", height:"15px"}}/>
               </IconCloseView>
-              <Label content={'관리사 상태변경'} containerStyle={{marginTop:-30}}/>
+   
             <MainData>
-              <MainDataItem check={themaType1} onClick={_handleData1}><MainDataItemText check={themaType1}>퇴근</MainDataItemText></MainDataItem>
-              <MainDataItem check={themaType2} onClick={_handleData2}><MainDataItemText check={themaType2}>휴무</MainDataItemText></MainDataItem>
-              <MainDataItem check={themaType3} onClick={_handleData3}><MainDataItemText check={themaType3}>마감</MainDataItemText></MainDataItem>
-              <MainDataItem check={themaType4} onClick={_handleData4}><MainDataItemText check={themaType4}>출근전</MainDataItemText></MainDataItem>
-              <MainDataItem check={themaType5} onClick={_handleData5}><MainDataItemText check={themaType5}>출근</MainDataItemText></MainDataItem>
+
+            {
+                state == 4 &&
+                <div>
+                    <img src={imageDB.fail} style={{width:'20%'}} />
+                    <Content>
+                    <div>홍여사 경품 이벤트는 하루 한번 이용가능 합니다</div>
+                    <div>다음기회를 이용해주세요 </div>
+                    </Content>
+                </div> 
+ 
+            }
+
+            {
+                (state == 1 || state == 2 || state ==3) &&
+                <div>
+                    <img src={imageDB.success} style={{width:'40%'}} />
+                    <Content>
+                    <div>홍여사 경품 이벤트는 하루 한번 이용가능 합니다</div>
+
+                    <div>홍여사 시스템에서 확인후 쿠폰함으로 당첨되신 경품을 보내드립니다</div>
+                    </Content>
+                </div> 
+ 
+            }
+
+
             </MainData>
       
-            <ApplyItem >
+            {/* <ApplyItem >
                 <div style={{dispaly:"flex", alignItems:"flex-end", marginRight :35, justifyContent:"center"}}>   
-                    <FilterApplyButton onClick ={_handlecheckstatus}><FilterApplyButtonText>적용</FilterApplyButtonText></FilterApplyButton>
+                    <FilterApplyButton onClick ={_handlecheckstatus}><FilterApplyButtonText>닫음</FilterApplyButtonText></FilterApplyButton>
                 </div>
-            </ApplyItem>
+            </ApplyItem> */}
           </Box>
         </Fade>
       </Modal>

@@ -91,11 +91,11 @@ const Noticecontainer = ({containerStyle}) => {
     <Container style={containerStyle}>
       
         <QuestionLayout>
-          {/* {
+          {
             useqna.map((item, index) => (
               <Question data1={item.data1} data2= {item.data2}></Question>
             ))
-          } */}
+          }
         </QuestionLayout>
 
     </Container>

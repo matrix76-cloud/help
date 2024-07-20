@@ -9,14 +9,15 @@ const Container = styled.div`
   justify-content:center;
   align-items:center;
   text-align : left;
+  font-weight: ${({weight}) =>weight};
 
 `
 
-const Text = ({containerStyle, value, size, color,shorten}) => {
+const Text = ({containerStyle, value, size, color,shorten, weight}) => {
 
 
   return (
-    <Container style={containerStyle} size={size} color={color}>
+    <Container style={containerStyle} size={size} color={color} weight={weight}>
 
       <>
       {
@@ -34,7 +35,8 @@ const Text = ({containerStyle, value, size, color,shorten}) => {
 }
 
 Text.defaultProps = {
-  color :"#000"
+  color :"#000",
+  weight : 500
 }
 
 export default Text;

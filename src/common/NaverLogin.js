@@ -45,8 +45,9 @@ const NaverLogin = ({containerStyle}) => {
 
   const naverLogin = new naver.LoginWithNaverId({
     clientId: "7aect0NV3l30s2Lm369y",
-    callbackUrl: "http://localhost:3000/authm",
-    isPopup: true,
+    callbackUrl: "https://mapapp-30.web.app/authm",
+    isPopup: false,
+    callbackHandle: true,
     loginButton: {
       color: "green",
       type: 3,
@@ -56,19 +57,19 @@ const NaverLogin = ({containerStyle}) => {
     },
   });
 
-  const getUser = async () => {
-    await naverLogin.getLoginStatus((status) => {
+  // const getUser = async () => {
+  //   await naverLogin.getLoginStatus((status) => {
 
-      if (status) {
-        setUser({ ...naverLogin.user });
+  //     if (status) {
+  //       setUser({ ...naverLogin.user });
 
-        console.log("user information", user);
+  //       console.log("user information", user);
 
-        // window.opener.location.href = "http://localhost:3000";
-        // window.close();
-      }
-    });
-  };
+  //       // window.opener.location.href = "http://localhost:3000";
+  //       // window.close();
+  //     }
+  //   });
+  // };
 
   const handleLogin = () =>{
     const naverLoginButton = document.getElementById(
@@ -79,16 +80,16 @@ const NaverLogin = ({containerStyle}) => {
 
   useEffect(() => {
     naverLogin.init();
-    getUser();
+
+
+
   }, []);
 
 
   return (
     <Container style={containerStyle}  ref={stepRef}>
         <div id="naverIdLogin" style={{display:"none"}}></div>
-
         <SocialButton bgcolor={'#03CF5D'} onClick={handleLogin} >    
-        {/* <Image source={imageDB.kakaomsg} containerStyle={{width:30}}/> */}
         <Text value={'네이버로 로그인'} color = {'#fff'}> </Text>    
       </SocialButton>
 

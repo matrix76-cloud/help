@@ -14,6 +14,8 @@ import { getKaKaoUserData, getToken } from "../utility/api";
 import Button from "../common/Button";
 import { DuplicatePhone, get_userInfoForKakaoID, get_userInfoForPhone, get_userInfoForUID, login, update_userdevice, update_userkakaoid } from "../service/UserService";
 import { UserContext } from "../context/User";
+import Label from "../common/Label";
+import GuideLabel from "../components/GuildeLable";
 
 const Container = styled.div`
     margin-top:50px;
@@ -61,6 +63,21 @@ const LabelText = styled.span`
   font-family: ${({ theme }) => theme.REGULAR};
 `;
 
+const MainLoginView = styled.div`
+    display         : flex;
+    flex-direction  : column;
+    justify-content : center;
+    align-items     : flex-start;
+    margin          : 20px 3%;
+    background-color: #FFF;
+    border          : 1px solid #ededed;
+    height          : 60px;
+    padding-left    : 30px;
+    padding-top     : 20px;
+    padding-bottom  : 20px;
+`
+
+
 const Kakaoauthcontainer = ({ containerStyle }) => {
     const navigate = useNavigate();
 
@@ -68,6 +85,7 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
 
     const [loginsuccess, setLoginsuccess] = useState(true);
     const [kakaoexist, setkakaoexist] = useState(true);
+    const [kakaoID, setKakaoID] = useState('');
     const [tel, setTel] = useState("");
     const [authcheck, setAuthcheck] = useState(false);
     const [refresh, setRefresh] = useState((refresh) => refresh + 1);
@@ -77,7 +95,7 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
     const [minutes, setMinutes] = useState(2);
     const [seconds, setSeconds] = useState(0);
     const [authstart, setAuthstart] = useState(false);
-    const [kakaoID, setKakaoID] = useState('');
+
 
   useEffect(() => {
     setAuthcheck(authcheck);
@@ -104,7 +122,8 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
   const _handleLoginpagemove = () => {
     navigate("/login");
   };
-  const _handleauthcode = async () => {
+  const _handlephonecheck = async () =>
+  {
     // 이미 가입된 번호인지 확인하자
 
     const USER_TEL = tel;
@@ -122,93 +141,44 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
 
         const kakaoupdate = await update_userkakaoid({USERID,kakaoID});
 
-        //로그인 진행
-        async function UserLogin(uniqueId) {
-            // 아이디와 패스워드 값을 가져오자
-            const DEVICEID = uniqueId;
 
-            let email = userinfo.USER_ID;
-            let password = userinfo.USER_PW;
-            const user2 = await login({ email, password });
+        // 로그인 진행
 
-            if (user2 == -1) {
-            alert("아이디와 비밀번호를 다시 확인해주시기 바랍니다");
-            return;
-            }
+        console.log("userinfo", userinfo);
 
-            const USER_ID = userinfo.USER_SESSION;
-            const user3 = await get_userInfoForUID({ USER_ID });
 
-            user["email"] = email;
-            user["uid"] = user2.user.uid;
-            user["type"] = user3.USER_TYPE;
-            user["nickname"] = user3.USER_NICKNAME;
-            user["user_type"] = user3.USER_TYPE;
+        user['email'] = userinfo.USER_ID;
+        user['uid'] = userinfo.USERS_INDEX;
+        user['type'] = userinfo.USER_TYPE;
+        user['nickname'] = userinfo.USER_NICKNAME;
+        user['user_type'] = userinfo.USER_TYPE;
+        user['img'] = userinfo.USER_IMAGE;
 
-            dispatch2(user);
+        user["distance"] = userinfo.DISTANCE;
 
-            navigate("/home", { state: { homerefresh: false } });
-        }
+        const latitude = user.latitude;
+        const longitude = user.longitude;
 
-        const uniqueId = user.deviceid;
 
-        UserLogin(uniqueId);
+        dispatch2(user);
+
+        navigate("/loginloading");
+
+
+
 
         
       return;
+    }else{
+      alert("등록된 전화번호가 없습니다. 회원가입을 진행한후 가입된 동일 전화번호로 카카오 로그인을 사용하세요");
     }
 
-    const getRandom1 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom1(1, 10));
-    const getRandom2 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom2(1, 10));
-    const getRandom3 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom3(1, 10));
-    const getRandom4 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom4(1, 10));
-    const getRandom5 = (min, max) =>
-      Math.floor(Math.random() * (max - min) + min);
-    console.log(getRandom5(1, 10));
 
-    let code =
-      String(getRandom1(1, 10)) +
-      String(getRandom2(1, 10)) +
-      String(getRandom3(1, 10)) +
-      String(getRandom4(1, 10)) +
-      String(getRandom5(1, 10));
 
-    setReqcode(code);
 
-    //인증코드를 보내자
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          command: "smssend",
-          param1: code,
-          param2: tel,
-        })
-      );
-    }
-
-    setAuthstart(true);
-
-    setMinutes(2);
-    setSeconds(0);
   };
 
-  const _handleVericodeCheck = () => {
-    if (reqcode == verifyCode) {
-      setAuthstart(false);
-      setAuthcheck(true);
-      alert("인증코드가 일치 합니다");
-    } else {
-      alert("인증코드가 일치 하지 않습니다");
-    }
-  };
+
 
   useEffect(() => {
     // 카카오 아이디에 해당하는 사용자가 있는지 검사 한다
@@ -236,39 +206,29 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
 
             const userinfo = await get_userInfoForKakaoID({ kakaoID });
 
-            //로그인 진행
-            async function UserLogin(uniqueId) {
-                // 아이디와 패스워드 값을 가져오자
-                const DEVICEID = uniqueId;
+            // 로그인 진행
 
-                let email = userinfo.USER_ID;
-                let password = userinfo.USER_PW;;
-                const user2 = await login({ email, password });
+            console.log("userinfo", userinfo);
 
-                if (user2 == -1) {
-                alert("아이디와 비밀번호를 다시 확인해주시기 바랍니다");
-                return;
-                }
 
-                const USER_ID = userinfo.USER_SESSION;
-                const user3 = await get_userInfoForUID({ USER_ID });
+            user['email'] = userinfo.USER_ID;
+            user['uid'] = userinfo.USERS_INDEX;
+            user['type'] = userinfo.USER_TYPE;
+            user['nickname'] = userinfo.USER_NICKNAME;
+            user['user_type'] = userinfo.USER_TYPE;
+            user['img'] = userinfo.USER_IMAGE;
 
-        
+            user["distance"] = userinfo.DISTANCE;
 
-                user["email"] = email;
-                user["uid"] = user2.user.uid;
-                user["type"] = user3.USER_TYPE;
-                user["nickname"] = user3.USER_NICKNAME;
-                user["user_type"] = user3.USER_TYPE;
+            const latitude = user.latitude;
+            const longitude = user.longitude;
+   
 
-                dispatch2(user);
-  
-                navigate("/home", { state: { homerefresh: false } });
-            }
+            dispatch2(user);
 
-            const uniqueId = user.deviceid;
-            
-            UserLogin(uniqueId);
+            navigate("/loginloading");
+
+
         }
       } else {
         setLoginsuccess(false);
@@ -304,6 +264,17 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
 
       {kakaoexist == false && (
         <div>
+
+          <GuideLabel
+            containerStyle={{ marginTop: 50 }}
+            height={180}
+            LabelText={"마원 카카오 로그인"}
+            SubLabelText={
+              "마원 채팅입니다. 마원은 건전한 마사지 업소 문화를 선도하고 있습니다. 원활한 마원 앱 이용을 위해 마원에서는 딱한번 전화번호 인증을 통해 부정사용을 방지 하고 있습니다. 회원가입이  되어 있지 않다면 회원가입을 진행 해주시고 이미 회원가입이 되어 있다면 가입된 전화번호로 카카오 아이디를 일치시켜 주시기 바랍니다 "
+            }
+          />
+
+
           <View1>
             <LabelView>
               <LabelText>전화번호</LabelText>
@@ -321,11 +292,11 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
               />
 
               <Button
-                buttonText={"인증요청"}
-                callback={_handleauthcode}
+                buttonText={"확인"}
+                callback={_handlephonecheck}
                 containerStyle={{
-                  backgroundColor: "#EDEDED",
-                  color: "#000",
+                  backgroundColor: "#307bf1",
+                  color: "#fff",
                   margin: "10px",
                   width: "150px",
                   height: 35,
@@ -334,48 +305,7 @@ const Kakaoauthcontainer = ({ containerStyle }) => {
             </ConfigView>
           </View1>
 
-          <View1>
-            <LabelView>
-              <LabelText>인증 번호</LabelText>
-            </LabelView>
-            <ConfigView>
-              <input
-                type="number"
-                style={{ border: "none", fontSize: 14 }}
-                placeholder={"인증번호"}
-                value={verifyCode}
-                onChange={(e) => {
-                  setVerifyCode(e.target.value);
-                  setRefresh((refresh) => refresh + 1);
-                }}
-              />
 
-              {verifyCode != "" ? (
-                <Button
-                  buttonText={"인증"}
-                  callback={_handleVericodeCheck}
-                  containerStyle={{
-                    backgroundColor: "#FF5826",
-                    color: "#fff",
-                    margin: "10px",
-                    width: "150px",
-                    height: 35,
-                  }}
-                />
-              ) : (
-                <Button
-                  buttonText={"인증"}
-                  containerStyle={{
-                    backgroundColor: "#EDEDED",
-                    color: "#000",
-                    margin: "10px",
-                    width: "150px",
-                    height: 35,
-                  }}
-                />
-              )}
-            </ConfigView>
-          </View1>
         </div>
       )}
     </Container>

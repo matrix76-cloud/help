@@ -7,11 +7,7 @@ import useDimensions from "react-use-dimensions";
 import { imageDB } from '../utility/imageData';
 
 const Container = styled.div`
-
-
-
 `
-
 
 const Splash = ({containerStyle}) => {
 
@@ -19,10 +15,12 @@ const Splash = ({containerStyle}) => {
   const [ref, { x, y, width, height }] = useDimensions();
 
 
-
   return (
     <Container style={containerStyle}>
-        <img src={imageDB.splash} style={{width:"100%", height:"600px"}}/>
+      <img src={imageDB.maroneperson} style={{width:"150px", height:"150px",
+      position: "absolute",
+      top: "350px",
+      left: "26%"}}/>
     </Container>
   );
 }
